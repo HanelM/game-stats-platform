@@ -12,6 +12,7 @@ import com.gamestats.platform.dto.AuthResponse;
 import com.gamestats.platform.dto.LoginRequest;
 import com.gamestats.platform.security.JwtService;
 
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -21,26 +22,41 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
 
     @Override
-    public String register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            return "Username already exists!";
+            return new AuthResponse(
+                    "Username already exists!",
+                    null
+            );
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            return "Email already exists!";
+            return new AuthResponse(
+                    "Email already exists!",
+                    null
+            );
         }
 
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(UserRole.USER)
+                .role(
+                        request.getRole() != null
+                                ? request.getRole()
+                                : UserRole.USER
+                )
                 .build();
 
         userRepository.save(user);
 
-        return "User registered successfully!";
+        String token = jwtService.generateToken(user);
+
+        return new AuthResponse(
+                "User registered successfully!",
+                token
+        );
     }
     @Override
     public AuthResponse login(LoginRequest request) {
@@ -57,8 +73,13 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtService.generateToken(user.getUsername());
+        String token = jwtService.generateToken(user);
 
-        return new AuthResponse(token);
+        return new AuthResponse(
+                "Login successful!",
+                token
+        );
+
+
     }
 }

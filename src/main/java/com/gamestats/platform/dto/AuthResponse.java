@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthResponse {
 
+    private String message;
     private String token;
 }

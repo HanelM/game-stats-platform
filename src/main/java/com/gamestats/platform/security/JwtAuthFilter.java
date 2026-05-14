@@ -1,6 +1,5 @@
 package com.gamestats.platform.security;
 
-import com.gamestats.platform.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-
+@Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -30,29 +29,37 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String username;
+        final String requestPath = request.getServletPath();
 
-        // No token
-        if (authHeader == null ||
-                !authHeader.startsWith("Bearer ")) {
-
+        // Skip JWT validation for public endpoints
+        if (
+                requestPath.startsWith("/api/auth") ||
+                        requestPath.startsWith("/swagger-ui") ||
+                        requestPath.startsWith("/v3/api-docs")
+        ) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extract token
-        jwt = authHeader.substring(7);
+        final String authHeader = request.getHeader("Authorization");
+
+        // No JWT token present
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
 
-            username = jwtService.extractUsername(jwt);
+            final String jwt = authHeader.substring(7);
 
-            // User not authenticated yet
-            if (username != null &&
-                    SecurityContextHolder.getContext()
-                            .getAuthentication() == null) {
+            final String username = jwtService.extractUsername(jwt);
+
+            // Authenticate only if user is not already authenticated
+            if (
+                    username != null &&
+                            SecurityContextHolder.getContext().getAuthentication() == null
+            ) {
 
                 UserDetails userDetails =
                         userDetailsService.loadUserByUsername(username);
@@ -77,14 +84,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
 
-        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+
+        } catch (Exception ex) {
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
 
-            response.getWriter().write("Invalid or Expired JWT Token");
-
-            return;
+            response.getWriter().write("""
+                    {
+                      "error": "Invalid or expired JWT token"
+                    }
+                    """);
         }
-        filterChain.doFilter(request, response);
     }
 }

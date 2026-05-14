@@ -1,5 +1,6 @@
 package com.gamestats.platform.dto;
 
+import com.gamestats.platform.model.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -15,4 +16,6 @@ public class RegisterRequest {
 
     @NotBlank(message = "Password is required")
     private String password;
+
+    private UserRole role;
 }

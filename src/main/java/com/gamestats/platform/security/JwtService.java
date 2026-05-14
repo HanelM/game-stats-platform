@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import com.gamestats.platform.model.User;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -18,17 +23,20 @@ public class JwtService {
 
     private final Key key =
             Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private final long jwtExpiration = 1000 * 60 * 60 * 24;
 
     // Generate token
-    public String generateToken(String username) {
+    public String generateToken(User user) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
 
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + 86400000)
-                )
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setClaims(claims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -66,5 +74,9 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+    private Key getSignInKey() {
+        byte[] keyBytes = SECRET_KEY.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

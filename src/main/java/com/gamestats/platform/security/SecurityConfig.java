@@ -1,7 +1,6 @@
 package com.gamestats.platform.security;
 
-import com.gamestats.platform.security.JwtAuthFilter;
-import com.gamestats.platform.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,81 +8,77 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.context.annotation.Lazy;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserRepository userRepository;
-
-    public SecurityConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
-                .map(user -> org.springframework.security.core.userdetails.User
-                        .withUsername(user.getUsername())
-                        .password(user.getPassword())
-                        .authorities("USER")
-                        .build())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config
     ) throws Exception {
+
         return config.getAuthenticationManager();
     }
-    @Bean
-    public JwtService jwtService() {
-        return new JwtService();
-    }
-    @Bean
-    public JwtAuthFilter jwtAuthFilter() {
-        return new JwtAuthFilter(
-                jwtService(),
-                userDetailsService()
-        );
-    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
+
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
                 )
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(
+                                (request, response, authException) ->
+                                        response.sendError(
+                                                HttpServletResponse.SC_UNAUTHORIZED,
+                                                "Unauthorized"
+                                        )
+                        )
+                )
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public endpoints
+                        // PUBLIC
                         .requestMatchers(
-                                "/api/auth/**"
+                                "/",
+                                "/api/auth/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
                         ).permitAll()
 
-                        // Protected endpoints
-                        .requestMatchers(
-                                "/api/test/**",
-                                "/api/users/**",
-                                "/api/matches/**"
-                        ).authenticated()
+                        // ADMIN
+                        .requestMatchers("/api/admin/**")
+                        .hasRole("ADMIN")
 
-                        // Everything else
-                        .anyRequest().authenticated()
+                        // USER + ADMIN
+                        .requestMatchers(
+                                "/api/match/**",
+                                "/api/matches/**"
+                        )
+                        .hasAnyRole("USER", "ADMIN")
+
+                        // EVERYTHING ELSE
+                        .anyRequest()
+                        .authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter(),
-                        UsernamePasswordAuthenticationFilter.class);
+
+                .addFilterBefore(
+                        jwtAuthFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
