@@ -11,3 +11,4 @@ public class GameStatsPlatformApplication {
 	}
 
 }
+// http://localhost:8080/docs.html

@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Gaming Statistics Platform API</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui.css"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            box-sizing:border-box;
+        }
+
+        html{
+            scroll-behavior:smooth;
+        }
+
+        body{
+            margin:0;
+            background:#050816;
+            font-family:'Inter',sans-serif;
+            color:white;
+            overflow-x:hidden;
+        }
+
+        .topbar{
+            display:none;
+        }
+
+        /* LAYOUT */
+
+        .layout{
+            display:flex;
+            min-height:100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+
+            width:290px;
+
+            background:
+                    linear-gradient(
+                            180deg,
+                            #070d1f 0%,
+                            #081122 100%
+                    );
+
+            border-right:
+                    1px solid rgba(255,255,255,0.05);
+
+            padding:35px 22px;
+
+            position:fixed;
+
+            top:0;
+            left:0;
+            bottom:0;
+
+            overflow-y:auto;
+
+            z-index:1000;
+        }
+
+        .logo{
+
+            font-size:32px;
+            font-weight:700;
+
+            color:#22c55e;
+
+            margin-bottom:10px;
+
+            letter-spacing:1px;
+        }
+
+        .subtitle{
+
+            color:#94a3b8;
+
+            line-height:1.7;
+
+            margin-bottom:40px;
+
+            font-size:15px;
+        }
+
+        .nav-title{
+
+            font-size:12px;
+
+            text-transform:uppercase;
+
+            letter-spacing:2px;
+
+            color:#64748b;
+
+            margin-bottom:20px;
+        }
+
+        .nav-item{
+
+            display:block;
+
+            padding:15px 18px;
+
+            margin-bottom:12px;
+
+            border-radius:16px;
+
+            text-decoration:none;
+
+            color:#e2e8f0;
+
+            transition:0.25s;
+
+            background:rgba(255,255,255,0.02);
+
+            cursor:pointer;
+
+            font-weight:500;
+        }
+
+        .nav-item:hover{
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            #16a34a,
+                            #0f766e
+                    );
+
+            color:white;
+
+            transform:translateX(5px);
+
+            box-shadow:
+                    0 0 20px rgba(34,197,94,0.2);
+        }
+
+        /* CONTENT */
+
+        .content{
+
+            margin-left:290px;
+
+            width:calc(100% - 290px);
+
+            padding:35px;
+        }
+
+        /* HERO */
+
+        .hero{
+
+            background:
+                    radial-gradient(
+                            circle at top right,
+                            rgba(34,197,94,0.2),
+                            transparent 40%
+                    ),
+                    #081122;
+
+            border:
+                    1px solid rgba(255,255,255,0.05);
+
+            border-radius:28px;
+
+            padding:45px;
+
+            margin-bottom:30px;
+
+            box-shadow:
+                    0 0 50px rgba(34,197,94,0.08);
+        }
+
+        .hero h1{
+
+            font-size:56px;
+
+            margin:0 0 20px;
+
+            color:#22c55e;
+
+            line-height:1.1;
+        }
+
+        .hero p{
+
+            color:#cbd5e1;
+
+            font-size:18px;
+
+            line-height:1.9;
+
+            max-width:900px;
+        }
+
+        /* SWAGGER */
+
+        .swagger-ui{
+            color:white;
+        }
+
+        .swagger-ui .info{
+            display:none;
+        }
+
+        .swagger-ui .scheme-container{
+
+            background:#0f172a;
+
+            border-radius:22px;
+
+            border:none;
+
+            box-shadow:none;
+
+            padding:22px;
+
+            margin-bottom:30px;
+        }
+
+        /* TAGS */
+
+        .swagger-ui .opblock-tag{
+
+            font-size:28px !important;
+
+            color:#22c55e !important;
+
+            border-bottom:none !important;
+
+            margin-top:35px !important;
+
+            margin-bottom:18px !important;
+
+            background:#0f172a;
+
+            padding:18px 22px;
+
+            border-radius:18px;
+
+            box-shadow:
+                    0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .swagger-ui .opblock-tag:hover{
+            background:#111827 !important;
+        }
+
+        /* ENDPOINTS */
+
+        .swagger-ui .opblock{
+
+            border:none !important;
+
+            border-radius:18px !important;
+
+            overflow:hidden;
+
+            margin-bottom:12px;
+
+            background:#0b1220;
+
+            box-shadow:
+                    0 0 0 1px rgba(255,255,255,0.04);
+
+            transition:0.2s;
+        }
+
+        .swagger-ui .opblock:hover{
+
+            transform:translateY(-2px);
+
+            box-shadow:
+                    0 0 30px rgba(255,255,255,0.03);
+        }
+
+        .swagger-ui .opblock-summary{
+            padding:14px 18px !important;
+        }
+
+        .swagger-ui .opblock-summary-path{
+
+            color:#ffffff !important;
+
+            font-weight:700 !important;
+
+            font-size:16px !important;
+        }
+
+        .swagger-ui .opblock-summary-description{
+
+            color:#f8fafc !important;
+
+            font-size:15px !important;
+
+            font-weight:500 !important;
+        }
+
+        .swagger-ui .opblock-description-wrapper p,
+        .swagger-ui .markdown p{
+
+            color:#f8fafc !important;
+
+            line-height:1.8;
+        }
+
+        /* METHODS */
+
+        .swagger-ui .opblock-summary-method{
+
+            border-radius:12px !important;
+
+            font-weight:700 !important;
+
+            min-width:85px !important;
+        }
+
+        .swagger-ui .opblock.opblock-get{
+
+            background:rgba(59,130,246,0.08);
+
+            border:
+                    1px solid rgba(59,130,246,0.25);
+        }
+
+        .swagger-ui .opblock.opblock-post{
+
+            background:rgba(34,197,94,0.08);
+
+            border:
+                    1px solid rgba(34,197,94,0.25);
+        }
+
+        .swagger-ui .opblock.opblock-delete{
+
+            background:rgba(239,68,68,0.08);
+
+            border:
+                    1px solid rgba(239,68,68,0.25);
+        }
+
+        .swagger-ui .opblock.opblock-put{
+
+            background:rgba(234,179,8,0.08);
+
+            border:
+                    1px solid rgba(234,179,8,0.25);
+        }
+
+        /* BODY */
+
+        .swagger-ui .opblock-body{
+
+            background:#0f172a;
+
+            padding:22px;
+        }
+
+        .swagger-ui .responses-wrapper{
+
+            background:#111827;
+
+            border-radius:16px;
+
+            padding:20px;
+
+            margin-top:20px;
+        }
+
+        .swagger-ui .responses-inner h4,
+        .swagger-ui .responses-inner h5{
+            color:white !important;
+        }
+
+        /* BUTTONS */
+
+        .swagger-ui .btn{
+
+            border:none !important;
+
+            border-radius:12px !important;
+
+            transition:0.2s ease;
+        }
+
+        .swagger-ui .btn:hover{
+            transform:translateY(-1px);
+        }
+
+        .swagger-ui .btn.authorize{
+
+            background:#16a34a !important;
+
+            color:white !important;
+
+            padding:12px 20px !important;
+        }
+
+        .swagger-ui .btn.execute{
+
+            background:#22c55e !important;
+
+            color:white !important;
+        }
+
+        /* INPUTS */
+
+        .swagger-ui input,
+        .swagger-ui textarea,
+        .swagger-ui select{
+
+            background:#0f172a !important;
+
+            color:white !important;
+
+            border:
+                    1px solid #1e293b !important;
+
+            border-radius:12px !important;
+        }
+
+        /* TABLES */
+
+        .swagger-ui table{
+
+            color:white !important;
+
+            border-radius:14px;
+
+            overflow:hidden;
+        }
+
+        .swagger-ui .response-col_status{
+            color:white !important;
+        }
+
+        /* MODELS */
+
+        .swagger-ui section.models{
+
+            background:#081122 !important;
+
+            border-radius:24px !important;
+
+            padding:25px !important;
+
+            margin-top:40px !important;
+
+            border:
+                    1px solid rgba(255,255,255,0.05) !important;
+
+            box-shadow:
+                    0 0 40px rgba(34,197,94,0.06);
+        }
+
+        .swagger-ui .models-control{
+            color:white !important;
+        }
+
+        .swagger-ui .model-box{
+
+            background:#111827 !important;
+
+            border-radius:16px !important;
+
+            border:
+                    1px solid rgba(255,255,255,0.05) !important;
+
+            padding:20px !important;
+        }
+
+        .swagger-ui .model-title{
+
+            color:#22c55e !important;
+
+            font-weight:700 !important;
+
+            font-size:18px !important;
+        }
+
+        .swagger-ui .property{
+            color:#f8fafc !important;
+        }
+
+        .swagger-ui .property-type{
+
+            color:#22c55e !important;
+
+            font-weight:600 !important;
+        }
+
+        .swagger-ui .model{
+            color:#f8fafc !important;
+        }
+
+        /* SCROLLBAR */
+
+        ::-webkit-scrollbar{
+            width:10px;
+        }
+
+        ::-webkit-scrollbar-thumb{
+
+            background:#16a34a;
+
+            border-radius:20px;
+        }
+
+        .swagger-ui .copy-to-clipboard{
+    display:none !important;
+}
+
+.custom-copy-token-btn{
+
+    margin-right:10px;
+
+    padding:8px 16px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    font-size:13px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #16a34a,
+            #22c55e
+        );
+
+    box-shadow:
+        0 0 15px rgba(34,197,94,0.25);
+}
+.custom-authorize-btn{
+
+    background:
+        linear-gradient(
+            90deg,
+            #16a34a,
+            #22c55e
+        );
+
+    color:white;
+    border:none;
+    border-radius:12px;
+    padding:10px 22px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s;
+    box-shadow:
+        0 0 20px
+        rgba(34,197,94,0.25);
+}
+
+.custom-authorize-btn:hover{
+
+    transform:translateY(-1px);
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            🎮 GAME STATS API
+        </div>
+
+        <div class="subtitle">
+            Professional Gaming Statistics Platform REST API with JWT authentication, analytics and statistics.
+        </div>
+
+        <div class="nav-title">
+            Navigation
+        </div>
+
+        <a class="nav-item">Authentication</a>
+
+        <a class="nav-item">Admin</a>
+
+        <a class="nav-item">Match</a>
+
+        <a class="nav-item">Statistics</a>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+        <div class="hero">
+
+            <h1>
+                Gaming Statistics Platform API
+            </h1>
+
+            <p>
+                Modern REST API platform for gaming analytics,
+                match statistics, authentication and admin management.
+            </p>
+
+        </div>
+
+        <div id="swagger-ui"></div>
+
+    </div>
+
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui-bundle.js"></script>
+
+<script>
+
+window.onload = () => {
+
+    // =========================
+    // TOAST
+    // =========================
+
+    function showToast(text, success){
+
+        const old =
+            document.getElementById(
+                "custom-toast"
+            );
+
+        if(old)
+            old.remove();
+
+        const toast =
+            document.createElement("div");
+
+        toast.id = "custom-toast";
+
+        toast.innerText = text;
+
+        toast.style.position = "fixed";
+        toast.style.top = "24px";
+        toast.style.right = "24px";
+        toast.style.padding = "14px 22px";
+        toast.style.borderRadius = "14px";
+        toast.style.fontWeight = "700";
+        toast.style.fontSize = "14px";
+        toast.style.color = "white";
+        toast.style.zIndex = "999999";
+        toast.style.boxShadow =
+            "0 0 30px rgba(0,0,0,0.35)";
+        toast.style.backdropFilter =
+            "blur(10px)";
+
+        toast.style.background = success
+            ? "rgba(34,197,94,0.95)"
+            : "rgba(239,68,68,0.95)";
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 3000);
+    }
+
+
+
+    // =========================
+    // SWAGGER
+    // =========================
+
+    SwaggerUIBundle({
+
+        url: "/v3/api-docs",
+
+        dom_id: "#swagger-ui",
+
+        deepLinking: true,
+
+        displayRequestDuration: true,
+
+        docExpansion: "none",
+
+        defaultModelsExpandDepth: 2,
+
+        defaultModelExpandDepth: 2,
+
+        tryItOutEnabled: true,
+
+        persistAuthorization: false,
+
+        tagsSorter: "alpha",
+
+        operationsSorter: "method",
+
+
+
+        requestInterceptor: (request) => {
+
+            const token =
+                localStorage.getItem(
+                    "jwt_token"
+                );
+
+            if(token){
+
+                request.headers["Authorization"] =
+                    "Bearer " + token;
+            }
+
+            return request;
+        },
+
+
+
+        responseInterceptor: async (response) => {
+
+            try {
+
+                if(
+                    response.url.includes("/api/auth/login") &&
+                    response.status === 200
+                ){
+
+                    const body =
+                        JSON.parse(response.text);
+
+                    if(body.token){
+
+                        localStorage.setItem(
+                            "jwt_token",
+                            body.token
+                        );
+
+                        const profileResponse =
+                            await fetch(
+                                "/api/users/profile",
+                                {
+                                    headers:{
+                                        "Authorization":
+                                            "Bearer " + body.token
+                                    }
+                                }
+                            );
+
+                        if(profileResponse.ok){
+
+                            let username =
+                                await profileResponse.text();
+
+                            username =
+                                username.replace(
+                                    "Welcome ",
+                                    ""
+                                );
+
+                            showToast(
+                                "Logged in as " + username,
+                                true
+                            );
+                        }
+                    }
+                }
+
+            } catch(e){}
+
+            return response;
+        }
+    });
+
+
+
+    // =========================
+    // AUTHORIZE BUTTON FIX
+    // =========================
+
+    setInterval(() => {
+
+        const authBtn =
+            document.querySelector(
+                ".authorize"
+            );
+
+        if(
+            authBtn &&
+            !authBtn.dataset.fixed
+        ){
+
+            authBtn.dataset.fixed = "true";
+
+            authBtn.addEventListener(
+                "click",
+                () => {
+
+                    setTimeout(() => {
+
+                        const input =
+                            document.querySelector(
+                                '.dialog-ux input[type="text"]'
+                            );
+
+                        const modalAuthBtn =
+                            document.querySelector(
+                                ".auth-btn-wrapper .btn.modal-btn.auth"
+                            );
+
+                        if(
+                            !input ||
+                            !modalAuthBtn
+                        ){
+                            return;
+                        }
+
+                        modalAuthBtn.onclick =
+                            async (e) => {
+
+                            e.preventDefault();
+
+                            let token =
+                                input.value.trim();
+
+                            token =
+                                token.replace(
+                                    "Bearer ",
+                                    ""
+                                );
+
+                            if(!token){
+
+                                showToast(
+                                    "Please enter token",
+                                    false
+                                );
+
+                                return;
+                            }
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        "/api/users/profile",
+                                        {
+                                            headers:{
+                                                "Authorization":
+                                                    "Bearer " + token
+                                            }
+                                        }
+                                    );
+
+                                if(!response.ok){
+
+                                    input.value = "";
+
+                                    input.focus();
+
+                                    showToast(
+                                        "Wrong or expired token",
+                                        false
+                                    );
+
+                                    return;
+                                }
+
+                                let username =
+                                    await response.text();
+
+                                username =
+                                    username.replace(
+                                        "Welcome ",
+                                        ""
+                                    );
+
+                                localStorage.setItem(
+                                    "jwt_token",
+                                    token
+                                );
+
+                                showToast(
+    "Logged in as " + username,
+    true
+);
+
+// CHANGE AUTHORIZE BUTTON TO LOGOUT
+const topAuthorizeBtn =
+    document.querySelector(
+        ".authorize"
+    );
+
+if(topAuthorizeBtn){
+
+    topAuthorizeBtn.innerText =
+        "Logout";
+
+    topAuthorizeBtn.onclick = () => {
+
+        localStorage.removeItem(
+            "jwt_token"
+        );
+
+        showToast(
+            "Logged out successfully",
+            true
+        );
+
+        location.reload();
+    };
+}
+
+// CLOSE MODAL
+const closeBtn =
+    document.querySelector(
+        ".close-modal"
+    );
+
+if(closeBtn){
+    closeBtn.click();
+}
+
+                            }
+                            catch(e){
+
+                                input.value = "";
+
+                                input.focus();
+
+                                showToast(
+                                    "Wrong or expired token",
+                                    false
+                                );
+                            }
+                        };
+
+                    }, 300);
+
+                }
+            );
+        }
+
+    }, 1000);
+
+
+
+    // =========================
+    // COPY TOKEN BUTTON
+    // =========================
+
+    setInterval(() => {
+
+        document
+            .querySelectorAll(".responses-wrapper")
+            .forEach(wrapper => {
+
+            if(
+                !wrapper.innerText.includes(
+                    '"token"'
+                )
+            ){
+                return;
+            }
+
+            const downloadBtn =
+                wrapper.querySelector(
+                    ".download-contents"
+                );
+
+            if(!downloadBtn)
+                return;
+
+            if(
+                downloadBtn.parentElement.querySelector(
+                    ".custom-copy-token-btn"
+                )
+            ){
+                return;
+            }
+
+            const copyBtn =
+                document.createElement("button");
+
+            copyBtn.className =
+                "custom-copy-token-btn";
+
+            copyBtn.innerText =
+                "Copy Token";
+
+            copyBtn.onclick = () => {
+
+                const codeBlock =
+                    wrapper.querySelector(
+                        ".highlight-code pre"
+                    );
+
+                if(!codeBlock)
+                    return;
+
+                const text =
+                    codeBlock.innerText;
+
+                const match =
+                    text.match(
+                        /"token"\s*:\s*"([^"]+)"/
+                    );
+
+                if(!match)
+                    return;
+
+                const token =
+                    match[1];
+
+                navigator.clipboard.writeText(
+                    token
+                );
+
+                copyBtn.innerText =
+                    "Copied ✓";
+
+                setTimeout(() => {
+
+                    copyBtn.innerText =
+                        "Copy Token";
+
+                }, 1500);
+            };
+
+            downloadBtn.parentElement.insertBefore(
+                copyBtn,
+                downloadBtn
+            );
+
+        });
+
+    }, 1000);
+
+
+
+    // =========================
+    // SIDEBAR NAVIGATION FIX
+    // =========================
+
+    setInterval(() => {
+
+        document
+            .querySelectorAll(".nav-item")
+            .forEach(item => {
+
+            if(item.dataset.fixed){
+                return;
+            }
+
+            item.dataset.fixed = "true";
+
+            item.addEventListener(
+                "click",
+                function(){
+
+                const text =
+                    this.innerText
+                        .trim()
+                        .toLowerCase();
+
+                const tags =
+                    document.querySelectorAll(
+                        ".opblock-tag"
+                    );
+
+                tags.forEach(tag => {
+
+                    const tagText =
+                        tag.innerText
+                            .trim()
+                            .toLowerCase();
+
+                    if(
+                        tagText.includes(text)
+                    ){
+
+                        tag.scrollIntoView({
+
+                            behavior:"smooth",
+
+                            block:"start"
+                        });
+                    }
+                });
+            });
+        });
+
+    }, 1000);
+
+};
+
+</script>
+
+</body>
+
+</html>
