@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.gamestats.platform.dto.ErrorResponse;
+
 
 import java.time.LocalDateTime;
 
@@ -13,48 +15,61 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ApiError> handleJwtException(JwtException ex) {
+    public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex) {
 
-        ApiError error = new ApiError(
-                HttpStatus.UNAUTHORIZED.value(),
-                "Unauthorized",
-                "Invalid JWT token",
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(
+                        401,
+                        "Unauthorized",
+                        "Invalid JWT token",
+                        LocalDateTime.now()
+                ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationException(
+    public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex
     ) {
 
         String message = ex.getBindingResult()
-                .getFieldError()
-                .getDefaultMessage();
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .findFirst()
+                .orElse("Validation error");
 
-        ApiError error = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation Error",
-                message,
-                LocalDateTime.now()
-        );
+        return ResponseEntity.badRequest()
+                .body(new ErrorResponse(
+                        400,
+                        "Validation Error",
+                        message,
+                        LocalDateTime.now()
+                ));
+    }
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyExists(
+            ResourceAlreadyExistsException ex
+    ) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(
+                        409,
+                        "Conflict",
+                        ex.getMessage(),
+                        LocalDateTime.now()
+                ));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGeneralException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
 
-        ApiError error = new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Server Error",
-                ex.getMessage(),
-                LocalDateTime.now()
-        );
-
-        return new ResponseEntity<>(error,
-                HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(
+                        500,
+                        "Server Error",
+                        "Something went wrong",
+                        LocalDateTime.now()
+                ));
     }
 }

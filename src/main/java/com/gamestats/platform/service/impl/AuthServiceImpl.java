@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.gamestats.platform.dto.AuthResponse;
 import com.gamestats.platform.dto.LoginRequest;
 import com.gamestats.platform.security.JwtService;
+import com.gamestats.platform.exception.ResourceAlreadyExistsException;
 
 
 @Service
@@ -37,7 +38,21 @@ public class AuthServiceImpl implements AuthService {
                     null
             );
         }
+        if(userRepository.existsByUsername(
+                request.getUsername()
+        )){
+            throw new ResourceAlreadyExistsException(
+                    "Username already exists"
+            );
+        }
 
+        if(userRepository.existsByEmail(
+                request.getEmail()
+        )){
+            throw new ResourceAlreadyExistsException(
+                    "Email already exists"
+            );
+        }
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())

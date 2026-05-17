@@ -1,1098 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <title>Gaming Statistics Platform API</title>
-
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui.css"/>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
-
-    <style>
-
-*{
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    margin:0;
-    background:#050816;
-    font-family:'Inter',sans-serif;
-    color:white;
-    overflow-x:hidden;
-}
-
-.topbar{
-    display:none;
-}
-
-/* LAYOUT */
-
-.layout{
-    display:flex;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-
-    width:230px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #060b18 0%,
-            #081122 100%
-        );
-
-    border-right:
-        1px solid rgba(255,255,255,0.04);
-
-    position:fixed;
-
-    top:0;
-    left:0;
-    bottom:0;
-
-    padding:20px 14px;
-
-    overflow-y:auto;
-
-    z-index:1000;
-
-    display:flex;
-    flex-direction:column;
-
-    box-shadow:
-        inset -1px 0 0 rgba(255,255,255,0.03);
-}
-
-/* LOGO */
-
-.logo{
-
-    font-size:22px;
-
-    font-weight:700;
-
-    color:#22c55e;
-
-    margin-bottom:8px;
-
-    letter-spacing:0.5px;
-
-    text-shadow:
-        0 0 18px rgba(34,197,94,0.18);
-}
-
-/* SUBTITLE */
-
-.subtitle{
-
-    color:#64748b;
-
-    line-height:1.6;
-
-    font-size:11px;
-
-    margin-bottom:24px;
-
-    font-weight:500;
-}
-
-/* CATEGORY */
-
-.nav-category{
-
-    color:#475569;
-
-    font-size:10px;
-
-    text-transform:uppercase;
-
-    letter-spacing:2px;
-
-    font-weight:700;
-
-    margin-bottom:10px;
-
-    margin-top:18px;
-
-    padding-left:4px;
-}
-
-/* NAVIGATION ITEMS */
-
-.nav-item{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:11px 14px;
-
-    margin-bottom:8px;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,0.025);
-
-    color:#cbd5e1;
-
-    text-decoration:none;
-
-    transition:0.25s ease;
-
-    cursor:pointer;
-
-    font-size:12px;
-
-    font-weight:500;
-
-    overflow:hidden;
-
-    border:
-        1px solid rgba(255,255,255,0.03);
-}
-
-/* GREEN GLOW FOLLOW */
-
-.nav-item::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:140px;
-    height:140px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(34,197,94,0.16),
-            transparent 70%
-        );
-
-    left:var(--x);
-    top:var(--y);
-
-    transform:
-        translate(-50%, -50%);
-
-    opacity:0;
-
-    transition:opacity 0.2s;
-
-    pointer-events:none;
-}
-
-/* HOVER */
-
-.nav-item:hover{
-
-    color:#22c55e;
-
-    transform:
-        translateX(4px);
-
-    border:
-        1px solid rgba(34,197,94,0.16);
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(34,197,94,0.10),
-            rgba(15,118,110,0.08)
-        );
-
-    box-shadow:
-        0 0 25px rgba(34,197,94,0.10);
-}
-
-.nav-item:hover::before{
-
-    opacity:1;
-}
-
-/* SUPPORT */
-
-.support-box{
-
-    margin-top:auto;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(15,23,42,0.95),
-            rgba(9,14,26,0.95)
-        );
-
-    border-radius:18px;
-
-    padding:16px;
-
-    border:
-        1px solid rgba(255,255,255,0.04);
-
-    box-shadow:
-        0 0 25px rgba(0,0,0,0.25);
-}
-
-/* SUPPORT TITLE */
-
-.support-title{
-
-    color:#22c55e;
-
-    font-weight:700;
-
-    margin-bottom:10px;
-
-    font-size:12px;
-
-    letter-spacing:0.5px;
-}
-
-/* SUPPORT LINKS */
-
-.support-link{
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    color:#94a3b8;
-
-    text-decoration:none;
-
-    padding:8px 10px;
-
-    border-radius:12px;
-
-    transition:0.25s ease;
-
-    font-size:12px;
-
-    font-weight:500;
-
-    overflow:hidden;
-}
-
-.support-link::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:120px;
-    height:120px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(34,197,94,0.16),
-            transparent 70%
-        );
-
-    left:var(--x);
-    top:var(--y);
-
-    transform:
-        translate(-50%, -50%);
-
-    opacity:0;
-
-    transition:opacity 0.2s;
-
-    pointer-events:none;
-}
-
-.support-link:hover{
-
-    color:#22c55e;
-
-    transform:
-        translateX(4px);
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(34,197,94,0.08),
-            rgba(15,118,110,0.06)
-        );
-}
-
-.support-link:hover::before{
-
-    opacity:1;
-}
-
-/* CONTENT */
-
-.content{
-
-    margin-left:240px;
-
-    width:calc(100% - 240px);
-
-    padding:18px 26px 40px;
-}
-
-/* TOP HEADER */
-
-.top-header{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-
-    margin-bottom:20px;
-}
-
-.search-box{
-
-    flex:1;
-
-    background:#0f172a;
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    color:white;
-
-    padding:15px 18px;
-
-    border-radius:16px;
-
-    outline:none;
-
-    font-size:14px;
-}
-
-.search-box:focus{
-
-    border-color:#22c55e;
-
-    box-shadow:
-        0 0 20px rgba(34,197,94,0.15);
-}
-
-.user-status{
-
-    min-width:230px;
-
-    background:#0f172a;
-
-    padding:15px 18px;
-
-    border-radius:16px;
-
-    text-align:center;
-
-    color:#22c55e;
-
-    font-weight:600;
-
-    border:
-        1px solid rgba(255,255,255,0.05);
-}
-
-/* HERO */
-
-.hero{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:30px;
-
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(34,197,94,0.15),
-            transparent 40%
-        ),
-        #081122;
-
-    border:
-        1px solid rgba(255,255,255,0.05);
-
-    border-radius:28px;
-
-    padding:40px;
-
-    margin-bottom:24px;
-}
-
-.hero-left{
-    flex:1;
-}
-
-.hero h1{
-
-    margin:0 0 16px;
-
-    font-size:52px;
-
-    line-height:1.1;
-
-    color:#22c55e;
-}
-
-.hero p{
-
-    margin:0;
-
-    color:#cbd5e1;
-
-    font-size:18px;
-
-    line-height:1.8;
-
-    max-width:720px;
-}
-
-.hero-right img{
-
-    width:220px;
-
-    filter:
-        drop-shadow(
-            0 0 35px rgba(34,197,94,0.35)
-        );
-}
-
-/* SWAGGER */
-
-.swagger-ui{
-    color:white;
-}
-
-.swagger-ui .info{
-    display:none;
-}
-
-.swagger-ui .scheme-container{
-
-    background:#0f172a;
-
-    border-radius:22px;
-
-    border:none;
-
-    box-shadow:none;
-
-    padding:22px;
-
-    margin-bottom:30px;
-}
-
-.swagger-ui .opblock-tag{
-
-    background:#0f172a !important;
-
-    color:#22c55e !important;
-
-    border:none !important;
-
-    border-radius:18px;
-
-    padding:18px !important;
-
-    margin-top:28px !important;
-
-    font-size:24px !important;
-}
-
-.swagger-ui .opblock{
-
-    border:none !important;
-
-    border-radius:18px !important;
-
-    overflow:hidden;
-
-    background:#0b1220;
-
-    margin-bottom:14px;
-
-    box-shadow:
-        0 0 0 1px rgba(255,255,255,0.04);
-}
-
-.swagger-ui .opblock-summary{
-    padding:14px !important;
-}
-
-.swagger-ui .opblock-summary-path{
-
-    color:white !important;
-
-    font-weight:700 !important;
-}
-
-.swagger-ui .opblock-summary-description{
-    color:#f8fafc !important;
-}
-
-.swagger-ui .opblock-body{
-    background:#0f172a;
-}
-
-.swagger-ui .responses-wrapper{
-
-    background:#111827;
-
-    border-radius:16px;
-
-    padding:20px;
-
-    margin-top:20px;
-}
-
-/* BUTTONS */
-
-.swagger-ui .btn{
-
-    border:none !important;
-
-    border-radius:12px !important;
-
-    transition:0.2s ease;
-}
-
-.swagger-ui .btn:hover{
-    transform:translateY(-1px);
-}
-
-.swagger-ui .btn.authorize{
-
-    background:#16a34a !important;
-
-    color:white !important;
-
-    padding:12px 20px !important;
-}
-
-.swagger-ui .btn.execute{
-
-    background:#22c55e !important;
-
-    color:white !important;
-}
-
-/* INPUTS */
-
-.swagger-ui input,
-.swagger-ui textarea,
-.swagger-ui select{
-
-    background:#0f172a !important;
-
-    color:white !important;
-
-    border:
-        1px solid #1e293b !important;
-
-    border-radius:12px !important;
-}
-
-/* MODELS */
-
-.swagger-ui section.models{
-
-    background:#081122 !important;
-
-    border-radius:24px !important;
-
-    padding:25px !important;
-
-    border:
-        1px solid rgba(255,255,255,0.05) !important;
-}
-
-/* FOOTER */
-
-.footer{
-
-    margin-top:40px;
-
-    padding-top:22px;
-
-    border-top:
-        1px solid rgba(255,255,255,0.06);
-
-    text-align:center;
-
-    color:#94a3b8;
-
-    font-size:14px;
-}
-
-.footer-quote{
-
-    margin-top:10px;
-
-    color:#22c55e;
-
-    font-weight:600;
-}
-
-/* SCROLLBAR */
-
-::-webkit-scrollbar{
-    width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:#16a34a;
-
-    border-radius:20px;
-}
-
-/* COPY TOKEN */
-
-.swagger-ui .copy-to-clipboard{
-    display:none !important;
-}
-
-.custom-copy-token-btn{
-
-    margin-right:10px;
-
-    padding:8px 16px;
-
-    border:none;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-weight:700;
-
-    font-size:13px;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            90deg,
-            #16a34a,
-            #22c55e
-        );
-
-    box-shadow:
-        0 0 15px rgba(34,197,94,0.25);
-}
-
-.custom-copy-token-btn:hover{
-    opacity:0.9;
-}
-
-/* CUSTOM AUTHORIZE */
-
-.custom-authorize-btn{
-
-    background:
-        linear-gradient(
-            90deg,
-            #16a34a,
-            #22c55e
-        );
-
-    color:white;
-
-    border:none;
-
-    border-radius:12px;
-
-    padding:10px 22px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    font-size:14px;
-
-    transition:0.2s;
-
-    box-shadow:
-        0 0 20px rgba(34,197,94,0.25);
-}
-
-.custom-authorize-btn:hover{
-
-    transform:translateY(-1px);
-}
-/* SEARCH SUGGESTIONS */
-
-/* SEARCH WRAPPER */
-
-.search-wrapper{
-
-    position:relative;
-
-    flex:1;
-
-    width:100%;
-}
-
-/* SEARCH INPUT */
-
-.search-box{
-
-    width:100%;
-
-    height:50px;
-
-    padding:0 18px;
-
-    font-size:13px;
-
-    font-weight:500;
-
-    border-radius:16px;
-
-    background:#0b1220;
-
-    border:
-        1px solid rgba(255,255,255,0.06);
-
-    color:#f8fafc;
-
-    transition:0.25s ease;
-
-    box-shadow:
-        0 0 0 rgba(34,197,94,0);
-}
-
-.search-box::placeholder{
-
-    color:#64748b;
-
-    font-size:13px;
-}
-
-.search-box:focus{
-
-    outline:none;
-
-    border-color:#22c55e;
-
-    box-shadow:
-        0 0 25px rgba(34,197,94,0.18);
-}
-
-/* SEARCH DROPDOWN */
-
-.search-suggestions{
-
-    position:absolute;
-
-    top:56px;
-
-    left:0;
-
-    width:100%;
-
-    background:#0f172a;
-
-    border:
-        1px solid rgba(255,255,255,0.06);
-
-    border-radius:18px;
-
-    overflow:hidden;
-
-    z-index:99999;
-
-    display:none;
-
-    backdrop-filter:blur(12px);
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,0.45);
-}
-
-/* SEARCH ITEM */
-
-.search-suggestion{
-
-    position:relative;
-
-    padding:11px 16px;
-
-    cursor:pointer;
-
-    color:#cbd5e1;
-
-    font-size:13px;
-
-    font-weight:500;
-
-    transition:0.2s ease;
-
-    border-bottom:
-        1px solid rgba(255,255,255,0.03);
-
-    overflow:hidden;
-}
-
-.search-suggestion:last-child{
-
-    border-bottom:none;
-}
-
-/* HOVER */
-
-.search-suggestion:hover{
-
-    color:#22c55e;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(34,197,94,0.10),
-            rgba(15,118,110,0.08)
-        );
-
-    padding-left:22px;
-
-    box-shadow:
-        inset 0 0 20px rgba(34,197,94,0.08);
-}
-
-/* GREEN GLOW FOLLOW EFFECT */
-
-.search-suggestion::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:120px;
-    height:120px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(34,197,94,0.16),
-            transparent 70%
-        );
-
-    top:var(--y);
-    left:var(--x);
-
-    transform:
-        translate(-50%, -50%);
-
-    opacity:0;
-
-    transition:opacity 0.2s;
-
-    pointer-events:none;
-}
-
-.search-suggestion:hover::before{
-
-    opacity:1;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="layout">
-
-    <!-- SIDEBAR -->
-
-    <div class="sidebar">
-
-        <div>
-
-            <div class="logo">
-                🎮 GAME API
-            </div>
-
-            <div class="subtitle">
-                REST API for gaming statistics and analytics.
-            </div>
-
-            <div class="nav-category">
-                Navigation
-            </div>
-
-            <a class="nav-item" data-tag="Admin">
-                🛡️ Administration - all users & delete users
-            </a>
-
-            <a class="nav-item" data-tag="Authentication Collector">
-                🔐 Authentication - login & registration
-            </a>
-
-            <a class="nav-item" data-tag="Leaderboard Collector">
-                🏆 Leaderboard
-            </a>
-
-            <a class="nav-item" data-tag="Match Collector">
-                🎮 Match Management - 📊 Statistics
-            </a>
-
-            <a class="nav-item" data-tag="test-controller">
-                🧪 Testing
-            </a>
-
-            <a class="nav-item" data-tag="User">
-                👤 User Management
-            </a>
-
-            <div class="nav-category">
-                DOCUMENTATION
-            </div>
-
-            <a class="nav-item" id="schemas-nav">
-                📦 Schemas % Models
-            </a>
-
-        </div>
-
-        <!-- SUPPORT -->
-
-        <div class="support-box">
-
-            <div class="support-title">
-                Support
-            </div>
-
-            <a
-                    class="support-link"
-                    href="mailto:misljimihanel@gmail.com"
-            >
-                📧 Gmail
-            </a>
-
-            <a
-                    class="support-link"
-                    href="https://github.com/HanelM"
-                    target="_blank"
-            >
-                💻 GitHub
-            </a>
-
-        </div>
-
-    </div>
-
-    <!-- CONTENT -->
-
-    <div class="content">
-
-        <!-- TOP -->
-
-        <div class="top-header">
-
-            <div class="search-wrapper">
-
-                <input
-                        type="text"
-                        placeholder="Search endpoints..."
-                        class="search-box"
-                        id="search-box"
-                        autocomplete="off"
-                />
-
-                <div
-                        class="search-suggestions"
-                        id="search-suggestions"
-                ></div>
-
-            </div>
-
-            <div class="user-status" id="logged-user">
-                No one is logged
-            </div>
-
-        </div>
-
-        <!-- HERO -->
-
-        <div class="hero">
-
-            <div class="hero-left">
-
-                <h1>
-                    Gaming Statistics Platform API
-                </h1>
-
-                <p>
-                    Modern REST API platform for gaming analytics,
-                    match statistics, authentication and admin management.
-                </p>
-
-            </div>
-
-            <div class="hero-right">
-
-                <img
-                        src="https://cdn-icons-png.flaticon.com/512/686/686589.png"
-                        alt="Gaming"
-                >
-
-            </div>
-
-        </div>
-
-        <!-- SWAGGER -->
-
-        <div id="swagger-ui"></div>
-
-
-
-        <div class="footer">
-
-            <div>
-                © 2026 Gaming Statistics Platform API.
-                All rights reserved.
-            </div>
-
-            <div>
-                Engineered by HanelM
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui-bundle.js"></script>
-
-<script>
 
 window.onload = () => {
 
@@ -1144,11 +49,13 @@ window.onload = () => {
         }, 3000);
     }
 
+
+
     // =========================
     // SWAGGER UI
     // =========================
 
-    SwaggerUIBundle({
+    window.ui = SwaggerUIBundle({
 
         url: "/v3/api-docs",
 
@@ -1158,7 +65,7 @@ window.onload = () => {
 
         displayRequestDuration: true,
 
-        docExpansion: "list",
+        docExpansion: "none",
 
         defaultModelsExpandDepth: 2,
 
@@ -1246,6 +153,92 @@ window.onload = () => {
             } catch(e){}
 
             return response;
+        },
+
+        // =========================
+        // ONLY ONE OPEN
+        // =========================
+
+        onComplete: () => {
+
+            setTimeout(() => {
+
+                document
+                    .querySelectorAll(
+                        ".opblock-summary"
+                    )
+                    .forEach(summary => {
+
+                    summary.addEventListener(
+                        "click",
+                        () => {
+
+                        setTimeout(() => {
+
+                            const current =
+                                summary.closest(
+                                    ".opblock"
+                                );
+
+                            document
+                                .querySelectorAll(
+                                    ".opblock"
+                                )
+                                .forEach(block => {
+
+                                if(
+                                    block !== current
+                                ){
+
+                                    block.classList.remove(
+                                        "is-open"
+                                    );
+                                }
+                            });
+
+                        }, 50);
+                    });
+                });
+
+            }, 1000);
+
+            // =========================
+            // RELOAD BUTTON FIX
+            // =========================
+
+            setTimeout(() => {
+
+                const reloadBtn =
+                    document.querySelector(
+                        ".download-url-button"
+                    );
+
+                if(
+                    reloadBtn &&
+                    !reloadBtn.dataset.fixed
+                ){
+
+                    reloadBtn.dataset.fixed =
+                        "true";
+
+                    reloadBtn.addEventListener(
+                        "click",
+                        () => {
+
+                        const token =
+                            localStorage.getItem(
+                                "jwt_token"
+                            );
+
+                        setTimeout(() => {
+
+                            location.reload();
+
+                        }, 300);
+                    });
+                }
+
+            }, 1000);
         }
     });
 
@@ -1751,6 +744,10 @@ const suggestionsBox =
 
 const suggestions = [
 
+    // =========================
+    // AUTHENTICATION
+    // =========================
+
     {
         label:"Authentication",
         search:"authentication"
@@ -1758,33 +755,55 @@ const suggestions = [
 
     {
         label:"Login user",
-        search:"login"
+        search:"authentication"
     },
 
     {
         label:"Register user",
-        search:"register"
+        search:"authentication"
     },
+
+    // =========================
+    // USER MANAGEMENT
+    // =========================
 
     {
         label:"Get user profile",
-        search:"profile"
+        search:"user"
     },
 
     {
-        label:"Get all users",
-        search:"users"
+        label:"User leaderboard",
+        search:"user"
     },
 
-    {
-        label:"Delete user",
-        search:"delete"
-    },
+    // =========================
+    // ADMIN
+    // =========================
 
     {
         label:"Admin dashboard",
         search:"admin"
     },
+
+    {
+        label:"Get all users",
+        search:"admin"
+    },
+
+    {
+        label:"Delete user",
+        search:"admin"
+    },
+
+    {
+        label:"Search users",
+        search:"admin"
+    },
+
+    // =========================
+    // MATCH MANAGEMENT
+    // =========================
 
     {
         label:"Match management",
@@ -1798,14 +817,37 @@ const suggestions = [
 
     {
         label:"Get player matches",
-        search:"matches"
+        search:"match"
     },
 
     {
         label:"Get player statistics",
-        search:"statistics"
+        search:"match"
     },
 
+    {
+        label:"Search player matches",
+        search:"match"
+    },
+
+    {
+        label:"Filter matches",
+        search:"match"
+    },
+
+    {
+        label:"Get matches between dates",
+        search:"match"
+    },
+
+    {
+        label:"Get player analytics",
+        search:"match"
+    },
+
+    // =========================
+    // LEADERBOARD
+    // =========================
 
     {
         label:"Leaderboard",
@@ -1813,9 +855,27 @@ const suggestions = [
     },
 
     {
+        label:"Get leaderboard",
+        search:"leaderboard"
+    },
+
+    // =========================
+    // TESTING
+    // =========================
+
+    {
         label:"Testing",
         search:"test"
     },
+
+    {
+        label:"Test hello",
+        search:"test"
+    },
+
+    // =========================
+    // MODELS
+    // =========================
 
     {
         label:"Schemas",
@@ -2109,8 +1169,7 @@ function renderSuggestions(list){
         suggestionsBox.appendChild(div);
     });
 
-    suggestionsBox.style.display =
-        "block";
+    suggestionsBox.style.display = "grid";
 }
 
 // =========================
@@ -2132,10 +1191,49 @@ document.addEventListener(
     }
 });
 
+
+window.addEventListener("load", () => {
+
+    function setTodayDateInputs() {
+
+        const today =
+            new Date().toISOString().split("T")[0];
+
+        const fromInput =
+            document.querySelector('input[name="from"]');
+
+        const toInput =
+            document.querySelector('input[name="to"]');
+
+        if (!fromInput || !toInput) {
+            return;
+        }
+
+        // ✅ set TODAY automatically
+        fromInput.value = today;
+        toInput.value = today;
+
+        // optional UX improvement
+        fromInput.placeholder = "Select date";
+        toInput.placeholder = "Select date";
+
+        // ✅ open calendar on click
+        const openCalendar = (el) => {
+            if (el.showPicker) {
+                el.showPicker(); // modern browsers
+            } else {
+                el.focus();
+            }
+        };
+
+        fromInput.addEventListener("click", () => openCalendar(fromInput));
+        toInput.addEventListener("click", () => openCalendar(toInput));
+    }
+
+    // Swagger loads dynamically → wait a bit
+    setTimeout(setTodayDateInputs, 1500);
+
+});
+
+
 };
-
-</script>
-
-</body>
-
-</html>

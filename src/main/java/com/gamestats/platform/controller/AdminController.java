@@ -6,10 +6,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Sort;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-import java.util.List;
+
+
 
 @Tag(name = "Admin", description = "Admin APIs")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
@@ -22,17 +30,86 @@ public class AdminController {
             description = "Returns all registered users"
     )
     @GetMapping("/users")
-    public List<UserResponse> getAllUsers() {
+    public ResponseEntity<Page<UserResponse>> getAllUsers(
 
-        return userRepository.findAll()
-                .stream()
-                .map(user -> new UserResponse(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getRole()
-                ))
-                .toList();
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "5")
+            int size,
+
+            @RequestParam(defaultValue = "username")
+            String sortBy,
+
+            @RequestParam(defaultValue = "asc")
+            String direction
+    ) {
+
+        Pageable pageable =
+                PageRequest.of(
+
+                        page,
+
+                        size,
+
+                        direction.equalsIgnoreCase("asc")
+                                ? Sort.by(sortBy).ascending()
+                                : Sort.by(sortBy).descending()
+                );
+
+        Page<UserResponse> users =
+                userRepository.findAll(pageable)
+                        .map(user -> new UserResponse(
+                                user.getId(),
+                                user.getUsername(),
+                                user.getEmail(),
+                                user.getRole()
+                        ));
+
+        return ResponseEntity.ok(users);
+    }
+    @Operation(
+            summary = "Search users",
+            description = "Search users by username or email"
+    )
+    @GetMapping("/users/search")
+    public Page<UserResponse> searchUsers(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            Pageable pageable
+    ) {
+
+        if (username != null) {
+
+            return userRepository
+                    .findByUsernameContainingIgnoreCase(
+                            username,
+                            pageable
+                    )
+                    .map(user -> new UserResponse(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getRole()
+                    ));
+        }
+
+        if (email != null) {
+
+            return userRepository
+                    .findByEmailContainingIgnoreCase(
+                            email,
+                            pageable
+                    )
+                    .map(user -> new UserResponse(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getRole()
+                    ));
+        }
+
+        return Page.empty();
     }
 
     @Operation(

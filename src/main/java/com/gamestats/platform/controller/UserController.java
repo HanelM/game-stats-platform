@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
         name = "User Controller",
         description = "User profile and account management endpoints"
 )
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

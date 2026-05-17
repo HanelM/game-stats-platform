@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
         name = "Leaderboard Controller",
         description = "Global player rankings and leaderboard system"
 )
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/leaderboard")
 @RequiredArgsConstructor
