@@ -4,8 +4,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Data
+@Schema(description = "Request object for creating a game match")
 public class GameMatchRequest {
 
     @NotBlank(message = "Game name is required")
@@ -25,4 +27,6 @@ public class GameMatchRequest {
 
     @NotNull(message = "Win status is required")
     private Boolean win;
+
+
 }

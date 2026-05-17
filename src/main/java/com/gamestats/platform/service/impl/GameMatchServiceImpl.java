@@ -7,6 +7,7 @@ import com.gamestats.platform.repository.GameMatchRepository;
 import com.gamestats.platform.service.GameMatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.gamestats.platform.service.StatsService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,12 +17,10 @@ import java.util.List;
 public class GameMatchServiceImpl implements GameMatchService {
 
     private final GameMatchRepository gameMatchRepository;
+    private final StatsService statsService;
 
     @Override
-    public GameMatch saveMatch(
-            GameMatchRequest request,
-            String username
-    ) {
+    public GameMatch saveMatch(GameMatchRequest request, String username) {
 
         GameMatch gameMatch = GameMatch.builder()
                 .playerUsername(username)
@@ -38,33 +37,12 @@ public class GameMatchServiceImpl implements GameMatchService {
 
     @Override
     public List<GameMatch> getPlayerMatches(String username) {
-
         return gameMatchRepository.findByPlayerUsername(username);
     }
 
     @Override
     public MatchStatsResponse getPlayerStats(String username) {
 
-        List<GameMatch> matches =
-                gameMatchRepository.findByPlayerUsername(username);
-
-        int totalMatches = matches.size();
-
-        int totalWins = (int) matches.stream()
-                .filter(GameMatch::getWin)
-                .count();
-
-        int totalLosses = totalMatches - totalWins;
-
-        double winRate = totalMatches == 0
-                ? 0
-                : ((double) totalWins / totalMatches) * 100;
-
-        return new MatchStatsResponse(
-                totalMatches,
-                totalWins,
-                totalLosses,
-                winRate
-        );
+        return statsService.calculatePlayerStats(username);
     }
 }

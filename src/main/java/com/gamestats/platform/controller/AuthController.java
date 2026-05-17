@@ -11,7 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Authentication", description = "Authentication APIs")
+
+@Tag(
+        name = "Authentication Controller",
+        description = "Authentication and JWT token management endpoints"
+)
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

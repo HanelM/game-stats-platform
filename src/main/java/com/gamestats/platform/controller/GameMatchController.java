@@ -8,16 +8,25 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@Tag(
+        name = "Match Controller",
+        description = "Game match management and player match history endpoints"
+)
 @RestController
 @RequestMapping("/api/matches")
 @RequiredArgsConstructor
 public class GameMatchController {
-
     private final GameMatchService gameMatchService;
 
+    @Operation(
+            summary = "Save new match",
+            description = "Creates and stores a new game match for the authenticated player."
+    )
     @PostMapping
     public GameMatch saveMatch(
             @Valid @RequestBody GameMatchRequest request,
@@ -30,6 +39,10 @@ public class GameMatchController {
         );
     }
 
+    @Operation(
+            summary = "Get player matches",
+            description = "Returns all matches played by the authenticated player."
+    )
     @GetMapping("/my")
     public List<GameMatch> getMyMatches(
             Authentication authentication
@@ -40,6 +53,10 @@ public class GameMatchController {
         );
     }
 
+    @Operation(
+            summary = "Get player statistics",
+            description = "Returns total matches, wins, losses, win rate, average kills and K/D ratio for authenticated player."
+    )
     @GetMapping("/stats")
     public MatchStatsResponse getMyStats(
             Authentication authentication

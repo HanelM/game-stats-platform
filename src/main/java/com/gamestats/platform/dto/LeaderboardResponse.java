@@ -5,13 +5,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MatchStatsResponse {
+public class LeaderboardResponse {
 
-    private int totalMatches;
+    private String username;
+    private int kills;
     private int wins;
-    private int losses;
-
-    private double winRate;
-    private double avgKills;
     private double kdRatio;
 }
