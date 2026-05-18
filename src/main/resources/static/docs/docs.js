@@ -1236,4 +1236,148 @@ window.addEventListener("load", () => {
 });
 
 
+
+// =========================
+// ANALYTICS CHARTS
+// =========================
+
+function loadCharts(){
+
+    // WIN RATE CHART
+
+    const winCtx =
+        document.getElementById(
+            "winRateChart"
+        );
+
+    if(winCtx){
+
+        new Chart(winCtx, {
+
+            type:"doughnut",
+
+            data:{
+                labels:[
+                    "Wins",
+                    "Losses"
+                ],
+
+                datasets:[{
+                    data:[72, 28],
+
+                    backgroundColor:[
+                        "#22c55e",
+                        "#ef4444"
+                    ],
+
+                    borderWidth:0
+                }]
+            },
+
+            options:{
+                responsive:true,
+
+                plugins:{
+                    legend:{
+                        labels:{
+                            color:"#cbd5e1"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // KD CHART
+
+    const kdCtx =
+        document.getElementById(
+            "kdChart"
+        );
+
+    if(kdCtx){
+
+        new Chart(kdCtx, {
+
+            type:"line",
+
+            data:{
+
+                labels:[
+                    "Mon",
+                    "Tue",
+                    "Wed",
+                    "Thu",
+                    "Fri",
+                    "Sat",
+                    "Sun"
+                ],
+
+                datasets:[{
+
+                    label:"K/D Ratio",
+
+                    data:[
+                        1.2,
+                        1.5,
+                        2.1,
+                        1.9,
+                        2.4,
+                        2.8,
+                        3.1
+                    ],
+
+                    borderColor:"#22c55e",
+
+                    backgroundColor:
+                        "rgba(34,197,94,0.15)",
+
+                    tension:0.4,
+
+                    fill:true
+                }]
+            },
+
+            options:{
+
+                responsive:true,
+
+                plugins:{
+                    legend:{
+                        labels:{
+                            color:"#cbd5e1"
+                        }
+                    }
+                },
+
+                scales:{
+
+                    x:{
+                        ticks:{
+                            color:"#94a3b8"
+                        },
+
+                        grid:{
+                            color:"rgba(255,255,255,0.05)"
+                        }
+                    },
+
+                    y:{
+                        ticks:{
+                            color:"#94a3b8"
+                        },
+
+                        grid:{
+                            color:"rgba(255,255,255,0.05)"
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+setTimeout(loadCharts, 1200);
+
+
 };
