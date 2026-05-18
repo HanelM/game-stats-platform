@@ -12,6 +12,7 @@ import com.gamestats.platform.dto.AuthResponse;
 import com.gamestats.platform.dto.LoginRequest;
 import com.gamestats.platform.security.JwtService;
 import com.gamestats.platform.exception.ResourceAlreadyExistsException;
+import com.gamestats.platform.exception.ResourceNotFoundException;
 
 
 @Service
@@ -73,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         boolean passwordMatches = passwordEncoder.matches(
                 request.getPassword(),
@@ -81,7 +82,9 @@ public class AuthServiceImpl implements AuthService {
         );
 
         if (!passwordMatches) {
-            throw new RuntimeException("Invalid password");
+            throw new RuntimeException(
+                    "Invalid username or password"
+            );
         }
 
         String token = jwtService.generateToken(user);

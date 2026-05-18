@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import com.gamestats.platform.integration.entity.PlayerStats;
 import com.gamestats.platform.integration.repository.PlayerStatsRepository;
+import com.gamestats.platform.exception.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -140,7 +141,7 @@ public class PubgProvider
                 response.getData() == null ||
                 response.getData().isEmpty()){
 
-            throw new RuntimeException(
+            throw new ResourceNotFoundException(
                     "PUBG player not found"
             );
         }

@@ -60,6 +60,19 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()
                 ));
     }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(
+            ResourceNotFoundException ex
+    ) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(
+                        404,
+                        "Not Found",
+                        ex.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
@@ -72,4 +85,5 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()
                 ));
     }
+
 }

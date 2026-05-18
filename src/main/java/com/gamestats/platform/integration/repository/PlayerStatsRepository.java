@@ -16,4 +16,9 @@ public interface PlayerStatsRepository
     findTop10ByGameOrderByKdDesc(
             String game
     );
+    List<PlayerStats> findByPlayerNameOrderByCreatedAtDesc(
+            String playerName
+    );
+
+    List<PlayerStats> findTop20ByOrderByCreatedAtDesc();
 }
