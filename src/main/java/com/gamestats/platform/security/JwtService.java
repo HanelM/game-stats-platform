@@ -1,5 +1,7 @@
 package com.gamestats.platform.security;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,12 +21,12 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY =
-            "mySuperSecretKeyForJwtAuthentication123456789";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    private final Key key =
-            Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-    private final long jwtExpiration = 1000 * 60 * 60 * 24;
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
 
     // Generate token
     public String generateToken(User user) {
@@ -71,13 +73,15 @@ public class JwtService {
     private Claims extractAllClaims(String token) {
 
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
     private Key getSignInKey() {
-        byte[] keyBytes = SECRET_KEY.getBytes();
+
+        byte[] keyBytes = secretKey.getBytes();
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

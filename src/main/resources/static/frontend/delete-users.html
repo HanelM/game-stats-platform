@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Delete Users</title>
+
+    <link rel="stylesheet" href="css/delete-users.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+                Admin
+            </h2>
+
+            <span>
+                dashboard
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="menu">
+
+        <a href="admin.html">
+            <i class="fa-solid fa-user-shield"></i>
+            Admin Panel
+        </a>
+        <a href="delete-users.html" class="active">
+            <i class="fa-solid fa-trash"></i>
+            Delete users
+        </a>
+        <a href="all-users.html">
+            <i class="fa-solid fa-users"></i>
+            All users
+        </a>
+
+
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<div class="page-wrapper">
+
+    <!-- =========================
+         TOP SECTION
+    ========================= -->
+
+    <div class="top-section">
+
+        <div class="title-box">
+
+            <h1>
+                Delete Users
+            </h1>
+
+            <p>
+                Manage and permanently remove platform accounts.
+            </p>
+
+        </div>
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+                   id="searchInput"
+                   placeholder="Search player by username or email...">
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         MOST ACTIVE PLAYERS
+    ========================= -->
+
+    <div class="section-title">
+
+        <h2 id="sectionTitle">
+            New Registered Users
+        </h2>
+
+    </div>
+
+    <!-- =========================
+         USERS CONTAINER
+    ========================= -->
+
+    <div
+            class="users-container"
+            id="usersContainer"
+    ></div>
+
+</div>
+
+<!-- =========================
+     DELETE MODAL
+========================= -->
+
+<div
+        class="modal"
+        id="deleteModal"
+>
+
+    <div class="modal-content">
+
+        <h2>
+            Delete User
+        </h2>
+
+        <p>
+            Are you sure you want to delete this user?
+        </p>
+
+        <div class="modal-buttons">
+
+            <button
+                    class="confirm-btn"
+                    id="confirmDeleteBtn"
+            >
+                I'm Sure, Delete User
+            </button>
+
+            <button
+                    class="cancel-btn"
+                    onclick="closeDeleteModal()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/delete-users.js"></script>
+
+</body>
+</html>

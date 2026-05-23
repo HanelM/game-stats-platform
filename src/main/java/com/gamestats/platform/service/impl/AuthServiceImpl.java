@@ -13,6 +13,7 @@ import com.gamestats.platform.dto.LoginRequest;
 import com.gamestats.platform.security.JwtService;
 import com.gamestats.platform.exception.ResourceAlreadyExistsException;
 import com.gamestats.platform.exception.ResourceNotFoundException;
+import java.time.LocalDateTime;
 
 
 @Service
@@ -26,19 +27,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse register(RegisterRequest request) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
-            return new AuthResponse(
-                    "Username already exists!",
-                    null
-            );
-        }
-
-        if (userRepository.existsByEmail(request.getEmail())) {
-            return new AuthResponse(
-                    "Email already exists!",
-                    null
-            );
-        }
         if(userRepository.existsByUsername(
                 request.getUsername()
         )){
@@ -59,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.USER)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         userRepository.save(user);

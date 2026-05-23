@@ -1,0 +1,218 @@
+/* =========================
+   TABLETS
+========================= */
+@media (max-width: 992px) {
+
+    header {
+        padding: 18px;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    nav {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        padding: 80px 20px;
+    }
+
+    .hero h2 {
+        font-size: 42px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .games-grid,
+    .games-preview {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 20px;
+    }
+
+    .game-card img,
+    .preview-card img {
+        height: 210px;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+
+/* =========================
+   MOBILE DEVICES
+========================= */
+@media (max-width: 768px) {
+
+    header {
+        flex-direction: column;
+        gap: 18px;
+        text-align: center;
+        padding: 18px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    nav a {
+        width: auto;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+    .hero {
+        padding: 70px 20px;
+    }
+
+    .hero h2 {
+        font-size: 34px;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .hero button {
+        width: 100%;
+        max-width: 260px;
+    }
+
+    .games-grid,
+    .games-preview {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .game-card,
+    .preview-card {
+        padding: 16px;
+    }
+
+    .game-card img,
+    .preview-card img {
+        height: 220px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+    }
+
+    #search-input,
+    #genre-filter {
+        width: 100%;
+    }
+
+    footer {
+        margin-top: 40px;
+        font-size: 14px;
+    }
+}
+
+
+/* =========================
+   SMALL PHONES
+========================= */
+@media (max-width: 480px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    nav {
+        gap: 8px;
+    }
+
+    nav a {
+        font-size: 13px;
+        padding: 9px 12px;
+    }
+
+    .hero {
+        padding: 55px 15px;
+    }
+
+    .hero h2 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .hero button {
+        font-size: 14px;
+        padding: 12px 20px;
+    }
+
+    .games-grid,
+    .games-preview {
+        padding: 15px;
+        gap: 18px;
+    }
+
+    .game-card img,
+    .preview-card img {
+        height: 190px;
+    }
+
+    .game-card h2,
+    .preview-card h3 {
+        font-size: 20px;
+    }
+
+    .game-card p,
+    .preview-card p {
+        font-size: 14px;
+    }
+
+    .controls {
+        padding: 15px;
+    }
+
+    #search-input,
+    #genre-filter {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    footer {
+        padding: 18px;
+    }
+}
+
+// auth
+@media (max-width: 768px) {
+
+    .auth-box {
+        padding: 30px 20px;
+    }
+
+    .auth-box h2 {
+        font-size: 28px;
+    }
+
+}

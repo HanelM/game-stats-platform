@@ -1,0 +1,833 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body{
+
+    margin:0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(0,255,136,0.05),
+            transparent 25%
+        ),
+        #07110a;
+
+    font-family:Arial,sans-serif;
+
+    color:white;
+
+    overflow-x:hidden;
+
+    padding-top:50px;
+}
+
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+
+    top:0px;
+
+    width:220px;
+
+    height:calc(100vh );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,13,12,0.99),
+            rgba(5,8,7,0.99)
+        );
+
+    border-right:
+        1px solid rgba(255,255,255,0.05);
+
+    padding:26px 18px;
+
+    z-index:2000;
+
+    box-sizing:border-box;
+
+    overflow-y:auto;
+
+    box-shadow:
+        6px 0 26px rgba(0,0,0,0.28);
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:28px;
+}
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    border:2px solid #00ff88;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#00ff88;
+
+    font-size:16px;
+
+    box-shadow:
+        0 0 14px rgba(0,255,136,0.15);
+}
+
+.logo-text h2{
+
+    font-size:16px;
+
+    font-weight:800;
+}
+
+.logo-text span{
+
+    font-size:12px;
+
+    color:#00ff88;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:#d7d7d7;
+
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:14px;
+
+    transition:0.2s;
+}
+
+.menu a:hover{
+
+    background:rgba(255,255,255,0.03);
+
+    color:white;
+}
+
+.menu .active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,255,136,0.15),
+            rgba(0,255,136,0.04)
+        );
+
+    border-left:3px solid #00ff88;
+}
+/* =========================
+   MAIN
+========================= */
+
+.analytics-main{
+
+    margin-left:210px;
+    margin-top:-50px;
+
+    padding:26px;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.analytics-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+    margin-bottom:22px;
+}
+
+.analytics-top h1{
+
+    font-size:30px;
+
+    font-weight:900;
+
+    letter-spacing:0.5px;
+
+    margin-bottom:6px;
+
+    color:white;
+}
+
+.analytics-top p{
+
+    font-size:14px;
+
+    color:#8b9790;
+
+    letter-spacing:0.3px;
+}
+
+#analyticsGameSelect{
+
+    width:220px;
+
+    height:42px;
+
+    padding:0 16px;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(0,255,136,0.25);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,22,0.98),
+            rgba(5,10,12,0.98)
+        );
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    outline:none;
+
+    cursor:pointer;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.25);
+}
+
+#analyticsGameSelect:hover{
+
+    border-color:#00ff88;
+}
+
+#analyticsGameSelect option{
+
+    background:#081014;
+
+    color:white;
+
+    font-weight:700;
+}
+
+/* =========================
+   TOP STATS
+========================= */
+
+.advanced-stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:12px;
+
+    margin-bottom:16px;
+}
+
+.advanced-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,22,0.98),
+            rgba(5,10,12,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:18px;
+
+    padding:14px;
+
+    min-height:92px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.25);
+}
+
+.advanced-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(0,255,136,0.15);
+}
+
+.advanced-icon{
+
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:20px;
+
+    font-weight:900;
+}
+
+.advanced-icon.green{
+
+    color:#00ff88;
+
+    border:
+        1px solid rgba(0,255,136,0.4);
+
+    box-shadow:
+        0 0 15px rgba(0,255,136,0.12);
+}
+
+.advanced-icon.gold{
+
+    color:#ffd000;
+
+    border:
+        1px solid rgba(255,208,0,0.4);
+
+    box-shadow:
+        0 0 15px rgba(255,208,0,0.12);
+}
+
+.advanced-icon.blue{
+
+    color:#00bfff;
+
+    border:
+        1px solid rgba(0,191,255,0.4);
+
+    box-shadow:
+        0 0 15px rgba(0,191,255,0.12);
+}
+
+.advanced-icon.red{
+
+    color:#ff4d4d;
+
+    border:
+        1px solid rgba(255,77,77,0.4);
+
+    box-shadow:
+        0 0 15px rgba(255,77,77,0.12);
+}
+
+.advanced-card span{
+
+    display:block;
+
+    font-size:10px;
+
+    color:#7f8b84;
+
+    letter-spacing:1.1px;
+
+    margin-bottom:6px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+}
+
+.advanced-card h2{
+
+    font-size:28px;
+
+    font-weight:900;
+
+    color:white;
+}
+
+/* =========================
+   AI + GAME COMPARISON
+========================= */
+
+.dual-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:16px;
+
+    margin-bottom:16px;
+}
+
+.insights-section,
+.comparison-section{
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(8,17,20,0.98),
+            rgba(3,7,9,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:28px;
+
+    padding:20px;
+
+    box-shadow:
+        0 0 18px rgba(0,0,0,0.28);
+}
+
+.section-header{
+
+    color:#00ff88;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+}
+
+/* =========================
+   INSIGHTS
+========================= */
+
+.insights-grid{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.insight-card{
+
+    background:
+        rgba(255,255,255,0.02);
+
+    border:
+        1px solid rgba(255,255,255,0.04);
+
+    border-left:
+        3px solid #00ff88;
+
+    border-radius:16px;
+
+    padding:16px;
+}
+
+.insight-card h3{
+
+    font-size:15px;
+
+    margin-bottom:8px;
+
+    color:white;
+}
+
+.insight-card p{
+
+    color:#9ea6a1;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+/* =========================
+   GAME COMPARISON
+========================= */
+
+/* =========================
+   GAME COMPARISON (HORIZONTAL)
+========================= */
+
+.comparison-grid{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+}
+
+.game-card{
+
+    background:
+        rgba(255,255,255,0.02);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:18px;
+
+    padding:18px 20px;
+
+    transition:0.25s;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+}
+
+.game-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(0,255,136,0.15);
+}
+
+.game-card-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.game-card h3{
+
+    color:#00ff88;
+
+    margin:0;
+
+    font-size:18px;
+}
+
+.game-card p{
+
+    color:#d0d0d0;
+
+    margin:0;
+
+    font-size:13px;
+}
+
+.game-stats{
+
+    display:flex;
+
+    gap:22px;
+
+    flex-wrap:wrap;
+}
+
+.game-stat{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+}
+
+.game-stat span{
+
+    font-size:10px;
+
+    color:#7f8b84;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+    margin-bottom:5px;
+}
+
+.game-stat strong{
+
+    font-size:16px;
+
+    color:white;
+}
+
+.game-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(0,255,136,0.15);
+}
+
+.game-card h3{
+
+    color:#00ff88;
+
+    margin-bottom:14px;
+
+    font-size:18px;
+}
+
+.game-card p{
+
+    color:#d0d0d0;
+
+    margin-bottom:10px;
+
+    font-size:13px;
+}
+
+/* =========================
+   MAIN CHART
+========================= */
+
+.analytics-chart-section{
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(8,17,20,0.98),
+            rgba(3,7,9,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:38px;
+
+    padding:20px;
+
+    box-shadow:
+        0 0 18px rgba(0,0,0,0.28);
+
+    margin-bottom:16px;
+}
+
+.chart-container{
+
+    height:420px;
+}
+
+/* =========================
+   BOTTOM OVERVIEW
+========================= */
+
+.overview-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(6,1fr);
+
+    gap:12px;
+}
+
+.overview-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,22,0.98),
+            rgba(5,10,12,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:18px;
+
+    padding:16px;
+
+    min-height:92px;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.25);
+}
+
+.overview-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(0,255,136,0.15);
+}
+
+.overview-card span{
+
+    display:block;
+
+    font-size:10px;
+
+    color:#7f8b84;
+
+    letter-spacing:1.1px;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+}
+
+.overview-card h2{
+
+    font-size:28px;
+
+    font-weight:900;
+
+    color:white;
+}
+
+/* =========================
+   CANVAS
+========================= */
+
+canvas{
+
+    width:100% !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1450px){
+
+    .overview-grid{
+
+        grid-template-columns:
+            repeat(3,1fr);
+    }
+
+    .advanced-stats-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+@media(max-width:1100px){
+
+    .dual-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .comparison-grid{
+
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:850px){
+
+    .sidebar{
+
+        display:none;
+    }
+
+    .analytics-main{
+
+        margin-left:0;
+
+        padding:18px;
+    }
+
+    .advanced-stats-grid,
+    .overview-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .analytics-top{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    #analyticsGameSelect{
+
+        width:100%;
+    }
+
+    .analytics-top h1{
+
+        font-size:24px;
+    }
+}

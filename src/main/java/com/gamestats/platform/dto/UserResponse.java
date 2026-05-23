@@ -3,6 +3,7 @@ package com.gamestats.platform.dto;
 import com.gamestats.platform.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -12,4 +13,5 @@ public class UserResponse {
     private String username;
     private String email;
     private UserRole role;
+    private LocalDateTime createdAt;
 }

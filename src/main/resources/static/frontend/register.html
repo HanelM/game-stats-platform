@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+
+<header>
+
+    <h1>Game Stats Platform</h1>
+
+    <nav>
+
+        <a href="index.html">Home</a>
+        <a href="games.html">Games</a>
+        <a href="about.html">About</a>
+
+        <a href="login.html" id="login-link">Login</a>
+        <a href="register.html" id="register-link">Register</a>
+
+        <a href="account.html"
+           id="user-link"
+           style="display:none; font-weight:bold;">
+        </a>
+
+    </nav>
+
+</header>
+
+<section class="single-account-page">
+
+    <div class="single-account-card">
+
+        <h2>Create Account</h2>
+        <p id="register-error" class="error-message"></p>
+
+        <input type="text"
+               id="reg-username"
+               placeholder="Username">
+
+        <input type="email"
+               id="reg-email"
+               placeholder="Email">
+
+        <input type="password"
+               id="reg-password"
+               placeholder="Password">
+
+        <button onclick="register()">
+            Register
+        </button>
+
+        <p class="switch-text">
+            Already have account?
+
+            <a href="login.html">
+                Login
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+<script src="js/account.js"></script>
+<script src="js/auth-global.js"></script>
+
+</body>
+</html>

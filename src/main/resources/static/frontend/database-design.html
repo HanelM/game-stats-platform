@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Database Structure</title>
+
+    <link
+            rel="stylesheet"
+            href="css/database-design.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+                <h2>Navigation</h2>
+                <span>bar</span>
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <div class="menu">
+
+                <a href="about.html" >About</a>
+
+                <a href="about-creator.html">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    About Creator
+                </a>
+
+                <a href="project-overview.html">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    Project Overview
+                </a>
+
+                <a href="backend.html">
+                    <i class="fa-solid fa-server"></i>
+                    Backend Architecture
+                </a>
+
+                <a href="frontend-system.html">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    Frontend Development
+                </a>
+
+                <a href="database-design.html" class="active">
+                    <i class="fa-solid fa-database"></i>
+                    Database Structure
+                </a>
+
+                <a href="swagger.html">
+                    <i class="fa-solid fa-code"></i>
+                    Swagger API Documentation
+                </a>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="database-wrapper">
+
+    <!-- HERO -->
+
+    <section class="database-hero">
+
+        <div class="hero-left">
+
+            <span class="hero-tag">
+                NOSQL DATABASE ARCHITECTURE
+            </span>
+
+            <h1>
+                Powerful
+                <span>MongoDB</span>
+                Database System
+            </h1>
+
+            <p>
+                Flexible NoSQL database structure designed for
+                gaming analytics, match history tracking,
+                player statistics and scalable data management.
+            </p>
+
+        </div>
+
+        <div class="hero-right">
+
+            <div class="database-visual">
+
+                <div class="db-circle">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+
+                <div class="db-line"></div>
+
+                <div class="db-box">
+                    Users
+                </div>
+
+                <div class="db-box">
+                    Matches
+                </div>
+
+                <div class="db-box">
+                    Analytics
+                </div>
+
+                <div class="db-box">
+                    Leaderboards
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COLLECTIONS -->
+
+    <section class="collections-section">
+
+        <div class="section-header">
+
+            <span>DATABASE COLLECTIONS</span>
+
+            <h2>
+                Core MongoDB Collections
+            </h2>
+
+        </div>
+
+        <div class="collections-grid">
+
+            <div class="collection-card">
+
+                <div class="collection-top">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <span>users</span>
+
+                </div>
+
+                <ul>
+
+                    <li>Username</li>
+
+                    <li>Email</li>
+
+                    <li>Password</li>
+
+                    <li>Role</li>
+
+                    <li>Created Date</li>
+
+                </ul>
+
+            </div>
+
+            <div class="collection-card">
+
+                <div class="collection-top">
+
+                    <i class="fa-solid fa-gamepad"></i>
+
+                    <span>matches</span>
+
+                </div>
+
+                <ul>
+
+                    <li>Player Name</li>
+
+                    <li>Kills</li>
+
+                    <li>Deaths</li>
+
+                    <li>Game Name</li>
+
+                    <li>Match Date</li>
+
+                </ul>
+
+            </div>
+
+            <div class="collection-card">
+
+                <div class="collection-top">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <span>analytics</span>
+
+                </div>
+
+                <ul>
+
+                    <li>K/D Ratio</li>
+
+                    <li>Win Rate</li>
+
+                    <li>Performance Score</li>
+
+                    <li>Total Wins</li>
+
+                    <li>Player Ranking</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- DATABASE FLOW -->
+
+    <section class="flow-section">
+
+        <div class="section-header">
+
+            <span>DATA FLOW</span>
+
+            <h2>
+                Backend Database Communication
+            </h2>
+
+        </div>
+
+        <div class="flow-wrapper">
+
+            <div class="flow-box">
+                <i class="fa-solid fa-laptop-code"></i>
+                Frontend
+            </div>
+
+            <div class="flow-arrow">
+                <i class="fa-solid fa-arrow-right"></i>
+            </div>
+
+            <div class="flow-box">
+                <i class="fa-solid fa-server"></i>
+                Spring Boot API
+            </div>
+
+            <div class="flow-arrow">
+                <i class="fa-solid fa-arrow-right"></i>
+            </div>
+
+            <div class="flow-box">
+                <i class="fa-solid fa-database"></i>
+                MongoDB
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features-section">
+
+        <div class="feature-large">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+
+            <div>
+
+                <h2>
+                    Flexible NoSQL Architecture
+                </h2>
+
+                <p>
+                    MongoDB collections allow dynamic and scalable
+                    data structures optimized for game statistics,
+                    user profiles and analytics systems.
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="feature-large">
+
+            <div class="feature-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <div>
+
+                <h2>
+                    Secure Data Management
+                </h2>
+
+                <p>
+                    User credentials, authentication tokens and
+                    protected data are securely managed through
+                    backend validation and encrypted storage.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer class="creator-footer">
+
+    <p>
+        © 2026 All rights reserved. Engineered by HanelM
+    </p>
+
+    <span>
+        Game Stats Platform Graduation Project
+    </span>
+
+</footer>
+
+<script src="js/database-design.js"></script>
+
+</body>
+</html>

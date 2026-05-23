@@ -7,10 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 
+
 import java.util.List;
 
 public interface GameMatchRepository
         extends MongoRepository<GameMatch, String> {
+
+
 
     List<GameMatch> findByPlayerUsername(
             String username,
@@ -50,4 +53,6 @@ public interface GameMatchRepository
             LocalDateTime to,
             Sort sort
     );
+
+
 }

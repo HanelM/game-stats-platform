@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface LeaderboardService {
 
-    List<Map<String, Object>> getLeaderboard();
+    List<Map<String, Object>> getLeaderboard(String gameName);
 }

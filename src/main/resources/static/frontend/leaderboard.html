@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Leaderboard</title>
+
+    <link rel="stylesheet"
+          href="css/leaderboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+
+                <h2>Navigation</h2>
+
+                <span>bar</span>
+
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <a href="games.html">
+
+                <i class="fa-solid fa-ghost"></i>
+
+                Games
+
+            </a>
+
+            <a href="matches.html">
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                Matches
+
+            </a>
+
+            <a
+                    href="match.html"
+
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Match
+
+            </a>
+
+            <a href="connected-games.html">
+
+                <i class="fa-solid fa-link"></i>
+
+                Connected games
+
+            </a>
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-table-cells-large"></i>
+
+                Dashboard
+
+            </a>
+            <a href="analytics.html" >
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+            <a href="leaderboard.html" class="active">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                Leaderboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="main-content">
+
+    <section class="leaderboard-section">
+
+        <div class="top-layout">
+
+            <!-- LEFT SIDE -->
+
+            <div class="leaderboard-side">
+
+                <h2 class="leaderboard-title">
+                    Leaderboard
+                </h2>
+
+                <div class="leaderboard-controls">
+
+                    <select id="game-select">
+
+                        <option value="" disabled selected>
+                            Choose game
+                        </option>
+
+                    </select>
+
+                    <select id="sort-select">
+
+                        <option value="kills">
+                            Sort by Kills
+                        </option>
+
+                        <option value="wins">
+                            Sort by Wins
+                        </option>
+
+                    </select>
+
+                    <input
+                            type="text"
+                            id="player-search"
+                            placeholder="Search player..."
+                    >
+
+                </div>
+
+                <div class="leaderboard-table">
+
+                    <div class="leaderboard-head">
+
+                        <span>Rank</span>
+                        <span>Player</span>
+                        <span>Wins</span>
+                        <span>Kills</span>
+
+                    </div>
+
+                    <div id="leaderboard-container">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="best-side">
+
+                <h2 class="best-games-title">
+                    Your Best Scores
+                </h2>
+
+                <div id="best-games"
+                     class="best-games">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="js/leaderboard.js"></script>
+
+</body>
+
+</html>

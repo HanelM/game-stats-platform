@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Match History</title>
+
+    <link
+            rel="stylesheet"
+            href="css/style.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="css/matches.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+                <h2>Navigation</h2>
+                <span>bar</span>
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <a href="games.html">
+
+                <i class="fa-solid fa-ghost"></i>
+
+                Games
+
+            </a>
+
+            <a href="matches.html" class="active">
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                Matches
+
+            </a>
+
+            <a href="match.html">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Match
+
+            </a>
+
+            <a href="connected-games.html">
+
+                <i class="fa-solid fa-link"></i>
+
+                Connected games
+
+            </a>
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-table-cells-large"></i>
+
+                Dashboard
+
+            </a>
+            <a href="analytics.html" >
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+            <a href="leaderboard.html">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                Leaderboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     MAIN SECTION
+========================= -->
+
+<section class="matches-section">
+
+    <div class="page-header">
+
+        <h1 id="game-title"></h1>
+
+        <p>
+            View your recent matches, statistics and performance history
+        </p>
+
+    </div>
+
+    <!-- =========================
+         STATS
+    ========================= -->
+
+    <div class="stats-dashboard">
+
+        <div class="stat-box">
+
+            <h3>Total Matches</h3>
+
+            <p id="total-matches">
+                0
+            </p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <h3>Win Rate</h3>
+
+            <p id="win-rate">
+                0%
+            </p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <h3>Total Kills</h3>
+
+            <p id="total-kills">
+                0
+            </p>
+
+        </div>
+
+        <div class="stat-box">
+
+            <h3>Average Score</h3>
+
+            <p id="avg-score">
+                0
+            </p>
+
+        </div>
+
+    </div>
+    <!-- =========================
+         FILTER BAR
+    ========================= -->
+
+    <!-- =========================
+     FILTER BUTTON
+========================= -->
+
+    <div class="matches-filter">
+
+        <button id="openFiltersBtn" class="filter-btn">
+
+            <i class="fa-solid fa-sliders"></i>
+
+            Filters
+
+        </button>
+
+    </div>
+
+    <!-- =========================
+         FILTER MODAL
+    ========================= -->
+
+    <div id="filterModal" class="filter-modal hidden">
+
+        <div class="filter-box">
+
+            <h3>Filter Matches</h3>
+
+            <!-- GAME -->
+
+            <label>Choose Game</label>
+
+            <select id="game-filter">
+
+                <option value="all">
+                    All Games
+                </option>
+
+            </select>
+
+            <!-- RESULT -->
+
+            <label>Choose Result</label>
+
+            <select id="result-filter">
+
+                <option value="all">
+                    All Results
+                </option>
+
+                <option value="wins">
+                    Wins
+                </option>
+
+                <option value="losses">
+                    Losses
+                </option>
+
+            </select>
+
+            <!-- DATE -->
+
+            <label>Choose Date Order</label>
+
+            <select id="sort-filter">
+
+                <option value="newest">
+                    Newest First
+                </option>
+
+                <option value="oldest">
+                    Oldest First
+                </option>
+
+            </select>
+
+            <!-- BEST -->
+
+            <label>Choose Type</label>
+
+            <select id="best-filter">
+
+                <option value="all">
+                    All Matches
+                </option>
+
+                <option value="best">
+                    Best Matches
+                </option>
+
+            </select>
+
+            <!-- BUTTONS -->
+
+            <div class="filter-actions">
+
+                <button id="applyFilters">
+
+                    Apply Filter
+
+                </button>
+
+                <button id="resetFilters">
+
+                    Reset
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- =========================
+         TIMELINE
+    ========================= -->
+
+    <div class="timeline-top">
+
+        <h2 class="timeline-title">
+            Recent Activity
+        </h2>
+
+
+
+    </div>
+
+    <div
+            id="activity-timeline"
+            class="activity-timeline"
+    >
+    </div>
+
+    <!-- =========================
+         MATCHES GRID
+    ========================= -->
+
+    <div
+            id="matches-container"
+            class="matches-grid"
+    >
+    </div>
+
+</section>
+
+<script src="js/matches.js"></script>
+
+</body>
+</html>

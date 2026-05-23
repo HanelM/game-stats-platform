@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Match</title>
+
+    <link
+            rel="stylesheet"
+            href="css/match.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            <i class="fa-solid fa-crosshairs"></i>
+        </div>
+
+        <div class="logo-text">
+            <h2>Navigation</h2>
+            <span>bar</span>
+        </div>
+
+    </div>
+
+    <div class="menu">
+
+        <a href="games.html">
+            <i class="fa-solid fa-ghost"></i>
+            Games
+        </a>
+
+        <a href="matches.html">
+            <i class="fa-solid fa-gamepad"></i>
+            Matches
+        </a>
+
+        <a
+                href="match.html"
+                class="active"
+        >
+            <i class="fa-solid fa-plus"></i>
+            Add Match
+        </a>
+
+        <a href="connected-games.html">
+            <i class="fa-solid fa-link"></i>
+            Connected games
+        </a>
+
+        <a href="dashboard.html">
+            <i class="fa-solid fa-table-cells-large"></i>
+            Dashboard
+        </a>
+        <a href="analytics.html" >
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            Analytics
+
+        </a>
+
+        <a href="leaderboard.html">
+            <i class="fa-solid fa-trophy"></i>
+            Leaderboard
+        </a>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     PAGE CONTENT
+========================= -->
+
+<div class="match-page">
+
+    <div class="match-card">
+
+        <!-- HEADER -->
+
+        <div class="match-header">
+
+            <h1>
+                Add Match Manually
+            </h1>
+
+            <p>
+                Track your performance and improve your stats
+            </p>
+
+        </div>
+
+        <!-- FORM -->
+
+        <div class="match-form">
+
+            <!-- GAME SELECT -->
+
+            <div class="input-group">
+
+                <label>Select Game</label>
+
+                <select id="game-name">
+
+                    <option value="">
+                        Choose Game
+                    </option>
+
+                    <option value="PUBG">
+                        PUBG
+                    </option>
+
+                    <option value="CS2">
+                        CS2
+                    </option>
+
+                    <option value="Valorant">
+                        Valorant
+                    </option>
+
+                    <option value="League of Legends">
+                        League of Legends
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- RESULT -->
+
+            <div class="input-group">
+
+                <label>Result</label>
+
+                <select id="result">
+
+                    <option value="WIN">
+                        WIN
+                    </option>
+
+                    <option value="LOSS">
+                        LOSS
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- DYNAMIC FIELDS -->
+
+            <div
+                    id="dynamic-fields"
+                    class="dynamic-fields"
+            >
+            </div>
+
+            <!-- BUTTONS -->
+
+            <div class="match-actions">
+
+                <button
+                        class="save-btn"
+                        onclick="saveMatch()"
+                >
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Match
+
+                </button>
+
+                <a
+                        href="connected-games.html"
+                        class="connect-btn"
+                >
+
+                    <i class="fa-solid fa-link"></i>
+
+                    Connect To Your Game
+
+                </a>
+
+            </div>
+
+            <p id="match-message"></p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/match.js"></script>
+
+</body>
+</html>

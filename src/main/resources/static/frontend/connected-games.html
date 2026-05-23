@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Connected Games</title>
+
+    <link
+            rel="stylesheet"
+            href="css/connected-games.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+                <h2>Navigation</h2>
+                <span>bar</span>
+            </div>
+
+        </div>
+
+        <!-- MENU -->
+
+        <div class="menu">
+
+            <a href="games.html">
+
+                <i class="fa-solid fa-ghost"></i>
+
+                Games
+
+            </a>
+
+            <a href="matches.html">
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                Matches
+
+            </a>
+
+            <a
+                    href="match.html"
+
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Match
+
+            </a>
+
+            <a href="connected-games.html" class="active">
+
+                <i class="fa-solid fa-link"></i>
+
+                Connected games
+
+            </a>
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-table-cells-large"></i>
+
+                Dashboard
+
+            </a>
+            <a href="analytics.html" >
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+            <a href="leaderboard.html" >
+
+                <i class="fa-solid fa-trophy"></i>
+
+                Leaderboard
+
+            </a>
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     PAGE CONTENT
+========================= -->
+
+<div class="page">
+
+    <div class="top-section">
+
+        <h1>
+            Connected Game Accounts
+        </h1>
+
+        <p>
+            Connect your real gaming profiles
+        </p>
+
+    </div>
+
+    <!-- PUBG CARD -->
+
+    <div class="game-card">
+
+        <div class="game-top">
+
+            <div class="game-left">
+
+                <div class="game-icon">
+
+                    <i class="fa-solid fa-crosshairs"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        PUBG
+                    </h2>
+
+                    <span id="connectionStatus">
+
+                        Not Connected
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <button id="connectBtn">
+
+                Connect Account
+
+            </button>
+
+        </div>
+
+        <!-- EMPTY -->
+
+        <div
+                id="emptyState"
+                class="empty-state"
+        >
+
+            <i class="fa-solid fa-link-slash"></i>
+
+            <h3>
+                No PUBG Account Connected
+            </h3>
+
+            <p>
+                Connect your PUBG profile
+                to load real statistics
+            </p>
+
+        </div>
+
+        <!-- REAL DATA -->
+
+        <div
+                id="statsContainer"
+                class="stats-container hidden"
+        >
+
+            <div class="stats-grid">
+
+                <div class="stat-box">
+
+                    <span>KILLS</span>
+
+                    <h3 id="kills">
+                        0
+                    </h3>
+
+                </div>
+
+                <div class="stat-box">
+
+                    <span>WINS</span>
+
+                    <h3 id="wins">
+                        0
+                    </h3>
+
+                </div>
+
+                <div class="stat-box">
+
+                    <span>KD</span>
+
+                    <h3 id="kd">
+                        0
+                    </h3>
+
+                </div>
+
+                <div class="stat-box">
+
+                    <span>MATCHES</span>
+
+                    <h3 id="matches">
+                        0
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <div class="extra-stats">
+
+                <div>
+
+                    Average Damage:
+                    <strong id="damage">
+
+                        0
+
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    Survival Time:
+                    <strong id="survival">
+
+                        0
+
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    Rank:
+                    <strong id="rank">
+
+                        Unknown
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/connected-games.js"></script>
+
+</body>
+</html>

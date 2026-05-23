@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard</title>
+
+    <link
+            rel="stylesheet"
+            href="css/dashboard.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+
+                <h2>Navigation</h2>
+
+                <span>bar</span>
+
+            </div>
+
+        </div>
+
+        <div class="menu">
+            <a href="games.html">
+
+                <i class="fa-solid fa-ghost"></i>
+
+                Games
+
+            </a>
+            <a href="matches.html">
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                Matches
+
+            </a>
+            <a href="match.html">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add match
+
+            </a>
+            <a href="connected-games.html">
+
+                <i class="fa-solid fa-link"></i>
+
+                Connected games
+
+            </a>
+
+
+            <a href="#" class="active">
+
+                <i class="fa-solid fa-table-cells-large"></i>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="analytics.html">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+
+            <a href="leaderboard.html">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                Leaderboard
+
+            </a>
+
+
+
+        </div>
+
+    </div>
+
+
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <!-- TOP -->
+
+    <div class="top-bar">
+
+        <div class="top-title">
+
+            <h1>
+                Analytics Overview
+            </h1>
+
+            <p>
+                Performance statistics across all games
+            </p>
+
+        </div>
+
+        <div class="top-right">
+
+        <select id="chartGameSelect">
+
+            <option value="all">
+                All Games
+            </option>
+
+            <option>
+                Valorant
+            </option>
+
+            <option>
+                CS2
+            </option>
+
+            <option>
+                Fortnite
+            </option>
+
+        </select>
+        </div>
+
+    </div>
+
+    <!-- GRID -->
+
+    <div class="dashboard-grid">
+
+        <!-- LEFT -->
+
+        <div>
+
+            <!-- STATS -->
+
+            <div class="stats-row">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon green">
+
+                            <i class="fa-solid fa-crosshairs"></i>
+
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>
+                                TOTAL KILLS
+                            </span>
+
+                            <h2 id="totalKills">
+                                43
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <canvas class="mini-chart"></canvas>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon blue">
+
+                            <i class="fa-solid fa-trophy"></i>
+
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>
+                                WIN RATE
+                            </span>
+
+                            <h2 id="winRate">
+                                60%
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <canvas class="mini-chart"></canvas>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon green">
+                            KD
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>
+                                KD RATIO
+                            </span>
+
+                            <h2 id="kdRatio">
+                                2.87
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <canvas class="mini-chart"></canvas>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon yellow">
+
+                            <i class="fa-regular fa-star"></i>
+
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>
+                                AVG SCORE
+                            </span>
+
+                            <h2 id="avgScore">
+                                0
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <canvas class="mini-chart"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- MAIN CHART -->
+
+            <div class="big-chart-card">
+
+                <div class="section-title">
+
+                    Global Game Statistics
+
+                </div>
+
+                <canvas id="mainChart"></canvas>
+
+            </div>
+
+            <!-- ANALYTICS -->
+
+            <div class="analytics-grid">
+
+                <div class="small-chart-card">
+
+                    <h3 class="green-text">
+                        KD Ratio Analytics
+                    </h3>
+
+                    <span>
+                        KD
+                    </span>
+
+                    <canvas id="kdChart"></canvas>
+
+                </div>
+
+                <div class="small-chart-card">
+
+                    <h3 class="blue-text">
+                        Win Rate Analytics
+                    </h3>
+
+                    <span>
+                        WINS (%)
+                    </span>
+
+                    <canvas id="winRateChart"></canvas>
+
+                </div>
+
+                <div class="small-chart-card">
+
+                    <h3 class="yellow-text">
+                        Score Analytics
+                    </h3>
+
+                    <span>
+                        SCORE
+                    </span>
+
+                    <canvas id="scoreChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-column">
+
+            <!-- LEVEL -->
+
+            <div class="side-card">
+
+                <div class="side-title">
+                    Player Level
+                </div>
+
+                <div class="level-box">
+
+                    <div
+                            class="hexagon"
+                            id="playerLevel"
+                    >
+                        1
+                    </div>
+
+                    <div
+                            class="level-text"
+                            id="levelGameText"
+                    >
+                        Manual Matches
+                    </div>
+
+                    <div class="xp-bar">
+
+                        <div
+                                class="xp-fill"
+                                id="xpFill"
+                        ></div>
+
+                    </div>
+
+                    <div
+                            class="xp-text"
+                            id="xpText"
+                    >
+                        0 / 1000 XP
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACHIEVEMENTS -->
+
+            <div class="side-card">
+
+                <div class="side-title">
+                    Achievements
+                </div>
+
+                <div id="achievementList"></div>
+
+            </div>
+
+            <!-- RECENT -->
+
+            <div class="side-card recent-card">
+
+                <div class="side-title">
+
+                    Recent Activity
+
+                </div>
+
+                <div id="recentActivity"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

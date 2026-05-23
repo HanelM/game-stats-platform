@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Swagger API Documentation</title>
+
+    <link
+            rel="stylesheet"
+            href="css/swagger.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+                <h2>Navigation</h2>
+                <span>bar</span>
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <div class="menu">
+
+                <a href="about.html" >About</a>
+
+                <a href="about-creator.html">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    About Creator
+                </a>
+
+                <a href="project-overview.html">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    Project Overview
+                </a>
+
+                <a href="backend.html">
+                    <i class="fa-solid fa-server"></i>
+                    Backend Architecture
+                </a>
+
+                <a href="frontend-system.html">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    Frontend Development
+                </a>
+
+                <a href="database-design.html">
+                    <i class="fa-solid fa-database"></i>
+                    Database Structure
+                </a>
+
+                <a href="swagger.html" class="active">
+                    <i class="fa-solid fa-code"></i>
+                    Swagger API Documentation
+                </a>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="swagger-wrapper">
+
+    <!-- HERO -->
+
+    <section class="hero-section">
+
+        <div class="hero-content">
+
+            <span class="hero-badge">
+                REST API DOCUMENTATION
+            </span>
+
+            <h1>
+                Professional
+                <span>Swagger API</span>
+                System
+            </h1>
+
+            <p>
+                Complete REST API documentation platform built for
+                authentication, analytics, gaming statistics,
+                match history management and secure backend communication.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#" class="primary-btn">
+                    Open Swagger UI
+                </a>
+
+                <a href="#" class="secondary-btn">
+                    View Endpoints
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- API STATS -->
+
+    <section class="stats-section">
+
+        <div class="stats-card">
+
+            <h2>25+</h2>
+
+            <span>REST Endpoints</span>
+
+        </div>
+
+        <div class="stats-card">
+
+            <h2>JWT</h2>
+
+            <span>Secure Authentication</span>
+
+        </div>
+
+        <div class="stats-card">
+
+            <h2>Real-Time</h2>
+
+            <span>Gaming Analytics</span>
+
+        </div>
+
+        <div class="stats-card">
+
+            <h2>Spring</h2>
+
+            <span>Boot Backend</span>
+
+        </div>
+
+    </section>
+
+    <!-- API FEATURES -->
+
+    <section class="about-grid">
+
+        <div class="about-card">
+
+            <div class="about-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+
+            <h2>
+                JWT Authentication
+            </h2>
+
+            <p>
+                Secure login and registration endpoints using
+                JWT token authorization and protected API access.
+            </p>
+
+        </div>
+
+        <div class="about-card">
+
+            <div class="about-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <h2>
+                Analytics APIs
+            </h2>
+
+            <p>
+                Advanced player analytics, K/D statistics,
+                leaderboard ranking and performance tracking systems.
+            </p>
+
+        </div>
+
+        <div class="about-card">
+
+            <div class="about-icon">
+                <i class="fa-solid fa-server"></i>
+            </div>
+
+            <h2>
+                REST Architecture
+            </h2>
+
+            <p>
+                Structured RESTful architecture powered by
+                Java Spring Boot and MongoDB integration.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- CONTROLLERS -->
+
+    <section class="swagger-section">
+
+        <div class="section-title">
+
+            <span>API CONTROLLERS</span>
+
+            <h2>
+                Backend Endpoint Structure
+            </h2>
+
+        </div>
+
+        <div class="endpoint-grid">
+
+            <div class="endpoint-card">
+
+                <div class="endpoint-header">
+                    <i class="fa-solid fa-user-shield"></i>
+                    Authentication Controller
+                </div>
+
+                <div class="endpoint-item post">
+                    POST /api/auth/register
+                </div>
+
+                <div class="endpoint-item post">
+                    POST /api/auth/login
+                </div>
+
+            </div>
+
+            <div class="endpoint-card">
+
+                <div class="endpoint-header">
+                    <i class="fa-solid fa-users"></i>
+                    User Controller
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/users/profile
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/users/leaderboard
+                </div>
+
+            </div>
+
+            <div class="endpoint-card">
+
+                <div class="endpoint-header">
+                    <i class="fa-solid fa-gamepad"></i>
+                    Match Controller
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/matches/stats
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/matches/analytics
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/matches/filter
+                </div>
+
+                <div class="endpoint-item post">
+                    POST /api/matches
+                </div>
+
+            </div>
+
+            <div class="endpoint-card">
+
+                <div class="endpoint-header">
+                    <i class="fa-solid fa-ranking-star"></i>
+                    Leaderboard Controller
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/leaderboard
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/leaderboard/{game}
+                </div>
+
+            </div>
+
+            <div class="endpoint-card">
+
+                <div class="endpoint-header">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    History Controller
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/history/{playerName}
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/history/recent
+                </div>
+
+                <div class="endpoint-item post">
+                    POST /api/history
+                </div>
+
+            </div>
+
+            <div class="endpoint-card">
+
+                <div class="endpoint-header">
+                    <i class="fa-solid fa-user-gear"></i>
+                    Admin Controller
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/admin/users
+                </div>
+
+                <div class="endpoint-item get">
+                    GET /api/admin/users/search
+                </div>
+
+                <div class="endpoint-item delete">
+                    DELETE /api/admin/users/{id}
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TECHNOLOGIES -->
+
+    <section class="tech-section">
+
+        <div class="section-title">
+
+            <span>TECHNOLOGY STACK</span>
+
+            <h2>
+                API Infrastructure
+            </h2>
+
+        </div>
+
+        <div class="tech-grid">
+
+            <div class="tech-box">
+                <i class="fa-brands fa-java"></i>
+                Spring Boot
+            </div>
+
+            <div class="tech-box">
+                <i class="fa-solid fa-database"></i>
+                MongoDB
+            </div>
+
+            <div class="tech-box">
+                <i class="fa-solid fa-key"></i>
+                JWT Tokens
+            </div>
+
+            <div class="tech-box">
+                <i class="fa-solid fa-code"></i>
+                Swagger OpenAPI
+            </div>
+
+            <div class="tech-box">
+                <i class="fa-solid fa-network-wired"></i>
+                REST APIs
+            </div>
+
+            <div class="tech-box">
+                <i class="fa-solid fa-shield"></i>
+                Security Filters
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer class="creator-footer">
+
+    <p>
+        © 2026 All rights reserved. Engineered by HanelM
+    </p>
+
+    <span>
+        Game Stats Platform Graduation Project
+    </span>
+
+</footer>
+
+<script src="js/swagger.js"></script>
+
+</body>
+</html>

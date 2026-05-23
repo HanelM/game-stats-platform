@@ -27,7 +27,11 @@ public class LeaderboardController {
             description = "Returns top players ranked by wins, score or statistics."
     )
     @GetMapping
-    public List<Map<String, Object>> getLeaderboard() {
-        return leaderboardService.getLeaderboard();
+    public List<Map<String, Object>> getLeaderboard(
+            @RequestParam String gameName
+    ) {
+
+        return leaderboardService.getLeaderboard(gameName);
     }
+
 }

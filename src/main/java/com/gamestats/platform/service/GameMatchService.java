@@ -7,6 +7,9 @@ import org.springframework.data.domain.Page;
 import com.gamestats.platform.dto.AnalyticsResponse;
 import java.time.LocalDate;
 import com.gamestats.platform.dto.GameMatchResponse;
+import java.util.List;
+
+
 
 
 
@@ -50,5 +53,14 @@ public interface GameMatchService {
             LocalDate from,
             LocalDate to
     );
+
+    AnalyticsResponse getAnalyticsForUser(
+            String username
+    );
+
+    List<GameMatch> getMatchesForUser(
+            String username
+    );
+
 
 }

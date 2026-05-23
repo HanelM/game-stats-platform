@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.gamestats.platform.dto.ErrorResponse;
+import com.gamestats.platform.exception.GameNotSupportedException;
 
 
 import java.time.LocalDateTime;
@@ -82,6 +83,19 @@ public class GlobalExceptionHandler {
                         500,
                         "Server Error",
                         "Something went wrong",
+                        LocalDateTime.now()
+                ));
+    }
+    @ExceptionHandler(GameNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleGameNotSupported(
+            GameNotSupportedException ex
+    ) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(
+                        400,
+                        "Bad Request",
+                        ex.getMessage(),
                         LocalDateTime.now()
                 ));
     }

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard</title>
+
+    <link
+            rel="stylesheet"
+            href="css/admin.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+</head>
+
+<body>
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+                <h2>Navigation</h2>
+                <span>bar</span>
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <div class="menu">
+
+                <a
+                        href="admin.html"
+                        class="active"
+                >
+                    <i class="fa-solid fa-user-shield"></i>
+                    Admin Panel
+                </a>
+                <a href="delete-users.html">
+                    <i class="fa-solid fa-house"></i>
+                    Delete users
+                </a>
+                <a href="all-users.html">
+                    <i class="fa-solid fa-gamepad"></i>
+                    All users
+                </a>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     TOP NAVBAR
+========================= -->
+
+<header class="top-navbar">
+
+    <div class="nav-left">
+
+        <h1>🎮Game <span>Stats </span>Platform</h1>
+
+    </div>
+
+    <nav class="nav-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="games.html" >
+            Games
+        </a>
+
+        <a href="about.html">About</a>
+
+        <a href="account.html" id="nav-user">
+            Account
+        </a>
+        <a href="admin.html" class="active-top">
+            Admin Panel
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =========================
+     MAIN PAGE
+========================= -->
+
+<div class="admin-page">
+
+    <!-- =========================
+         TOP HEADER
+    ========================= -->
+
+    <div class="admin-header">
+
+        <div>
+
+            <h1>
+                Admin Dashboard
+            </h1>
+
+            <p>
+                Control platform users, monitor activity and manage the system.
+            </p>
+
+        </div>
+
+        <!-- SEARCH -->
+
+        <div class="top-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search users by username or email..."
+            >
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         TOP STATS
+    ========================= -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div>
+
+                <h2 id="totalUsers">
+                    0
+                </h2>
+
+                <p>
+                    Total Users
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+
+            <div>
+
+                <h2 id="adminCount">
+                    0
+                </h2>
+
+                <p>
+                    Administrators
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div>
+
+                <h2>
+                    Online
+                </h2>
+
+                <p>
+                    System Status
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-server"></i>
+            </div>
+
+            <div>
+
+                <h2>
+                    Secure
+                </h2>
+
+                <p>
+                    Backend Security
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <div class="dashboard-grid">
+
+        <!-- LEFT SIDE -->
+
+        <div class="dashboard-left">
+
+            <!-- ADMIN INFO -->
+
+            <div class="info-card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Administrator Access
+                    </h2>
+
+                    <i class="fa-solid fa-lock"></i>
+
+                </div>
+
+                <div class="info-content">
+
+                    <div class="info-row">
+
+                        <span>
+                            Access Level
+                        </span>
+
+                        <strong>
+                            Full Control
+                        </strong>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <span>
+                            Permissions
+                        </span>
+
+                        <strong>
+                            Read / Write / Delete
+                        </strong>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <span>
+                            Security
+                        </span>
+
+                        <strong>
+                            JWT Protected
+                        </strong>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <span>
+                            API Status
+                        </span>
+
+                        <strong class="green">
+                            Operational
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SYSTEM INFO -->
+
+            <div class="info-card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Platform Information
+                    </h2>
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                </div>
+
+                <div class="system-box">
+
+                    <p>
+                        • User management system active
+                    </p>
+
+                    <p>
+                        • Analytics API connected
+                    </p>
+
+                    <p>
+                        • Match tracking operational
+                    </p>
+
+                    <p>
+                        • Search functionality enabled
+                    </p>
+
+                    <p>
+                        • Database synchronized
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="dashboard-right">
+
+            <div class="users-header">
+
+                <h2 id="usersTitle">
+                    Recently Logged Accounts
+                </h2>
+
+            </div>
+
+            <div
+                    class="users-grid"
+                    id="usersGrid"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+<div>
+    <!-- FOOTER -->
+    <footer class="creator-footer">
+
+        <p>
+            © 2026 All rights reserved. Engineered by HanelM
+        </p>
+
+        <span>
+            Game Stats Platform Graduation Project
+        </span>
+
+    </footer>
+</div>
+<script src="js/admin.js"></script>
+<script src="js/navbar.js"></script>
+
+</body>
+</html>

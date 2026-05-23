@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Games</title>
+
+    <!-- FONT AWESOME -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/games.css">
+
+
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+                <h2>Navigation</h2>
+                <span>bar</span>
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <div class="menu">
+
+                <a href="matches.html">
+
+                    <i class="fa-solid fa-gamepad"></i>
+
+                    Matches
+
+                </a>
+                <a href="match.html">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add match
+
+                </a>
+                <a href="connected-games.html">
+
+                    <i class="fa-solid fa-link"></i>
+
+                    Connected games
+
+                </a>
+
+                <a href="dashboard.html">
+
+                    <i class="fa-solid fa-table-cells-large"></i>
+
+                    Dashboard
+
+                </a>
+                <a href="analytics.html" >
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    Analytics
+
+                </a>
+
+
+                <a href="leaderboard.html">
+
+                    <i class="fa-solid fa-trophy"></i>
+
+                    Leaderboard
+
+                </a>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     TOP NAVBAR
+========================= -->
+
+<header class="top-navbar">
+
+    <div class="nav-left">
+
+        <h1>🎮Game <span>Stats </span>Platform</h1>
+
+    </div>
+
+    <nav class="nav-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="games.html" class="active-top">
+            Games
+        </a>
+
+        <a href="about.html">About</a>
+
+        <a href="account.html" id="nav-user">
+            Account
+        </a>
+            <div class="top-right-actions">
+
+                <div id="adminButtonContainer"></div>
+
+            </div>
+
+    </nav>
+
+</header>
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<main class="games-page">
+
+    <!-- FILTERS -->
+
+    <section class="controls">
+
+        <input
+                type="text"
+                id="search-input"
+                placeholder="Search games..."
+        >
+
+        <select id="genre-filter">
+
+            <option value="all">
+                All Genres
+            </option>
+
+            <option value="FPS">
+                FPS
+            </option>
+
+            <option value="RPG">
+                RPG
+            </option>
+
+            <option value="MOBA">
+                MOBA
+            </option>
+
+        </select>
+
+    </section>
+
+    <!-- PLAYED GAMES -->
+
+    <section class="my-games-section">
+
+        <h2>🎯 My Played Games</h2>
+
+        <div
+                id="played-games-container"
+                class="games-grid"
+        ></div>
+
+    </section>
+
+    <!-- DISCOVER -->
+
+    <section class="discover-section">
+
+        <h2>🔥 Discover New Games</h2>
+
+        <div
+                id="games-container"
+                class="games-grid"
+        ></div>
+
+    </section>
+
+</main>
+<div>
+<!-- FOOTER -->
+
+<footer class="creator-footer">
+
+    <p>
+        © 2026 All rights reserved. Engineered by HanelM
+    </p>
+
+    <span>
+            Game Stats Platform Graduation Project
+        </span>
+
+</footer>
+</div>
+
+
+<!-- JS -->
+<script src="js/games-data.js"></script>
+<script src="js/games.js"></script>
+<script src="js/navbar.js"></script>
+
+</body>
+</html>

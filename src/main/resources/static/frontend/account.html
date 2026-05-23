@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+
+<div class="top-navbar">
+
+    <div class="nav-left">
+        <h1>🎮Game <span>Stats </span>Platform</h1>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="index.html" >Home</a>
+
+        <a href="games.html">Games</a>
+
+        <a href="about.html">About</a>
+
+        <a href="account.html" class="active-top" id="nav-user">
+            Account
+        </a>
+        <div class="top-right-actions">
+
+            <div id="adminButtonContainer"></div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- LOGIN / REGISTER -->
+<section
+        class="single-account-page"
+        id="auth-section"
+>
+
+    <div class="single-account-card">
+
+        <h2 id="form-title">
+            Login
+        </h2>
+
+        <!-- LOGIN -->
+        <div id="login-form">
+
+            <input
+                    type="text"
+                    id="login-username"
+                    placeholder="Username"
+            >
+
+            <input
+                    type="password"
+                    id="login-password"
+                    placeholder="Password"
+            >
+
+            <button
+                    type="button"
+                    onclick="login()"
+            >
+                Login
+            </button>
+
+            <p id="login-error"></p>
+
+            <p class="switch-text">
+
+                Don't have account?
+
+                <a
+                        href="#"
+                        onclick="showRegister()"
+                >
+                    Create account
+                </a>
+
+            </p>
+
+        </div>
+
+        <!-- REGISTER -->
+        <div
+                id="register-form"
+                style="display:none;"
+        >
+
+            <input
+                    type="text"
+                    id="reg-username"
+                    placeholder="Username"
+            >
+
+            <input
+                    type="email"
+                    id="reg-email"
+                    placeholder="Email"
+            >
+
+            <input
+                    type="password"
+                    id="reg-password"
+                    placeholder="Password"
+            >
+
+            <button
+                    type="button"
+                    onclick="register()"
+            >
+                Register
+            </button>
+
+            <p id="register-error"></p>
+
+            <p class="switch-text">
+
+                Already have account?
+
+                <a
+                        href="#"
+                        onclick="showLogin()"
+                >
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div id="profile-section">
+
+    <div class="profile-card">
+
+        <div class="profile-header">
+            <div class="profile-extra">
+
+                <div class="extra-box">
+                    <h3>Current Level</h3>
+                    <p id="profile-level">1</p>
+                </div>
+
+            </div>
+
+            <div class="profile-avatar"
+                 id="profile-avatar">
+
+                D
+
+            </div>
+
+            <div class="profile-info">
+
+                <h2 id="profile-username">
+                    Username
+                </h2>
+
+                <p>
+                    Professional Gamer Statistics
+                </p>
+
+                <p>
+                    📧 Email:
+                    <span id="profile-email">
+            -
+        </span>
+                </p>
+
+                <p>
+                    📅 Member Since:
+                    <span id="profile-created">
+            -
+        </span>
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="profile-stats">
+            <div class="xp-section">
+
+                <div class="xp-top">
+
+                    <span>XP Progress</span>
+
+                    <span id="xp-text">
+            0 / 1000 XP
+        </span>
+
+                </div>
+
+                <div class="xp-bar">
+
+                    <div
+                            class="xp-fill"
+                            id="xp-fill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <h3>Total Matches</h3>
+
+                <p id="profile-matches">0</p>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <h3>Wins</h3>
+
+                <p id="profile-wins">0</p>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <h3>Losses</h3>
+
+                <p id="profile-losses">0</p>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <h3>Win Rate</h3>
+
+                <p id="profile-winrate">0%</p>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <h3>Total Kills</h3>
+
+                <p id="profile-kills">0</p>
+
+            </div>
+
+            <div class="profile-stat">
+
+                <h3>Favorite Game</h3>
+
+                <p id="favorite-game">-</p>
+
+            </div>
+
+        </div>
+        <div class="profile-actions">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="games.html">
+                Games
+            </a>
+
+            <a href="analytics.html">
+                Analytics
+            </a>
+
+        </div>
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+        </div>
+
+    </div>
+</section>
+<div>
+<!-- FOOTER -->
+
+<footer class="creator-footer">
+
+    <p>
+        © 2026 All rights reserved. Engineered by HanelM
+    </p>
+
+    <span>
+            Game Stats Platform Graduation Project
+        </span>
+
+</footer>
+</div>
+<script src="js/account.js"></script>
+<script src="js/navbar.js"></script>
+
+
+</body>
+</html>

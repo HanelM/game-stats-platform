@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Analytics</title>
+
+    <link
+            rel="stylesheet"
+            href="css/analytics.css"
+    >
+
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div class="logo-text">
+
+                <h2>Navigation</h2>
+
+                <span>bar</span>
+
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <a href="games.html">
+
+                <i class="fa-solid fa-ghost"></i>
+
+                Games
+
+            </a>
+
+            <a href="matches.html">
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                Matches
+
+            </a>
+
+            <a href="match.html">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Match
+
+            </a>
+
+            <a href="connected-games.html">
+
+                <i class="fa-solid fa-link"></i>
+
+                Connected games
+
+            </a>
+
+            <a href="dashboard.html">
+
+                <i class="fa-solid fa-table-cells-large"></i>
+
+                Dashboard
+
+            </a>
+
+            <a href="analytics.html" class="active">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+            <a href="leaderboard.html">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                Leaderboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="analytics-main">
+
+    <!-- =========================
+         TOP BAR
+    ========================= -->
+
+    <div class="analytics-top">
+
+        <div>
+
+            <h1>
+                Advanced Analytics
+            </h1>
+
+            <p>
+                Detailed performance insights and statistics
+            </p>
+
+        </div>
+
+        <select id="analyticsGameSelect">
+
+            <option value="all">
+                All Games
+            </option>
+
+        </select>
+
+    </div>
+
+    <!-- =========================
+         TOP ADVANCED STATS
+    ========================= -->
+
+    <section class="advanced-stats-grid">
+
+        <!-- BEST KILL MATCH -->
+
+        <div class="advanced-card">
+
+            <div class="advanced-icon green">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Best Kill Match
+                </span>
+
+                <h2 id="bestKillMatch">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- TOTAL WINS -->
+
+        <div class="advanced-card">
+
+            <div class="advanced-icon gold">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Total Wins
+                </span>
+
+                <h2 id="totalWins">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- HIGHEST KD -->
+
+        <div class="advanced-card">
+
+            <div class="advanced-icon blue">
+                KD
+            </div>
+
+            <div>
+
+                <span>
+                    Highest KD
+                </span>
+
+                <h2 id="highestKD">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+        <!-- TOTAL LOSSES -->
+
+        <div class="advanced-card">
+
+            <div class="advanced-icon red">
+                <i class="fa-solid fa-skull"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Total Losses
+                </span>
+
+                <h2 id="totalLosses">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+         AI + GAME COMPARISON
+    ========================= -->
+
+    <section class="dual-grid">
+
+        <!-- AI INSIGHTS -->
+
+        <div class="insights-section">
+
+            <div class="section-header">
+
+                AI Performance Insights
+
+            </div>
+
+            <div
+                    class="insights-grid"
+                    id="insightsGrid"
+            ></div>
+
+        </div>
+
+        <!-- GAME COMPARISON -->
+
+        <div class="comparison-section">
+
+            <div class="section-header">
+
+                Game Comparison
+
+            </div>
+
+            <div
+                    class="comparison-grid"
+                    id="comparisonGrid"
+            ></div>
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+         MAIN ANALYTICS CHART
+    ========================= -->
+
+    <section class="analytics-chart-section">
+
+        <div class="section-header">
+
+            Match Performance Analytics
+
+        </div>
+
+        <div class="chart-container">
+
+            <canvas id="analyticsChart"></canvas>
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+         BOTTOM OVERVIEW
+    ========================= -->
+
+    <section class="overview-grid">
+
+        <!-- TOTAL MATCHES -->
+
+        <div class="overview-card">
+
+            <span>
+                Total Matches
+            </span>
+
+            <h2 id="totalMatches">
+                0
+            </h2>
+
+        </div>
+
+        <!-- TOTAL KILLS -->
+
+        <div class="overview-card">
+
+            <span>
+                Total Kills
+            </span>
+
+            <h2 id="totalKills">
+                0
+            </h2>
+
+        </div>
+
+        <!-- TOTAL DEATHS -->
+
+        <div class="overview-card">
+
+            <span>
+                Total Deaths
+            </span>
+
+            <h2 id="totalDeaths">
+                0
+            </h2>
+
+        </div>
+
+        <!-- WIN RATE -->
+
+        <div class="overview-card">
+
+            <span>
+                Win Rate
+            </span>
+
+            <h2 id="winRate">
+                0%
+            </h2>
+
+        </div>
+
+        <!-- AVERAGE KD -->
+
+        <div class="overview-card">
+
+            <span>
+                Average KD
+            </span>
+
+            <h2 id="averageKD">
+                0
+            </h2>
+
+        </div>
+
+        <!-- AVERAGE SCORE -->
+
+        <div class="overview-card">
+
+            <span>
+                Average Score
+            </span>
+
+            <h2 id="averageScore">
+                0
+            </h2>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script src="js/analytics.js"></script>
+
+</body>
+</html>

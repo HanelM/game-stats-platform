@@ -1,6 +1,7 @@
 package com.gamestats.platform.controller;
 
 import com.gamestats.platform.dto.LeaderboardResponse;
+import com.gamestats.platform.dto.UserResponse;
 import com.gamestats.platform.model.GameMatch;
 import com.gamestats.platform.model.User;
 import com.gamestats.platform.repository.GameMatchRepository;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -31,9 +33,46 @@ public class UserController {
             description = "Returns profile information for authenticated user."
     )
     @GetMapping("/profile")
+    public UserResponse getProfile(Authentication authentication) {
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow();
+
+        /* FIX OLD USERS WITHOUT createdAt */
+        if (user.getCreatedAt() == null) {
+
+            user.setCreatedAt(java.time.LocalDateTime.now());
+
+            userRepository.save(user);
+        }
+
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getCreatedAt()
+        );
+    }
+    /*@GetMapping("/profile")
     public String getProfile(org.springframework.security.core.Authentication authentication) {
         return "Welcome " + authentication.getName();
     }
+    @GetMapping("/profile")
+    public User getProfile(
+            org.springframework.security.core.Authentication authentication
+    ) {
+
+        String username =
+                authentication.getName();
+
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow();
+    }
+    */
 
     @GetMapping("/leaderboard")
     public List<LeaderboardResponse> getLeaderboard() {

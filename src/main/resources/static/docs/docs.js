@@ -127,8 +127,11 @@ window.onload = () => {
 
                         if(profileResponse.ok){
 
-                            let username =
-                                await profileResponse.text();
+                           let user =
+                               await profileResponse.json();
+
+                           let username =
+                               user.username;
 
                             username =
                                 username.replace(
@@ -261,8 +264,11 @@ window.onload = () => {
             }
 
         })
-        .then(r => r.text())
-        .then(username => {
+        .then(r => r.json())
+        .then(user => {
+
+            let username =
+                user.username;
 
             username =
                 username.replace(
@@ -406,8 +412,11 @@ window.onload = () => {
                                     return;
                                 }
 
+                                let user =
+                                    await response.json();
+
                                 let username =
-                                    await response.text();
+                                    user.username;
 
                                 username =
                                     username.replace(

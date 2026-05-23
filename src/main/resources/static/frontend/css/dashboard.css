@@ -1,0 +1,1062 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body{
+
+    margin:0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(0,255,136,0.05),
+            transparent 25%
+        ),
+        #07110a;
+
+    font-family:Arial,sans-serif;
+
+    color:white;
+
+    overflow-x:hidden;
+
+    padding-top:50px;
+}
+
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+
+    top:0px;
+
+    width:220px;
+
+    height:calc(100vh );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,13,12,0.99),
+            rgba(5,8,7,0.99)
+        );
+
+    border-right:
+        1px solid rgba(255,255,255,0.05);
+
+    padding:26px 18px;
+
+    z-index:2000;
+
+    box-sizing:border-box;
+
+    overflow-y:auto;
+
+    box-shadow:
+        6px 0 26px rgba(0,0,0,0.28);
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:28px;
+}
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    border:2px solid #00ff88;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#00ff88;
+
+    font-size:16px;
+
+    box-shadow:
+        0 0 14px rgba(0,255,136,0.15);
+}
+
+.logo-text h2{
+
+    font-size:16px;
+
+    font-weight:800;
+}
+
+.logo-text span{
+
+    font-size:12px;
+
+    color:#00ff88;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:#d7d7d7;
+
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:14px;
+
+    transition:0.2s;
+}
+
+.menu a:hover{
+
+    background:rgba(255,255,255,0.03);
+
+    color:white;
+}
+
+.menu .active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,255,136,0.15),
+            rgba(0,255,136,0.04)
+        );
+
+    border-left:3px solid #00ff88;
+}
+/* =========================
+   MAIN
+========================= */
+
+.main{
+
+    margin-left:210px;
+    margin-top:-50px;
+
+    padding:26px;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+.top-bar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+    margin-bottom:22px;
+}
+.top-right{
+
+    margin-right:260px;
+}
+.top-title{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+.top-title h1{
+
+    font-size:30px;
+
+    font-weight:900;
+
+    letter-spacing:0.5px;
+
+    margin-bottom:6px;
+
+    color:white;
+}
+.top-title p{
+
+    font-size:14px;
+
+    color:#8b9790;
+
+    letter-spacing:0.3px;
+}
+
+ .top-right{
+
+     display:flex;
+
+     align-items:flex-start;
+
+     gap:16px;
+ }
+#chartGameSelect{
+
+    width:200px;
+
+    height:42px;
+
+    padding:0 16px;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(0,255,136,0.25);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,22,0.98),
+            rgba(5,10,12,0.98)
+        );
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    outline:none;
+
+    cursor:pointer;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.25);
+}
+
+#chartGameSelect:hover{
+
+    border-color:#00ff88;
+}
+
+#chartGameSelect:focus{
+
+    border-color:#00ff88;
+
+    box-shadow:
+        0 0 0 3px rgba(0,255,136,0.12);
+}
+
+#chartGameSelect option{
+
+    background:#071014;
+
+    color:white;
+}
+
+
+/* =========================
+   DASHBOARD GRID
+========================= */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 240px;
+
+    gap:16px;
+
+    align-items:start;
+}
+
+/* =========================
+   STATS ROW
+========================= */
+
+.stats-row{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:12px;
+
+    margin-bottom:16px;
+}
+.stat-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,22,0.98),
+            rgba(5,10,12,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:18px;
+
+    padding:10px 14px;
+
+    height:68px;
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    overflow:hidden;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.25);
+}
+
+.stat-card:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(0,255,136,0.15);
+}
+
+.stat-top{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    width:100%;
+}
+
+.stat-icon{
+
+    min-width:42px;
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:15px;
+
+    font-weight:800;
+
+    background:
+        rgba(255,255,255,0.03);
+}
+.stat-info span{
+
+    display:block;
+
+    font-size:9px;
+
+    color:#7f8b84;
+
+    letter-spacing:1.2px;
+
+    margin-bottom:4px;
+
+    font-weight:700;
+}
+
+.green{
+
+    color:#00ff88;
+
+    border:
+        1px solid #00ff88;
+}
+
+.blue{
+
+    color:#00bfff;
+
+    border:
+        1px solid #00bfff;
+}
+
+.yellow{
+
+    color:#ffd000;
+
+    border:
+        1px solid #ffd000;
+}
+.green{
+
+    color:#00ff88;
+
+    border:
+        1px solid rgba(0,255,136,0.4);
+
+    box-shadow:
+        0 0 15px rgba(0,255,136,0.12);
+}
+
+.blue{
+
+    color:#00bfff;
+
+    border:
+        1px solid rgba(0,191,255,0.4);
+
+    box-shadow:
+        0 0 15px rgba(0,191,255,0.12);
+}
+
+.yellow{
+
+    color:#ffd000;
+
+    border:
+        1px solid rgba(255,208,0,0.4);
+
+    box-shadow:
+        0 0 15px rgba(255,208,0,0.12);
+}
+
+
+.stat-info h2{
+
+    font-size:24px;
+
+    font-weight:900;
+
+    color:white;
+
+    line-height:1;
+}
+
+
+.stat-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+}
+/* =========================
+   BIG CHART
+========================= */
+
+.big-chart-card{
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(8,17,20,0.98),
+            rgba(3,7,9,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:38px;
+
+    padding:18px;
+
+    box-shadow:
+        0 0 18px rgba(0,0,0,0.28);
+
+    margin-bottom:16px;
+}
+
+.section-title{
+
+    color:#00ff88;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    margin-bottom:14px;
+}
+
+#mainChart{
+
+    height:205px !important;
+}
+
+/* =========================
+   SMALL ANALYTICS
+========================= */
+
+.analytics-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:12px;
+}
+
+.small-chart-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8,17,20,0.98),
+            rgba(3,7,9,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:16px;
+
+    padding:14px;
+
+    min-height:190px;
+
+    position:relative;
+}
+
+.small-chart-card h3{
+
+    font-size:13px;
+
+    margin-bottom:8px;
+
+    font-weight:700;
+}
+
+.small-chart-card span{
+
+    font-size:10px;
+
+    color:#9ca7a0;
+}
+
+.green-text{
+
+    color:#00ff88;
+}
+
+.blue-text{
+
+    color:#00bfff;
+}
+
+.yellow-text{
+
+    color:#ffd000;
+}
+
+/* =========================
+   SMALL CHART CANVAS
+========================= */
+
+.small-chart-card canvas{
+
+    width:100% !important;
+
+    height:120px !important;
+
+    margin-top:10px;
+}
+
+/* =========================
+   RIGHT COLUMN
+========================= */
+
+.right-column{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    margin-top:-115px;
+}
+.side-card{
+
+    background:
+        linear-gradient(
+            80deg,
+            rgba(8,17,20,0.98),
+            rgba(3,7,9,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:18px;
+
+    padding:14px;
+}
+.recent-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:180px;
+
+    max-height:280px;
+
+    overflow:hidden;
+}
+
+.side-title{
+
+    color:#00ff88;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+}
+
+/* =========================
+   LEVEL
+========================= */
+/* =========================================
+   WHOLE OUTSIDE BLOCK
+========================================= */
+
+.side-card{
+
+    width:100%;          /* BLOCK WIDTH */
+
+    min-height:120px;    /* BLOCK HEIGHT */
+
+    padding:10px;        /* INSIDE SPACE */
+
+    border-radius:22px;
+}
+.level-box{
+
+    text-align:center;
+}
+
+.hexagon{
+
+    width:50px;
+    height:58px;
+
+    margin:auto;
+
+    background:
+        linear-gradient(
+            70deg,
+            #8eff7f,
+            #4cff7b
+        );
+
+    clip-path:
+        polygon(
+            25% 6%,
+            75% 6%,
+            100% 50%,
+            75% 94%,
+            25% 94%,
+            0 50%
+        );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#03220f;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    margin-bottom:14px;
+}
+
+.level-text{
+
+    font-size:15px;
+
+    margin-bottom:6px;
+}
+
+.xp-bar{
+
+    width:100%;
+    height:8px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    overflow:hidden;
+
+    margin:14px 0;
+}
+
+.xp-fill{
+
+    width:65%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00ff88,
+            #00d26f
+        );
+}
+
+.xp-text{
+
+    color:#a3aba7;
+
+    font-size:11px;
+}
+
+/* =========================
+   ACHIEVEMENTS
+========================= */
+.achievement{
+
+    width:100%;          /* BLOCK WIDTH */
+
+    min-height:5px;    /* BLOCK HEIGHT */
+
+    padding:1px;        /* INSIDE SPACE */
+
+    border-radius:30px;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:10px;
+
+    margin-bottom:10px;
+}
+
+.achievement i{
+
+    font-size:20px;
+}
+
+.achievement h4{
+
+    font-size:13px;
+
+    margin-bottom:4px;
+}
+
+.achievement p{
+
+    color:#a5ada8;
+
+    font-size:11px;
+}
+
+.fire{
+
+    color:#ff8a2a;
+}
+
+.trophy{
+
+    color:#ffd000;
+}
+
+.bolt{
+
+    color:#ffd000;
+}
+
+/* =========================
+   RECENT ACTIVITY
+========================= */
+
+.activity-item{
+width:100%;          /* BLOCK WIDTH */
+
+    min-height:5px;    /* BLOCK HEIGHT */
+
+          /* INSIDE SPACE */
+
+    border-radius:12px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:3px 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.activity-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+.activity-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.activity-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.activity-icon{
+
+    width:38px;
+    height:38px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+}
+
+.activity-info{
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.activity-info strong{
+
+    font-size:13px;
+}
+
+.activity-info span{
+
+    font-size:11px;
+
+    color:#9ea6a1;
+}
+
+.activity-score{
+
+    font-weight:700;
+
+    color:#00ff88;
+}
+
+.recent-left i{
+
+    font-size:18px;
+}
+
+.recent-game{
+
+    font-size:13px;
+}
+
+.victory{
+
+    color:#00ff88;
+
+    font-size:10px;
+}
+
+.defeat{
+
+    color:#ff4c4c;
+
+    font-size:10px;
+}
+
+.recent-score{
+
+    font-size:14px;
+
+    font-weight:700;
+}
+
+.view-btn{
+
+    width:100%;
+
+    margin-top:14px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:
+        rgba(255,255,255,0.02);
+
+    color:white;
+
+    font-size:12px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    cursor:pointer;
+}
+
+/* =========================
+   GLOBAL CANVAS
+========================= */
+
+canvas{
+
+    width:100% !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+
+    .dashboard-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .analytics-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .stats-row{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+
+        margin-left:0;
+
+        padding:18px;
+    }
+
+    .stats-row{
+
+        grid-template-columns:1fr;
+    }
+
+    .top-bar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:18px;
+    }
+
+    #chartGameSelect{
+
+        width:100%;
+    }
+
+    .top-title h1{
+
+        font-size:24px;
+    }
+
+    .stat-info h2{
+
+        font-size:28px;
+    }
+}

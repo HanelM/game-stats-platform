@@ -16,9 +16,16 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     private final GameMatchRepository gameMatchRepository;
 
     @Override
-    public List<Map<String, Object>> getLeaderboard() {
+    public List<Map<String, Object>> getLeaderboard(String gameName) {
 
-        List<GameMatch> matches = gameMatchRepository.findAll();
+        List<GameMatch> matches =
+                gameMatchRepository.findAll()
+                        .stream()
+                        .filter(match ->
+                                match.getGameName()
+                                        .equalsIgnoreCase(gameName)
+                        )
+                        .toList();
 
         Map<String, List<GameMatch>> grouped =
                 matches.stream().collect(Collectors.groupingBy(GameMatch::getPlayerUsername));

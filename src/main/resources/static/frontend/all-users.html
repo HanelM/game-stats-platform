@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>All Users</title>
+
+    <link rel="stylesheet"
+          href="css/all-users.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+                Admin
+            </h2>
+
+            <span>
+                dashboard
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="menu">
+
+        <a href="admin.html">
+            <i class="fa-solid fa-user-shield"></i>
+            Admin Panel
+        </a>
+        <a href="delete-users.html">
+            <i class="fa-solid fa-trash"></i>
+            Delete users
+        </a>
+        <a href="all-users.html" class="active">
+            <i class="fa-solid fa-users"></i>
+            All users
+        </a>
+
+
+    </div>
+
+</aside>
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<div class="page-wrapper">
+
+    <!-- =========================
+         TOP SECTION
+    ========================= -->
+
+    <div class="top-section">
+
+        <div class="title-box">
+
+            <h1>
+                All Users
+            </h1>
+
+            <p>
+                View and manage all registered platform users.
+            </p>
+
+        </div>
+
+        <!-- =========================
+             CONTROLS
+        ========================= -->
+
+        <div class="controls">
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                       id="searchInput"
+                       placeholder="Search username or email...">
+
+            </div>
+
+            <!-- FILTER BUTTON -->
+
+            <button class="filter-btn"
+                    id="openFilterBtn">
+
+                <i class="fa-solid fa-sliders"></i>
+
+                Filters
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         USERS GRID
+    ========================= -->
+
+    <div class="users-grid"
+         id="usersGrid">
+
+        <!-- USERS HERE -->
+
+    </div>
+
+</div>
+
+<!-- =========================
+     FILTER MODAL
+========================= -->
+
+<div class="filter-modal"
+     id="filterModal">
+
+    <div class="filter-content">
+
+        <!-- =========================
+             HEADER
+        ========================= -->
+
+        <div class="filter-header">
+
+            <h2>
+                Advanced Filters
+            </h2>
+
+            <button class="close-filter"
+                    id="closeFilterBtn">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+        <!-- =========================
+             REGISTER FILTER
+        ========================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Registration Date
+            </label>
+
+            <select id="registerFilter">
+
+                <option value="default">
+                    Default
+                </option>
+
+                <!-- REGISTER -->
+                <option value="newestRegistered">Newest Registered</option>
+                <option value="oldestRegistered">Oldest Registered</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =========================
+             KD FILTER
+        ========================= -->
+
+        <div class="filter-group">
+
+            <label>
+                KD Ratio
+            </label>
+
+            <select id="kdFilter">
+
+                <option value="default">
+                    Default
+                </option>
+
+                <!-- KD -->
+                <option value="highestKD">Highest KD</option>
+                <option value="lowestKD">Lowest KD</option>
+
+            </select>
+
+        </div>
+
+        <!-- =========================
+     MATCHES FILTER
+========================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Matches Played
+            </label>
+
+            <select id="scoreFilter">
+
+                <option value="default">
+                    Default
+                </option>
+
+                <option value="highestNumberMatches">
+                    Highest Number Matches
+                </option>
+
+                <option value="lowestNumberMatches">
+                    Lowest Number Matches
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- =========================
+             WIN RATE FILTER
+        ========================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Win Rate
+            </label>
+
+            <select id="winrateFilter">
+
+                <option value="default">
+                    Default
+                </option>
+
+                <!-- WINRATE -->
+                <option value="highestWinrate">Highest Winrate</option>
+                <option value="lowestWinrate">Lowest Winrate</option>
+
+            </select>
+
+        </div>
+
+        <!-- =========================
+             KILLS FILTER
+        ========================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Total Kills
+            </label>
+
+            <select id="killsFilter">
+
+                <option value="default">
+                    Default
+                </option>
+
+                <!-- KILLS -->
+                <option value="highestKills">Highest Kills</option>
+                <option value="lowestKills">Lowest Kills</option>
+
+            </select>
+
+        </div>
+
+        <!-- =========================
+             GAME FILTER
+        ========================= -->
+
+        <div class="filter-group">
+
+            <label>
+                Game
+            </label>
+
+            <select id="gameFilter">
+
+                <option value="all">
+                    All Games
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- =========================
+             BUTTONS
+        ========================= -->
+
+        <div class="filter-buttons">
+
+            <button class="cancel-btn"
+                    id="cancelFiltersBtn">
+
+                Cancel
+
+            </button>
+
+            <button class="apply-btn"
+                    id="applyFiltersBtn">
+
+                Apply Filters
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     SCRIPT
+========================= -->
+
+<script src="js/all-users.js"></script>
+
+</body>
+</html>

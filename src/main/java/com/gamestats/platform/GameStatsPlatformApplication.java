@@ -14,3 +14,4 @@ public class GameStatsPlatformApplication {
 
 }
 //     http://localhost:8080/docs/docs.html
+// http://localhost:63342/game-stats-platform/static/frontend/index.html

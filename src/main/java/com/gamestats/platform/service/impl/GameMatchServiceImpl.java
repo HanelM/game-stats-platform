@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.gamestats.platform.repository.GameMatchRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +26,45 @@ public class GameMatchServiceImpl implements GameMatchService {
     public GameMatch saveMatch(GameMatchRequest request, String username) {
 
         GameMatch gameMatch = GameMatch.builder()
+
                 .playerUsername(username)
+
                 .gameName(request.getGameName())
+
                 .score(request.getScore())
+
                 .kills(request.getKills())
+
                 .deaths(request.getDeaths())
+
                 .win(request.getWin())
+
+                /* PUBG */
+
+                .placement(request.getPlacement())
+
+                .damage(request.getDamage())
+
+                .survivalTime(request.getSurvivalTime())
+
+                /* CS2 / VALORANT */
+
+                .assists(request.getAssists())
+
+                .headshots(request.getHeadshots())
+
+                /* VALORANT */
+
+                .combatScore(request.getCombatScore())
+
+                /* LEAGUE OF LEGENDS */
+
+                .cs(request.getCs())
+
+                .gold(request.getGold())
+
                 .playedAt(LocalDateTime.now())
+
                 .build();
 
         return gameMatchRepository.save(gameMatch);
@@ -139,6 +172,27 @@ public class GameMatchServiceImpl implements GameMatchService {
                 .max()
                 .orElse(0);
 
+        int bestKillMatch = matches.stream()
+                .mapToInt(GameMatch::getKills)
+                .max()
+                .orElse(0);
+
+        double highestKD = matches.stream()
+                .mapToDouble(match -> {
+
+                    if(match.getDeaths() == 0){
+
+                        return match.getKills();
+                    }
+
+                    return (double)
+                            match.getKills()
+                            / match.getDeaths();
+
+                })
+                .max()
+                .orElse(0);
+
         double averageScore = matches.stream()
                 .mapToInt(GameMatch::getScore)
                 .average()
@@ -153,15 +207,37 @@ public class GameMatchServiceImpl implements GameMatchService {
                 : totalKills;
 
         return AnalyticsResponse.builder()
+
                 .totalMatches(totalMatches)
+
                 .wins(wins)
+
                 .losses(losses)
-                .winRate(Math.round(winRate * 100.0) / 100.0)
+
+                .winRate(
+                        Math.round(winRate * 100.0) / 100.0
+                )
+
                 .totalKills(totalKills)
+
                 .totalDeaths(totalDeaths)
-                .kdRatio(Math.round(kdRatio * 100.0) / 100.0)
+
+                .kdRatio(
+                        Math.round(kdRatio * 100.0) / 100.0
+                )
+
                 .bestScore(bestScore)
-                .averageScore(Math.round(averageScore * 100.0) / 100.0)
+
+                .averageScore(
+                        Math.round(averageScore * 100.0) / 100.0
+                )
+
+                .bestKillMatch(bestKillMatch)
+
+                .highestKD(
+                        Math.round(highestKD * 100.0) / 100.0
+                )
+
                 .build();
     }
 
@@ -186,4 +262,120 @@ public class GameMatchServiceImpl implements GameMatchService {
                 .map(GameMatchMapper::toResponse)
                 .toList();
     }
+
+
+
+    @Override
+    public AnalyticsResponse getAnalyticsForUser(
+            String username
+    ){
+
+        List<GameMatch> matches =
+                gameMatchRepository.findByPlayerUsername(username);
+
+        return buildAnalytics(matches);
+    }
+
+    @Override
+    public List<GameMatch> getMatchesForUser(
+            String username
+    ){
+
+        return gameMatchRepository.findByPlayerUsername(username);
+    }
+    private AnalyticsResponse buildAnalytics(
+            List<GameMatch> matches
+    ){
+
+        long totalMatches = matches.size();
+
+        long wins = matches.stream()
+                .filter(GameMatch::getWin)
+                .count();
+
+        long losses = totalMatches - wins;
+
+        int totalKills = matches.stream()
+                .mapToInt(GameMatch::getKills)
+                .sum();
+
+        int totalDeaths = matches.stream()
+                .mapToInt(GameMatch::getDeaths)
+                .sum();
+
+        int bestScore = matches.stream()
+                .mapToInt(GameMatch::getScore)
+                .max()
+                .orElse(0);
+
+        int bestKillMatch = matches.stream()
+                .mapToInt(GameMatch::getKills)
+                .max()
+                .orElse(0);
+
+        double highestKD = matches.stream()
+                .mapToDouble(match -> {
+
+                    if(match.getDeaths() == 0){
+
+                        return match.getKills();
+                    }
+
+                    return (double)
+                            match.getKills()
+                            / match.getDeaths();
+
+                })
+                .max()
+                .orElse(0);
+
+        double averageScore = matches.stream()
+                .mapToInt(GameMatch::getScore)
+                .average()
+                .orElse(0);
+
+        double winRate = totalMatches > 0
+                ? ((double) wins / totalMatches) * 100
+                : 0;
+
+        double kdRatio = totalDeaths > 0
+                ? (double) totalKills / totalDeaths
+                : totalKills;
+
+        return AnalyticsResponse.builder()
+
+                .totalMatches(totalMatches)
+
+                .wins(wins)
+
+                .losses(losses)
+
+                .winRate(
+                        Math.round(winRate * 100.0) / 100.0
+                )
+
+                .totalKills(totalKills)
+
+                .totalDeaths(totalDeaths)
+
+                .kdRatio(
+                        Math.round(kdRatio * 100.0) / 100.0
+                )
+
+                .bestScore(bestScore)
+
+                .averageScore(
+                        Math.round(averageScore * 100.0) / 100.0
+                )
+
+                .bestKillMatch(bestKillMatch)
+
+                .highestKD(
+                        Math.round(highestKD * 100.0) / 100.0
+                )
+
+                .build();
+    }
+
+
 }

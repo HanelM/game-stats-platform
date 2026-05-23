@@ -4,6 +4,7 @@ import com.gamestats.platform.integration.dto.GamePlayerStatsResponse;
 import com.gamestats.platform.integration.provider.GameProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.gamestats.platform.exception.GameNotSupportedException;
 
 import java.util.List;
 import com.gamestats.platform.integration.dto.CompareResponse;
@@ -34,7 +35,7 @@ public class GameIntegrationServiceImpl
             }
         }
 
-        throw new RuntimeException(
+        throw new GameNotSupportedException(
                 "Game not supported"
         );
     }

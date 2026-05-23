@@ -1,0 +1,798 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body{
+
+    margin:0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(0,255,136,0.05),
+            transparent 25%
+        ),
+        #07110a;
+
+    font-family:Arial,sans-serif;
+
+    color:white;
+
+    overflow-x:hidden;
+
+    padding-top:50px;
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+/* =========================
+   TOP NAVBAR
+========================= */
+
+.top-navbar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+    right:0;
+
+    width:100%;
+
+    height:74px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,13,12,0.98),
+            rgba(6,9,8,0.97)
+        );
+
+    backdrop-filter:blur(14px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.05);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 42px;
+
+    z-index:3000;
+
+    box-sizing:border-box;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.35);
+}
+
+.nav-left{
+
+    display:flex;
+
+    align-items:center;
+}
+
+.nav-left h1{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:900;
+
+    letter-spacing:0.8px;
+
+    color:#f7f7f7;
+
+    text-transform:uppercase;
+}
+
+.nav-left h1 span{
+
+    color:#00ff88;
+}
+
+.nav-links{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:34px;
+}
+
+.nav-links a{
+
+    position:relative;
+
+    text-decoration:none;
+
+    color:#b8c0bb;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+    transition:0.25s;
+}
+
+.nav-links a:hover{
+
+    color:#00ff88;
+
+    text-shadow:
+        0 0 8px rgba(0,255,136,0.7),
+        0 0 18px rgba(0,255,136,0.45);
+
+    transition:0.25s;
+}
+
+.nav-links a:hover::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-12px;
+
+    width:100%;
+
+    height:2px;
+
+    border-radius:20px;
+
+    background:#00ff88;
+
+    box-shadow:
+        0 0 12px rgba(0,255,136,0.6);
+}
+
+.active-top{
+
+    color:#00ff88 !important;
+}
+
+.active-top::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-12px;
+
+    width:100%;
+
+    height:2px;
+
+    border-radius:20px;
+
+    background:#00ff88;
+
+    box-shadow:
+        0 0 12px rgba(0,255,136,0.45);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+
+    top:74px;
+
+    width:220px;
+
+    height:calc(100vh - 74px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,13,12,0.99),
+            rgba(5,8,7,0.99)
+        );
+
+    border-right:
+        1px solid rgba(255,255,255,0.05);
+
+    padding:26px 18px;
+
+    z-index:2000;
+
+    box-sizing:border-box;
+
+    overflow-y:auto;
+
+    box-shadow:
+        6px 0 26px rgba(0,0,0,0.28);
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:28px;
+}
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    border:2px solid #00ff88;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#00ff88;
+
+    font-size:16px;
+
+    box-shadow:
+        0 0 14px rgba(0,255,136,0.15);
+}
+
+.logo-text h2{
+
+    font-size:16px;
+
+    font-weight:800;
+}
+
+.logo-text span{
+
+    font-size:12px;
+
+    color:#00ff88;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:#d7d7d7;
+
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:14px;
+
+    transition:0.2s;
+}
+
+.menu a:hover{
+
+    background:rgba(255,255,255,0.03);
+
+    color:white;
+}
+
+.menu .active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,255,136,0.15),
+            rgba(0,255,136,0.04)
+        );
+
+    border-left:3px solid #00ff88;
+}
+
+/* =========================
+   MAIN PAGE
+========================= */
+
+.games-page{
+
+    margin-left:210px;
+
+    padding-top:50px;
+
+    padding-left:45px;
+
+    padding-right:35px;
+
+    padding-bottom:40px;
+
+    width:calc(100% - 210px);
+
+    box-sizing:border-box;
+
+    flex:1;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:38px;
+}
+
+.controls input,
+.controls select{
+
+    width:240px;
+
+    height:46px;
+
+    padding:0 16px;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(0,255,136,0.18);
+
+    background:
+        linear-gradient(
+            145deg,
+            #121715,
+            #0c110f
+        );
+
+    color:white;
+
+    outline:none;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.25);
+}
+
+.controls input:focus,
+.controls select:focus{
+
+    border-color:#00ff88;
+
+    box-shadow:
+        0 0 14px rgba(0,255,136,0.16);
+}
+
+/* =========================
+   GAMES GRID
+========================= */
+
+.games-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(220px,220px));
+
+    gap:20px;
+    padding:30px;
+}
+
+/* =========================
+   GAME CARD
+========================= */
+
+.game-card{
+
+    width:200px;
+
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(18,24,21,0.98),
+            rgba(10,14,12,0.98)
+        );
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    transition:0.25s;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.28);
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.game-card:hover{
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(0,255,136,0.22);
+
+    box-shadow:
+        0 10px 24px rgba(0,255,136,0.12);
+}
+
+/* =========================
+   IMAGE
+========================= */
+
+.game-card img{
+
+    width:100%;
+
+    height:105px;
+
+    object-fit:cover;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.04);
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.game-card h2{
+
+    margin:12px 0 8px;
+
+    color:#00ff88;
+
+    font-size:17px;
+
+    font-weight:800;
+
+    text-align:center;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.game-card p{
+
+    margin:3px 0;
+
+    color:#b7c1bb;
+
+    font-size:11px;
+
+    text-align:center;
+
+    line-height:1.4;
+
+    padding:0 12px;
+}
+
+/* =========================
+   BUTTON AREA
+========================= */
+
+.game-buttons{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    padding:14px;
+
+    margin-top:auto;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.game-buttons button{
+
+    height:36px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:800;
+
+    font-size:11px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00ff88,
+            #00c96b
+        );
+
+    color:black;
+
+    transition:0.25s;
+}
+
+.game-buttons button:hover{
+
+    transform:scale(1.02);
+
+    box-shadow:
+        0 0 12px rgba(0,255,136,0.22);
+}
+
+/* =========================
+   ALL GENRES SELECT
+========================= */
+
+.controls select{
+
+    appearance:none;
+
+    -webkit-appearance:none;
+
+    -moz-appearance:none;
+
+    cursor:pointer;
+
+    width:240px;
+
+    height:48px;
+
+    padding:0 45px 0 16px;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(0,255,136,0.18);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,24,21,0.98),
+            rgba(10,14,12,0.98)
+        );
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:0.3px;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.25);
+
+    position:relative;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            #00ff88 50%
+        ),
+        linear-gradient(
+            135deg,
+            #00ff88 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 12px) calc(50% - 3px);
+
+    background-size:
+        6px 6px,
+        6px 6px;
+
+    background-repeat:no-repeat;
+}
+
+.controls select:hover{
+
+    border-color:
+        rgba(0,255,136,0.45);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(0,255,136,0.10);
+}
+
+.controls select:focus{
+
+    border-color:#00ff88;
+
+    box-shadow:
+        0 0 0 3px rgba(0,255,136,0.12),
+        0 8px 20px rgba(0,255,136,0.10);
+}
+
+.controls select option{
+
+    background:#0d1310;
+
+    color:white;
+
+    padding:10px;
+}
+
+/* =========================
+   NO RESULTS
+========================= */
+
+.no-results{
+
+    color:#aeb8b2;
+
+    font-size:14px;
+
+    margin-top:15px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        display:none;
+    }
+
+    .games-page{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding-left:22px;
+
+        padding-right:22px;
+    }
+}
+
+@media(max-width:700px){
+
+    .top-navbar{
+
+        flex-direction:column;
+
+        justify-content:center;
+
+        gap:10px;
+
+        height:auto;
+
+        padding:14px 18px;
+    }
+
+    .games-page{
+
+        padding-top:145px;
+    }
+
+    .games-grid{
+
+        justify-content:center;
+
+        grid-template-columns:
+            repeat(auto-fill,minmax(100%,1fr));
+    }
+
+    .game-card{
+
+        width:100%;
+    }
+
+    .controls{
+
+        flex-direction:column;
+    }
+
+    .controls input,
+    .controls select{
+
+        width:100%;
+    }
+}
+/* =========================
+   FOOTER
+========================= */
+
+.creator-footer{
+
+    text-align:center;
+
+    padding:30px 0 10px;
+}
+
+.creator-footer p{
+
+    font-size:14px;
+
+    margin-bottom:6px;
+}
+
+.creator-footer span{
+
+    color:#00ff88;
+
+    font-size:12px;
+
+    letter-spacing:1px;
+}

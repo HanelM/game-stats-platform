@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Stats Platform</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<div class="top-navbar">
+
+    <div class="nav-left">
+        <h1>🎮Game <span>Stats </span>Platform</h1>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="index.html" class="active-top">Home</a>
+
+        <a href="games.html">Games</a>
+
+        <a href="about.html">About</a>
+
+        <a href="account.html" id="nav-user">
+            Account
+        </a>
+        <div class="top-right-actions">
+
+            <div id="adminButtonContainer"></div>
+
+        </div>
+
+    </div>
+</div>
+
+<section class="hero">
+    <h2>Track Game Statistics & Rankings</h2>
+
+    <p>
+        Explore trending games, player statistics,
+        rankings and achievements.
+    </p>
+
+    <a href="games.html">
+        <button>Explore Games</button>
+    </a>
+</section>
+
+
+<section class="top-games">
+    <h2>🔥 Trending Games</h2>
+
+    <div class="games-preview" id="games-preview"></div>
+</section>
+
+<!-- FOOTER -->
+
+<footer class="creator-footer">
+
+    <p>
+        © 2026 All rights reserved. Engineered by HanelM
+    </p>
+
+    <span>
+            Game Stats Platform Graduation Project
+        </span>
+
+</footer>
+
+<script src="js/games-data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/home.js"></script>
+
+</body>
+
+<script>
+const preview = document.getElementById("games-preview");
+
+GAMES.slice(0, 4).forEach(game => {
+
+  preview.innerHTML += `
+
+    <div class="preview-card">
+
+      <img src="${game.img}" alt="${game.name}">
+
+      <h3>${game.name}</h3>
+
+      <p>🎮 Genre: ${game.genre}</p>
+
+            <p>👥 Players: ${game.players}</p>
+
+            <p>⭐ Rating: ${game.rating}</p>
+
+    </div>
+
+  `;
+});
+</script>
+
+</body>
+</html>

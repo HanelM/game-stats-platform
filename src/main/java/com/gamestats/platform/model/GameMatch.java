@@ -20,6 +20,10 @@ public class GameMatch {
 
     private String gameName;
 
+    /* =========================
+       COMMON
+    ========================= */
+
     private Integer score;
 
     private Integer kills;
@@ -29,4 +33,36 @@ public class GameMatch {
     private Boolean win;
 
     private LocalDateTime playedAt;
+
+    /* =========================
+       PUBG
+    ========================= */
+
+    private Integer placement;
+
+    private Integer damage;
+
+    private String survivalTime;
+
+    /* =========================
+       CS2 / VALORANT
+    ========================= */
+
+    private Integer assists;
+
+    private Integer headshots;
+
+    /* =========================
+       VALORANT
+    ========================= */
+
+    private Integer combatScore;
+
+    /* =========================
+       LEAGUE OF LEGENDS
+    ========================= */
+
+    private Integer cs;
+
+    private Integer gold;
 }

@@ -19,9 +19,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.gamestats.platform.dto.GameMatchResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
+import com.gamestats.platform.mapper.GameMatchMapper;
 
 import java.time.LocalDate;
-import java.util.List;
+
 
 @Tag(
         name = "Match Controller",
@@ -227,5 +233,28 @@ public class GameMatchController {
                 from,
                 to
         );
+    }
+
+    @GetMapping("/analytics/user/{username}")
+    public ResponseEntity<?> getAnalyticsForUser(
+            @PathVariable String username
+    ){
+
+        return ResponseEntity.ok(
+                gameMatchService.getAnalyticsForUser(username)
+        );
+    }
+
+
+
+    @GetMapping("/user/{username}")
+    public List<GameMatchResponse> getMatchesForUser(
+            @PathVariable String username
+    ){
+        return gameMatchService
+                .getMatchesForUser(username)
+                .stream()
+                .map(GameMatchMapper::toResponse)
+                .toList();
     }
 }

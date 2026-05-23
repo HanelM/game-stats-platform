@@ -63,7 +63,8 @@ public class AdminController {
                                 user.getId(),
                                 user.getUsername(),
                                 user.getEmail(),
-                                user.getRole()
+                                user.getRole(),
+                                user.getCreatedAt()
                         ));
 
         return ResponseEntity.ok(users);
@@ -90,7 +91,8 @@ public class AdminController {
                             user.getId(),
                             user.getUsername(),
                             user.getEmail(),
-                            user.getRole()
+                            user.getRole(),
+                            user.getCreatedAt()
                     ));
         }
 
@@ -105,7 +107,8 @@ public class AdminController {
                             user.getId(),
                             user.getUsername(),
                             user.getEmail(),
-                            user.getRole()
+                            user.getRole(),
+                            user.getCreatedAt()
                     ));
         }
 

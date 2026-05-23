@@ -1,0 +1,1181 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body{
+
+    margin:0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(0,255,136,0.05),
+            transparent 25%
+        ),
+        #07110a;
+
+    font-family:Arial,sans-serif;
+
+    color:white;
+
+    overflow-x:hidden;
+
+    padding-top:50px;
+}
+
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+
+    top:0px;
+
+    width:220px;
+
+    height:calc(100vh );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10,13,12,0.99),
+            rgba(5,8,7,0.99)
+        );
+
+    border-right:
+        1px solid rgba(255,255,255,0.05);
+
+    padding:26px 18px;
+
+    z-index:2000;
+
+    box-sizing:border-box;
+
+    overflow-y:auto;
+
+    box-shadow:
+        6px 0 26px rgba(0,0,0,0.28);
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:28px;
+}
+
+.logo-icon{
+
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    border:2px solid #00ff88;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#00ff88;
+
+    font-size:16px;
+
+    box-shadow:
+        0 0 14px rgba(0,255,136,0.15);
+}
+
+.logo-text h2{
+
+    font-size:16px;
+
+    font-weight:800;
+}
+
+.logo-text span{
+
+    font-size:12px;
+
+    color:#00ff88;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+
+    gap:6px;
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:#d7d7d7;
+
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:14px;
+
+    transition:0.2s;
+}
+
+.menu a:hover{
+
+    background:rgba(255,255,255,0.03);
+
+    color:white;
+}
+
+.menu .active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,255,136,0.15),
+            rgba(0,255,136,0.04)
+        );
+
+    border-left:3px solid #00ff88;
+}
+
+/* =========================
+   PAGE HEADER (FULL WIDTH STYLE)
+========================= */
+
+.page-header {
+    max-width:1400px;
+    padding: 20px 20px 15px;
+
+
+    margin:20px auto 30px; /* small separation below */
+    margin-bottom: 18px;
+
+    border-radius: 28px; /* 👈 makes it rounded like a card */
+
+    background: linear-gradient(
+        135deg,
+        rgba(0, 255, 136, 0.12),
+        rgba(0, 0, 0, 0.45)
+    );
+
+    border: 1px solid rgba(0, 255, 136, 0.12);
+
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+
+    text-align: center;
+
+    background: linear-gradient(
+        135deg,
+        rgba(0, 255, 136, 0.10),
+        rgba(0, 0, 0, 0.45)
+    );
+
+    border-bottom: 1px solid rgba(0, 255, 136, 0.10);
+}
+
+#game-title {
+    font-size: 38px;
+    color: #00ff88;
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    color: #c8d2cb;
+    font-size: 15px;
+}
+
+/* =========================
+   MAIN SECTION (WIDER + CENTERED)
+========================= */
+
+.matches-section{
+
+    max-width:1300px;
+
+    margin-left:240px;
+    margin-top:-50px;
+
+    padding:10px 5px;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.stats-dashboard {
+    margin-top: 30px;
+    margin-bottom: 35px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.stat-box {
+    background: rgba(10,14,12,0.88);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 255, 136, 0.10);
+    border-radius: 22px;
+    padding: 14px;
+    text-align: center;
+
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+    transition: 0.25s;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 255, 136, 0.2);
+}
+
+.stat-box h3 {
+    color: #9ca8a1;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.stat-box p {
+    color: #00ff88;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline-title {
+    font-size: 28px;
+    color: #00ff88;
+    margin-bottom: 25px;
+}
+
+.activity-timeline {
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 55px;
+}
+
+/* removed heavy glow — cleaner look */
+.activity-timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: rgba(0, 255, 136, 0.18);
+}
+
+.timeline-item {
+    margin-bottom: 18px;
+    padding: 20px;
+
+    background: rgba(10,14,12,0.88);
+    border: 1px solid rgba(0, 255, 136, 0.08);
+    border-radius: 18px;
+
+    transition: 0.25s;
+}
+
+.timeline-item:hover {
+    transform: translateX(3px);
+    border-color: rgba(0, 255, 136, 0.2);
+}
+
+.timeline-item h4 {
+    color: #00ff88;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.timeline-item p {
+    margin: 6px 0;
+    color: #c8d2cb;
+    font-size: 14px;
+}
+
+.timeline-date {
+    margin-top: 10px;
+    color: #7d8a83;
+    font-size: 13px;
+}
+
+/* =========================
+   MATCH GRID
+========================= */
+
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 28px;
+}
+
+/* =========================
+   MATCH CARD
+========================= */
+
+.match-card {
+    background: rgba(10,14,12,0.88);
+    border: 1px solid rgba(0, 255, 136, 0.10);
+    border-radius: 22px;
+    padding: 26px;
+
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+    transition: 0.25s;
+}
+
+.match-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 255, 136, 0.2);
+}
+
+/* removed gradient strip (was visual noise) */
+
+.match-card h3 {
+    color: #00ff88;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.match-card p {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 12px 14px;
+    margin: 10px 0;
+
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+
+    color: #d0d8d3;
+    font-size: 14px;
+}
+
+/* =========================
+   WIN / LOSS
+========================= */
+
+.win { color: #00ff88; font-weight: bold; }
+.loss { color: #ff5f5f; font-weight: bold; }
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.no-results {
+    text-align: center;
+    color: #8d9891;
+    font-size: 20px;
+    padding: 70px 0;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        flex-direction: column;
+        gap: 18px;
+        text-align: center;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .matches-section {
+        padding: 30px 18px 60px;
+    }
+
+    .matches-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+/* =========================
+   FILTER BUTTON
+========================= */
+
+.matches-filter{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin:25px 0;
+}
+
+.filter-btn{
+
+    height:48px;
+
+    padding:0 24px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #00ff88,
+            #00d26f
+        );
+
+    color:black;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    transition:0.25s;
+}
+
+.filter-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 0 18px rgba(0,255,136,0.25);
+}
+
+/* =========================
+   FILTER MODAL
+========================= */
+
+.filter-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,0.6);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+}
+
+.hidden{
+
+    display:none;
+}
+
+.filter-box{
+
+    width:380px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,16,14,0.98),
+            rgba(6,10,9,0.98)
+        );
+
+    border:
+        1px solid rgba(0,255,136,0.15);
+
+    border-radius:24px;
+
+    padding:28px;
+
+    box-shadow:
+        0 0 35px rgba(0,0,0,0.45);
+}
+
+.filter-box h3{
+
+    margin-top:0;
+
+    margin-bottom:24px;
+
+    color:#00ff88;
+
+    font-size:24px;
+}
+
+.filter-box label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    margin-top:16px;
+
+    color:#c7d2cb;
+
+    font-size:13px;
+}
+
+.filter-box select{
+
+    width:100%;
+
+    height:48px;
+
+    padding:0 14px;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(0,255,136,0.12);
+
+    background:
+        rgba(18,24,21,0.98);
+
+    color:white;
+
+    outline:none;
+
+    font-size:13px;
+}
+
+.filter-actions{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:28px;
+}
+
+.filter-actions button{
+
+    flex:1;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:0.25s;
+}
+
+#applyFilters{
+
+    background:#00ff88;
+
+    color:black;
+}
+
+#resetFilters{
+
+    background:
+        rgba(255,255,255,0.05);
+
+    color:white;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+}
+
+/* =========================
+   PROFESSIONAL MATCH STATS
+========================= */
+
+.match-overview{
+
+    display:grid;
+
+    grid-template-columns:
+        170px 1fr;
+
+    gap:18px;
+
+    margin-top:18px;
+
+    align-items:stretch;
+}
+
+/* =========================
+   LEFT RADAR STYLE
+========================= */
+
+.match-radar{
+
+    position:relative;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.03),
+            rgba(255,255,255,0.01)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius:22px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:18px 12px;
+
+    overflow:hidden;
+
+    min-height:250px;
+}
+
+.match-radar::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+}
+
+.match-radar::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:88px;
+    height:88px;
+
+    border-radius:50%;
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.radar-center{
+
+    position:relative;
+
+    z-index:2;
+
+    width:78px;
+    height:78px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,255,136,0.28),
+            rgba(0,255,136,0.04)
+        );
+
+    border:
+        2px solid rgba(0,255,136,0.28);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    box-shadow:
+        0 0 20px rgba(0,255,136,0.12);
+}
+
+.radar-rank{
+
+    font-size:28px;
+
+    font-weight:900;
+
+    color:#00ff88;
+
+    line-height:1;
+}
+
+.radar-rating{
+
+    margin-top:5px;
+
+    font-size:11px;
+
+    color:#b8c7bf;
+
+    letter-spacing:1px;
+}
+
+/* =========================
+   RIGHT CONTENT
+========================= */
+
+.match-main{
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.03),
+            rgba(255,255,255,0.015)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius:22px;
+
+    padding:18px;
+
+    overflow:hidden;
+}
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.match-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-bottom:20px;
+
+    padding-bottom:18px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.06);
+}
+
+.match-game{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+}
+
+.match-game h3{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:800;
+
+    color:white;
+}
+
+.match-subtitle{
+
+    font-size:12px;
+
+    color:#8fa39a;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.match-result{
+
+    min-width:120px;
+
+    text-align:center;
+
+    padding:12px 16px;
+
+    border-radius:16px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+}
+
+.match-result.win{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0,255,136,0.18),
+            rgba(0,255,136,0.05)
+        );
+
+    border:
+        1px solid rgba(0,255,136,0.28);
+
+    color:#00ff88;
+
+    box-shadow:
+        0 0 15px rgba(0,255,136,0.08);
+}
+
+.match-result.loss{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,80,80,0.18),
+            rgba(255,80,80,0.05)
+        );
+
+    border:
+        1px solid rgba(255,80,80,0.25);
+
+    color:#ff7272;
+
+    box-shadow:
+        0 0 15px rgba(255,80,80,0.08);
+}
+
+/* =========================
+   TOP MAIN STATS
+========================= */
+
+.top-performance{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:12px;
+
+    margin-bottom:18px;
+}
+
+.performance-box{
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.035),
+            rgba(255,255,255,0.01)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius:16px;
+
+    padding:14px;
+
+    text-align:center;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.performance-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00ff88,
+            transparent
+        );
+}
+
+.performance-label{
+
+    color:#7f9188;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:10px;
+}
+
+.performance-value{
+
+    font-size:30px;
+
+    font-weight:900;
+
+    color:white;
+
+    line-height:1;
+}
+
+.performance-value.green{
+
+    color:#00ff88;
+}
+
+.performance-value.red{
+
+    color:#ff7272;
+}
+
+.performance-value.gold{
+
+    color:#ffd166;
+}
+
+/* =========================
+   SECONDARY STATS
+========================= */
+
+.match-stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:10px;
+}
+
+.match-stat-box{
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius:14px;
+
+    padding:12px;
+
+    text-align:center;
+
+    transition:0.25s;
+}
+
+.match-stat-box:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(0,255,136,0.16);
+
+    background:
+        rgba(255,255,255,0.04);
+}
+
+.match-stat-label{
+
+    color:#7f9188;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:8px;
+}
+
+.match-stat-value{
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:800;
+}
+
+/* =========================
+   EXTRA INFO
+========================= */
+
+.match-extra-info{
+
+    margin-top:18px;
+
+    padding-top:16px;
+
+    border-top:
+        1px solid rgba(255,255,255,0.06);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.match-date{
+
+    color:#8b9d94;
+
+    font-size:12px;
+}
+
+.match-mode{
+
+    padding:8px 12px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    color:#dbe7df;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:1100px){
+
+    .match-overview{
+
+        grid-template-columns:1fr;
+    }
+
+    .match-radar{
+
+        min-height:180px;
+    }
+
+    .top-performance{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .match-stats-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+@media (max-width:768px){
+
+    .match-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .match-result{
+
+        width:100%;
+    }
+
+    .top-performance{
+
+        grid-template-columns:1fr;
+    }
+
+    .match-stats-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .match-extra-info{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+}

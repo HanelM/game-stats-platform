@@ -28,4 +28,9 @@ public class AnalyticsResponse {
     private int bestScore;
 
     private double averageScore;
+
+    private int bestKillMatch;
+
+    private double highestKD;
+
 }
