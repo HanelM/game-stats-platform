@@ -49,7 +49,7 @@ async function loadUsers(){
 
         const response =
             await fetch(
-                '${API_URL}/api/admin/users',
+                `${API_URL}/api/admin/users`,
                 {
                     headers:{
                         Authorization:
@@ -201,7 +201,7 @@ async function searchUsers(value){
 
         const response =
             await fetch(
-                '${API_URL}/api/admin/users/search?username=${value}&page=0&size=20`,
+                `${API_URL}/api/admin/users/search?username=${value}&page=0&size=20`,
                 {
                     headers:{
                         Authorization:
@@ -299,7 +299,7 @@ document.getElementById(
         try{
 
             await fetch(
-                '${API_URL}/api/admin/users/${selectedDeleteId}`,
+                `${API_URL}/api/admin/users/${selectedDeleteId}`,
                 {
                     method:"DELETE",
 

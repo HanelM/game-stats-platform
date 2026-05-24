@@ -199,7 +199,7 @@ async function loadUsers(){
 
             const response =
                 await fetch(
-                    '${API_URL}/api/admin/users?page=${currentPage}&size=50`,
+                    `${API_URL}/api/admin/users?page=${currentPage}&size=50`,
                     {
                         headers:{
                             Authorization:
@@ -243,7 +243,7 @@ async function loadUsers(){
 
                         const statsResponse =
                             await fetch(
-                                '${API_URL}/api/matches/analytics/user/${user.username}`,
+                                `${API_URL}/api/matches/analytics/user/${user.username}`,
                                 {
                                     headers:{
                                         Authorization:

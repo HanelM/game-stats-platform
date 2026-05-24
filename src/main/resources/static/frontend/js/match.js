@@ -544,7 +544,7 @@ async function saveMatch() {
     try {
 
         const response = await fetch(
-            '${API_URL}/api/matches',
+            `${API_URL}/api/matches`,
             {
                 method: "POST",
 

@@ -33,7 +33,7 @@ async function loadPlayedGames(){
     try{
 
         const response = await fetch(
-            '${API_URL}/api/matches/my',
+            `${API_URL}/api/matches/my`,
             {
                 headers:{
                     "Authorization":

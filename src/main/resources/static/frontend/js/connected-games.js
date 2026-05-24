@@ -105,7 +105,7 @@ connectBtn.addEventListener(
             const response =
                 await fetch(
 
-                    '${API_URL}/api/games/pubg/player/${playerName}`,
+                    `${API_URL}/api/games/pubg/player/${playerName}`,
 
                     {
                         headers:{

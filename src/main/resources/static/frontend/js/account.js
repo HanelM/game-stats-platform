@@ -5,7 +5,7 @@ const API_URL =
         : "https://game-stats-platform-2.onrender.com";
 
 const API_URL =
-    '${API_URL}/api/auth';
+    `${API_URL}/api/auth`;
 /* =========================
    PAGE LOAD
 ========================= */
@@ -376,7 +376,7 @@ async function loadProfileStats(){
     try{
 
         const profileResponse = await fetch(
-            '${API_URL}/api/users/profile',
+            `${API_URL}/api/users/profile`,
             {
                 headers:{
                     "Authorization":
@@ -424,7 +424,7 @@ async function loadProfileStats(){
     try{
 
         const response = await fetch(
-            '${API_URL}/api/matches/my',
+            `${API_URL}/api/matches/my`,
             {
                 headers:{
                     "Authorization":

@@ -49,7 +49,7 @@ async function loadUser() {
         while (currentPage < totalPages) {
 
             const response = await fetch(
-                '${API_URL}/api/admin/users?page=${currentPage}&size=50`,
+                `${API_URL}/api/admin/users?page=${currentPage}&size=50`,
                 {
                     headers: {
                         Authorization: "Bearer " + token
@@ -133,7 +133,7 @@ async function loadUser() {
         ========================= */
 
         const analyticsResponse = await fetch(
-            '${API_URL}/api/matches/analytics/user/${username}`,
+            `${API_URL}/api/matches/analytics/user/${username}`,
             {
                 headers: {
                     Authorization: "Bearer " + token
@@ -190,7 +190,7 @@ async function confirmDeleteUser() {
         ========================= */
 
         const response = await fetch(
-            '${API_URL}/api/admin/users?page=0&size=100`,
+            `${API_URL}/api/admin/users?page=0&size=100`,
             {
                 headers: {
                     Authorization: "Bearer " + token
@@ -225,7 +225,7 @@ async function confirmDeleteUser() {
         ========================= */
 
         const deleteResponse = await fetch(
-            '${API_URL}/api/admin/users/${user.id}`,
+            `${API_URL}/api/admin/users/${user.id}`,
             {
                 method: "DELETE",
 

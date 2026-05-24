@@ -40,7 +40,7 @@ async function loadGames() {
     try {
 
         const response = await fetch(
-            '${API_URL}/api/matches/my',
+            `${API_URL}/api/matches/my`,
             {
                 headers:{
                     "Authorization":
@@ -286,7 +286,7 @@ async function loadLeaderboard() {
     try {
 
         const response = await fetch(
-            '${API_URL}/api/leaderboard?gameName=${selectedGame}`,
+            `${API_URL}/api/leaderboard?gameName=${selectedGame}`,
             {
                 headers:{
                     "Authorization":

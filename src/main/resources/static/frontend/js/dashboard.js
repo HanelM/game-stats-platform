@@ -49,12 +49,12 @@ async function loadDashboard(){
     if(selectedUsername){
 
         url =
-            '${API_URL}/api/matches/user/${selectedUsername}`;
+            `${API_URL}/api/matches/user/${selectedUsername}`;
 
     } else {
 
         url =
-            '${API_URL}/api/matches/my";
+            `${API_URL}/api/matches/my`;
     }
 
     try{

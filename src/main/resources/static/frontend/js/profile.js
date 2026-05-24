@@ -11,7 +11,7 @@ async function loadProfile() {
     try {
 
         const response = await fetch(
-            '${API_URL}/api/users/profile',
+            `${API_URL}/api/users/profile`,
             {
                 headers: {
                     "Authorization":
@@ -60,7 +60,7 @@ async function loadStats() {
     try {
 
         const response = await fetch(
-            '${API_URL}/api/matches/stats',
+            `${API_URL}/api/matches/stats`,
             {
                 headers: {
                     "Authorization":

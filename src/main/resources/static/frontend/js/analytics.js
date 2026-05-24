@@ -27,12 +27,12 @@ async function loadAnalytics(){
     try{
 
         const analyticsUrl = selectedUsername
-            ? '${API_URL}/api/matches/analytics/user/${selectedUsername}`
-            : '${API_URL}/api/matches/analytics`;
+            ? `${API_URL}/api/matches/analytics/user/${selectedUsername}`
+            : `${API_URL}/api/matches/analytics`;
 
         const matchesUrl = selectedUsername
-            ? '${API_URL}/api/matches/user/${selectedUsername}`
-            : '${API_URL}/api/matches/my`;
+            ? `${API_URL}/api/matches/user/${selectedUsername}`
+            : `${API_URL}/api/matches/my`;
 
         /* =========================
            LOAD ANALYTICS DATA
