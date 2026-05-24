@@ -27,7 +27,7 @@ const bestGamesContainer =
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
-        : "https://game-stats-platform-2.onrender.com";
+        : "https://game-stats-platform.onrender.com";
 /* =========================
    LOAD GAMES
 ========================= */

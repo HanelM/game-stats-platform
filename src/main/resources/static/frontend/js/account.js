@@ -2,7 +2,7 @@
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
-        : "https://game-stats-platform-2.onrender.com";
+        : "https://game-stats-platform.onrender.com";
 
 const API_BASE =
     `${API_URL}/api/auth`;
@@ -188,7 +188,7 @@ async function login() {
     try {
 
         const response = await fetch(
-            API_URL + "/login",
+            API_BASE + "/login",
             {
                 method: "POST",
 
@@ -294,7 +294,7 @@ async function register() {
     try {
 
         const response = await fetch(
-            API_URL + "/register",
+            API_BASE + "/register",
             {
                 method: "POST",
 

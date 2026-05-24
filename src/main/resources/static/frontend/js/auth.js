@@ -3,7 +3,7 @@
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
-        : "https://game-stats-platform-2.onrender.com";
+        : "https://game-stats-platform.onrender.com";
 
 const API_BASE = `${API_URL}/api/auth`;
 
@@ -37,7 +37,7 @@ if (registerForm) {
             try {
 
                 const response = await fetch(
-                    `${API_URL}/register`,
+                    `${API_BASE}/register`,
                     {
                         method: "POST",
 
@@ -53,7 +53,7 @@ if (registerForm) {
                     }
                 );
 
-                const data = await response.json();
+                matches = extractData(data);
 
                 if (response.ok) {
 
@@ -120,7 +120,7 @@ if (loginForm) {
             try {
 
                 const response = await fetch(
-                    `${API_URL}/login`,
+                    `${API_BASE}/login`,
                     {
                         method: "POST",
 
@@ -135,7 +135,7 @@ if (loginForm) {
                     }
                 );
 
-                const data = await response.json();
+                matches = extractData(data);
 
                 if (response.ok) {
 
