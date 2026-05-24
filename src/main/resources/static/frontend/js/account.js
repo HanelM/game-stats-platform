@@ -4,7 +4,7 @@ const API_URL =
         ? "http://localhost:8080"
         : "https://game-stats-platform-2.onrender.com";
 
-const API_URL =
+const API_BASE =
     `${API_URL}/api/auth`;
 /* =========================
    PAGE LOAD
