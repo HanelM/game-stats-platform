@@ -84,10 +84,10 @@ public class UserController {
             List<GameMatch> matches =
                     gameMatchRepository.findByPlayerUsername(user.getUsername());
 
-            int kills = matches.stream().mapToInt(GameMatch::getKills).sum();
+            int kills = matches.stream().mapToInt(match -> match.getKills() != null ? match.getKills() : 0).sum();
 
             int wins = (int) matches.stream()
-                    .filter(GameMatch::getWin)
+                    .filter(match -> Boolean.TRUE.equals(match.getWin()))
                     .count();
 
             double kd = matches.stream()

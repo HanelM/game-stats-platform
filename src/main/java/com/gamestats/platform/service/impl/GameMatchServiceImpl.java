@@ -154,35 +154,35 @@ public class GameMatchServiceImpl implements GameMatchService {
         long totalMatches = matches.size();
 
         long wins = matches.stream()
-                .filter(GameMatch::getWin)
+                .filter(match -> Boolean.TRUE.equals(match.getWin()))
                 .count();
 
         long losses = totalMatches - wins;
 
         int totalKills = matches.stream()
-                .mapToInt(GameMatch::getKills)
+                .mapToInt(match -> match.getKills() != null ? match.getKills() : 0)
                 .sum();
 
         int totalDeaths = matches.stream()
-                .mapToInt(GameMatch::getDeaths)
+                .mapToInt(match -> match.getDeaths() != null ? match.getDeaths() : 0)
                 .sum();
 
         int bestScore = matches.stream()
-                .mapToInt(GameMatch::getScore)
+                .mapToInt(match -> match.getScore() != null ? match.getScore() : 0)
                 .max()
                 .orElse(0);
 
         int bestKillMatch = matches.stream()
-                .mapToInt(GameMatch::getKills)
+                .mapToInt(match -> match.getKills() != null ? match.getKills() : 0)
                 .max()
                 .orElse(0);
 
         double highestKD = matches.stream()
                 .mapToDouble(match -> {
 
-                    if(match.getDeaths() == 0){
+                    if(match.getDeaths() == null || match.getDeaths() == 0){
 
-                        return match.getKills();
+                        return match.getKills() != null ? match.getKills() : 0;
                     }
 
                     return (double)
@@ -194,7 +194,7 @@ public class GameMatchServiceImpl implements GameMatchService {
                 .orElse(0);
 
         double averageScore = matches.stream()
-                .mapToInt(GameMatch::getScore)
+                .mapToInt(match -> match.getScore() != null ? match.getScore() : 0)
                 .average()
                 .orElse(0);
 
@@ -290,35 +290,35 @@ public class GameMatchServiceImpl implements GameMatchService {
         long totalMatches = matches.size();
 
         long wins = matches.stream()
-                .filter(GameMatch::getWin)
+                .filter(match -> Boolean.TRUE.equals(match.getWin()))
                 .count();
 
         long losses = totalMatches - wins;
 
         int totalKills = matches.stream()
-                .mapToInt(GameMatch::getKills)
+                .mapToInt(match -> match.getKills() != null ? match.getKills() : 0)
                 .sum();
 
         int totalDeaths = matches.stream()
-                .mapToInt(GameMatch::getDeaths)
+                .mapToInt(match -> match.getDeaths() != null ? match.getDeaths() : 0)
                 .sum();
 
         int bestScore = matches.stream()
-                .mapToInt(GameMatch::getScore)
+                .mapToInt(match -> match.getScore() != null ? match.getScore() : 0)
                 .max()
                 .orElse(0);
 
         int bestKillMatch = matches.stream()
-                .mapToInt(GameMatch::getKills)
+                .mapToInt(match -> match.getKills() != null ? match.getKills() : 0)
                 .max()
                 .orElse(0);
 
         double highestKD = matches.stream()
                 .mapToDouble(match -> {
 
-                    if(match.getDeaths() == 0){
+                    if(match.getDeaths() == null || match.getDeaths() == 0){
 
-                        return match.getKills();
+                        return match.getKills() != null ? match.getKills() : 0;
                     }
 
                     return (double)
@@ -330,7 +330,7 @@ public class GameMatchServiceImpl implements GameMatchService {
                 .orElse(0);
 
         double averageScore = matches.stream()
-                .mapToInt(GameMatch::getScore)
+                .mapToInt(match -> match.getScore() != null ? match.getScore() : 0)
                 .average()
                 .orElse(0);
 

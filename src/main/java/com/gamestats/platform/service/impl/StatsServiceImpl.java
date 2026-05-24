@@ -24,7 +24,7 @@ public class StatsServiceImpl implements StatsService {
         int totalMatches = matches.size();
 
         int wins = (int) matches.stream()
-                .filter(GameMatch::getWin)
+                .filter(match -> Boolean.TRUE.equals(match.getWin()))
                 .count();
 
         int losses = totalMatches - wins;
@@ -35,11 +35,11 @@ public class StatsServiceImpl implements StatsService {
                         : (wins * 100.0 / totalMatches);
 
         int totalKills = matches.stream()
-                .mapToInt(GameMatch::getKills)
+                .mapToInt(match -> match.getKills() != null ? match.getKills() : 0)
                 .sum();
 
         int totalDeaths = matches.stream()
-                .mapToInt(GameMatch::getDeaths)
+                .mapToInt(match -> match.getDeaths() != null ? match.getDeaths() : 0)
                 .sum();
 
         double avgKills =

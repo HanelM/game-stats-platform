@@ -36,8 +36,8 @@ public class LeaderboardServiceImpl implements LeaderboardService {
 
             List<GameMatch> userMatches = grouped.get(username);
 
-            int kills = userMatches.stream().mapToInt(GameMatch::getKills).sum();
-            int wins = (int) userMatches.stream().filter(GameMatch::getWin).count();
+            int kills = userMatches.stream().mapToInt(match -> match.getKills() != null ? match.getKills() : 0).sum();
+            int wins = (int) userMatches.stream().filter(match -> Boolean.TRUE.equals(match.getWin())).count();
 
             Map<String, Object> row = new HashMap<>();
             row.put("username", username);
