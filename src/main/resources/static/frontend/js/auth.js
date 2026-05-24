@@ -53,7 +53,7 @@ if (registerForm) {
                     }
                 );
 
-                matches = extractData(data);
+                const data = await response.json();
 
                 if (response.ok) {
 
@@ -135,7 +135,7 @@ if (loginForm) {
                     }
                 );
 
-                matches = extractData(data);
+                const data = await response.json();
 
                 if (response.ok) {
 
