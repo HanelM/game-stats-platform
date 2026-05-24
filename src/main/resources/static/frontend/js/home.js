@@ -1,3 +1,8 @@
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
+
 const trendingContainer = document.getElementById("trending-games");
 
 function renderTrendingGames() {

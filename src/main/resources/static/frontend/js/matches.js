@@ -1,3 +1,5 @@
+
+
 /* =========================
    ELEMENTS
 ========================= */
@@ -38,6 +40,10 @@ const applyFilters =
 const resetFilters =
     document.getElementById("resetFilters");
 
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 /* =========================
    GLOBAL MATCHES
 ========================= */
@@ -109,7 +115,7 @@ async function loadMatches() {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/api/matches/my",
+            '${API_URL}/api/matches/my',
             {
                 headers: {
                     "Authorization":

@@ -2,6 +2,10 @@ const token = localStorage.getItem("token");
 
 const params = new URLSearchParams(window.location.search);
 const username = params.get("username");
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 
 /* =========================
    PROTECTION
@@ -45,7 +49,7 @@ async function loadUser() {
         while (currentPage < totalPages) {
 
             const response = await fetch(
-                `http://localhost:8080/api/admin/users?page=${currentPage}&size=50`,
+                '${API_URL}/api/admin/users?page=${currentPage}&size=50`,
                 {
                     headers: {
                         Authorization: "Bearer " + token
@@ -129,7 +133,7 @@ async function loadUser() {
         ========================= */
 
         const analyticsResponse = await fetch(
-            `http://localhost:8080/api/matches/analytics/user/${username}`,
+            '${API_URL}/api/matches/analytics/user/${username}`,
             {
                 headers: {
                     Authorization: "Bearer " + token
@@ -186,7 +190,7 @@ async function confirmDeleteUser() {
         ========================= */
 
         const response = await fetch(
-            `http://localhost:8080/api/admin/users?page=0&size=100`,
+            '${API_URL}/api/admin/users?page=0&size=100`,
             {
                 headers: {
                     Authorization: "Bearer " + token
@@ -221,7 +225,7 @@ async function confirmDeleteUser() {
         ========================= */
 
         const deleteResponse = await fetch(
-            `http://localhost:8080/api/admin/users/${user.id}`,
+            '${API_URL}/api/admin/users/${user.id}`,
             {
                 method: "DELETE",
 

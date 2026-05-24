@@ -1,3 +1,8 @@
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
+
 const token =
     localStorage.getItem("token");
 
@@ -6,7 +11,7 @@ async function loadProfile() {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/api/users/profile",
+            '${API_URL}/api/users/profile',
             {
                 headers: {
                     "Authorization":
@@ -55,7 +60,7 @@ async function loadStats() {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/api/matches/stats",
+            '${API_URL}/api/matches/stats',
             {
                 headers: {
                     "Authorization":

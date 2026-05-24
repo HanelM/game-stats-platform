@@ -1,3 +1,9 @@
+
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
+
 const token =
     localStorage.getItem("token");
 
@@ -42,7 +48,7 @@ async function loadUsers(){
 
         const response =
             await fetch(
-                "http://localhost:8080/api/admin/users",
+                '${API_URL}/api/admin/users',
                 {
                     headers:{
                         Authorization:
@@ -205,7 +211,7 @@ async function searchUsers(value){
 
         const response =
             await fetch(
-                `http://localhost:8080/api/admin/users/search?username=${value}&page=0&size=20`,
+                '${API_URL}/api/admin/users/search?username=${value}&page=0&size=20`,
                 {
                     headers:{
                         Authorization:

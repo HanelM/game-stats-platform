@@ -1,6 +1,11 @@
-const API_URL =
-    "http://localhost:8080/api/auth";
 
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
+
+const API_URL =
+    '${API_URL}/api/auth';
 /* =========================
    PAGE LOAD
 ========================= */
@@ -371,7 +376,7 @@ async function loadProfileStats(){
     try{
 
         const profileResponse = await fetch(
-            "http://localhost:8080/api/users/profile",
+            '${API_URL}/api/users/profile',
             {
                 headers:{
                     "Authorization":
@@ -419,7 +424,7 @@ async function loadProfileStats(){
     try{
 
         const response = await fetch(
-            "http://localhost:8080/api/matches/my",
+            '${API_URL}/api/matches/my',
             {
                 headers:{
                     "Authorization":

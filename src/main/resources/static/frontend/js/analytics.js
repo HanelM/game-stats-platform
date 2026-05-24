@@ -11,7 +11,10 @@ const token =
 
 const analyticsGameSelect =
     document.getElementById("analyticsGameSelect");
-
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 let matches = [];
 let analyticsChart = null;
 
@@ -24,12 +27,12 @@ async function loadAnalytics(){
     try{
 
         const analyticsUrl = selectedUsername
-            ? `http://localhost:8080/api/matches/analytics/user/${selectedUsername}`
-            : `http://localhost:8080/api/matches/analytics`;
+            ? '${API_URL}/api/matches/analytics/user/${selectedUsername}`
+            : '${API_URL}/api/matches/analytics`;
 
         const matchesUrl = selectedUsername
-            ? `http://localhost:8080/api/matches/user/${selectedUsername}`
-            : `http://localhost:8080/api/matches/my`;
+            ? '${API_URL}/api/matches/user/${selectedUsername}`
+            : '${API_URL}/api/matches/my`;
 
         /* =========================
            LOAD ANALYTICS DATA

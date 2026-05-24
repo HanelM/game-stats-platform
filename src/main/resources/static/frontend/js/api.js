@@ -1,5 +1,11 @@
 
-const API_BASE = "http://localhost:8080/api";
+
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
+
+const API_BASE = '${API_URL}/api';
 
 export async function apiGet(url) {
     const token = localStorage.getItem("token");

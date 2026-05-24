@@ -10,7 +10,10 @@ const dynamicFields =
 
 const message =
     document.getElementById("match-message");
-
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 /* =========================
    GAME CONFIGS
 ========================= */
@@ -541,7 +544,7 @@ async function saveMatch() {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/api/matches",
+            '${API_URL}/api/matches',
             {
                 method: "POST",
 

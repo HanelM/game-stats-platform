@@ -24,7 +24,10 @@ const bestGamesContainer =
     document.getElementById(
         "best-games"
     );
-
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 /* =========================
    LOAD GAMES
 ========================= */
@@ -37,7 +40,7 @@ async function loadGames() {
     try {
 
         const response = await fetch(
-            "http://localhost:8080/api/matches/my",
+            '${API_URL}/api/matches/my',
             {
                 headers:{
                     "Authorization":
@@ -283,7 +286,7 @@ async function loadLeaderboard() {
     try {
 
         const response = await fetch(
-            `http://localhost:8080/api/leaderboard?gameName=${selectedGame}`,
+            '${API_URL}/api/leaderboard?gameName=${selectedGame}`,
             {
                 headers:{
                     "Authorization":

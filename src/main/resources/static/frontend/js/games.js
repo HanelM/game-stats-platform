@@ -11,7 +11,10 @@ const searchInput =
 
 const genreFilter =
     document.getElementById("genre-filter");
-
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 let playedGameNames = [];
 
 /* =========================
@@ -30,7 +33,7 @@ async function loadPlayedGames(){
     try{
 
         const response = await fetch(
-            "http://localhost:8080/api/matches/my",
+            '${API_URL}/api/matches/my',
             {
                 headers:{
                     "Authorization":

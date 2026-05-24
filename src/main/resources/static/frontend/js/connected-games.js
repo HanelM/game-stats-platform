@@ -7,7 +7,10 @@ const token =
     localStorage.getItem(
         "token"
     );
-
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 /* =========================
    LOAD SAVED PUBG ACCOUNT
 ========================= */
@@ -102,7 +105,7 @@ connectBtn.addEventListener(
             const response =
                 await fetch(
 
-                    `http://localhost:8080/api/games/pubg/player/${playerName}`,
+                    '${API_URL}/api/games/pubg/player/${playerName}`,
 
                     {
                         headers:{

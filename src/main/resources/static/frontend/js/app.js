@@ -9,7 +9,10 @@ const userInfo =
 
 const logoutBtn =
     document.getElementById("logout-btn");
-
+const API_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://game-stats-platform-2.onrender.com";
 /* =========================
    USER INFO
 ========================= */
