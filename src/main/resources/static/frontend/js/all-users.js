@@ -614,7 +614,7 @@ function renderUsers(users){
 
         return;
     }
-
+console.log(users);
     users.forEach(user => {
 
         usersGrid.innerHTML += `
@@ -650,22 +650,22 @@ function renderUsers(users){
 
                     <div class="mini-stat">
                         <span>KD</span>
-                        <strong>${user.kdRatio.toFixed(2)}</strong>
+                        <strong>${Number(user.kdRatio || 0).toFixed(2)}</strong>
                     </div>
 
                     <div class="mini-stat">
                         <span>Matches</span>
-                        <strong>${user.totalMatches || 0}</strong>
+                        <strong>${Number(user.totalMatches || 0)}</strong>
                     </div>
 
                     <div class="mini-stat">
                         <span>Win%</span>
-                        <strong>${user.winRate}%</strong>
+                        <strong>${Number(user.winRate || 0).toFixed(1)}%</strong>
                     </div>
 
                     <div class="mini-stat">
                         <span>Kills</span>
-                        <strong>${user.kills}</strong>
+                        <strong>${Number(user.kills || 0)}</strong>
                     </div>
 
                 </div>
