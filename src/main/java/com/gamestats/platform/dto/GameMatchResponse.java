@@ -15,13 +15,13 @@ public class GameMatchResponse {
 
     private String gameName;
 
-    private int score;
+    private Integer score;
 
-    private int kills;
+    private Integer kills;
 
-    private int deaths;
+    private Integer deaths;
 
-    private boolean win;
+    private Boolean win;
 
     private LocalDateTime playedAt;
 

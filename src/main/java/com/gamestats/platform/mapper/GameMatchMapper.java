@@ -12,6 +12,7 @@ public class GameMatchMapper {
         return GameMatchResponse.builder()
 
                 .id(match.getId())
+                .playerUsername(match.getPlayerUsername())
 
                 .gameName(match.getGameName())
 

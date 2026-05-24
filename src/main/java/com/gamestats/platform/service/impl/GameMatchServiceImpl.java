@@ -185,9 +185,15 @@ public class GameMatchServiceImpl implements GameMatchService {
                         return match.getKills() != null ? match.getKills() : 0;
                     }
 
-                    return (double)
-                            match.getKills()
-                            / match.getDeaths();
+                    int kills =
+                            match.getKills() != null
+                                    ? match.getKills()
+                                    : 0;
+
+                    int deaths =
+                            match.getDeaths();
+
+                    return (double) kills / deaths;
 
                 })
                 .max()
@@ -321,9 +327,15 @@ public class GameMatchServiceImpl implements GameMatchService {
                         return match.getKills() != null ? match.getKills() : 0;
                     }
 
-                    return (double)
-                            match.getKills()
-                            / match.getDeaths();
+                    int kills =
+                            match.getKills() != null
+                                    ? match.getKills()
+                                    : 0;
+
+                    int deaths =
+                            match.getDeaths();
+
+                    return (double) kills / deaths;
 
                 })
                 .max()
