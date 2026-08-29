@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Login</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="stylesheet"
+          href="css/account.css">
+
 </head>
+
 <body>
 
 <header>
@@ -16,11 +27,20 @@
     <nav>
 
         <a href="index.html">Home</a>
+
         <a href="games.html">Games</a>
+
         <a href="about.html">About</a>
 
-        <a href="login.html" id="login-link">Login</a>
-        <a href="register.html" id="register-link">Register</a>
+        <a href="login.html"
+           id="login-link">
+            Login
+        </a>
+
+        <a href="register.html"
+           id="register-link">
+            Register
+        </a>
 
         <a href="account.html"
            id="user-link"
@@ -31,39 +51,71 @@
 
 </header>
 
+
 <section class="single-account-page">
 
     <div class="single-account-card">
 
         <h2>Login</h2>
-        <p id="login-error" class="error-message"></p>
 
-        <input type="text"
-               id="login-username"
-               placeholder="Username">
+        <p id="login-error"
+           class="error-message">
+        </p>
 
-        <input type="password"
-               id="login-password"
-               placeholder="Password">
 
-        <button onclick="login()">
-            Login
-        </button>
+        <form id="login-form">
+
+            <input
+                    type="text"
+                    id="login-username"
+                    placeholder="Username"
+                    autocomplete="username"
+                    required
+            >
+
+            <input
+                    type="password"
+                    id="login-password"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                    required
+            >
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
 
         <p class="switch-text">
+
+            <a href="forgot-password.html">
+                Forgot your password?
+            </a>
+
+        </p>
+
+
+        <p class="switch-text">
+
             Don't have an account?
 
             <a href="register.html">
                 Create account
             </a>
+
         </p>
 
     </div>
 
 </section>
 
+
 <script src="js/account.js"></script>
+
 <script src="js/auth-global.js"></script>
 
 </body>
+
 </html>

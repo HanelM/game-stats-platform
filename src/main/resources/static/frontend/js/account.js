@@ -247,100 +247,207 @@ async function login() {
    REGISTER
 ========================= */
 
-async function register() {
+const registerForm =
+    document.getElementById("register-form");
 
-    const username =
-        document.getElementById(
-            "reg-username"
-        );
+if (registerForm) {
 
-    const email =
-        document.getElementById(
-            "reg-email"
-        );
+    registerForm.addEventListener(
+        "submit",
+        async function (e) {
 
-    const password =
-        document.getElementById(
-            "reg-password"
-        );
+            e.preventDefault();
 
-    let errorBox =
-        document.getElementById(
-            "register-error"
-        );
+            const username =
+                document.getElementById(
+                    "register-username"
+                );
 
-    // CREATE ERROR DIV IF NOT EXISTS
-    if (!errorBox) {
+            const email =
+                document.getElementById(
+                    "register-email"
+                );
 
-        errorBox = document.createElement("p");
+            const password =
+                document.getElementById(
+                    "register-password"
+                );
 
-        errorBox.id = "register-error";
+            const message =
+                document.getElementById(
+                    "register-message"
+                );
 
-        errorBox.style.color = "red";
+            message.innerText = "";
+            message.style.color = "";
 
-        document.getElementById(
-            "register-form"
-        ).appendChild(errorBox);
-    }
 
-    errorBox.innerText = "";
+            /* =========================
+               CLIENT-SIDE VALIDATION
+            ========================= */
 
-    const data = {
-        username: username.value,
-        email: email.value,
-        password: password.value
-    };
+            if (username.value.trim() === "") {
 
-    try {
+                message.innerText =
+                    "Username is required.";
 
-        const response = await fetch(
-            API_BASE + "/register",
-            {
-                method: "POST",
+                username.focus();
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(data)
+                return;
             }
-        );
 
-        let result = {};
+            if (email.value.trim() === "") {
 
-        try {
+                message.innerText =
+                    "Email is required.";
 
-            result = await response.json();
+                email.focus();
 
-        } catch (e) {}
+                return;
+            }
 
-        if (response.ok) {
+            if (password.value === "") {
 
-            localStorage.setItem(
-                "token",
-                result.token
-            );
+                message.innerText =
+                    "Password is required.";
 
-            localStorage.setItem(
-                "username",
-                username.value
-            );
+                password.focus();
 
-            location.reload();
+                return;
+            }
 
-        } else {
+            if (username.value.trim().length < 3) {
 
-            errorBox.innerText =
-                result.message ||
-                result.error ||
-                "Registration failed";
+                message.innerText =
+                    "Username must be at least 3 characters.";
+
+                username.focus();
+
+                return;
+            }
+
+            if (password.value.length < 4) {
+
+                message.innerText =
+                    "Password must be at least 4 characters.";
+
+                password.focus();
+
+                return;
+            }
+
+
+            const data = {
+
+                username:
+                    username.value.trim(),
+
+                email:
+                    email.value.trim(),
+
+                password:
+                    password.value
+            };
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_BASE + "/register",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(data)
+                        }
+                    );
+
+
+                let result = {};
+
+                try {
+
+                    result =
+                        await response.json();
+
+                } catch (e) {
+
+                    console.error(
+                        "Could not parse server response.",
+                        e
+                    );
+                }
+
+
+                if (response.ok) {
+
+                    message.style.color =
+                        "lightgreen";
+
+                    message.innerText =
+                        "Registration successful!";
+
+
+                    if (result.token) {
+
+                        localStorage.setItem(
+                            "token",
+                            result.token
+                        );
+
+                    }
+
+                    localStorage.setItem(
+                        "username",
+                        username.value.trim()
+                    );
+
+
+                    setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "index.html";
+
+                        },
+                        1000
+                    );
+
+
+                } else {
+
+                    message.style.color =
+                        "red";
+
+                    message.innerText =
+                        result.message ||
+                        result.error ||
+                        "Registration failed.";
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Registration error:",
+                    error
+                );
+
+                message.style.color =
+                    "red";
+
+                message.innerText =
+                    "Unable to connect to the server.";
+            }
+
         }
-
-    } catch (error) {
-
-        errorBox.innerText =
-            "Server error";
-    }
+    );
 }
 
 /* =========================

@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Register</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="stylesheet"
+          href="css/account.css">
+
 </head>
+
 <body>
 
 <header>
@@ -16,11 +27,20 @@
     <nav>
 
         <a href="index.html">Home</a>
+
         <a href="games.html">Games</a>
+
         <a href="about.html">About</a>
 
-        <a href="login.html" id="login-link">Login</a>
-        <a href="register.html" id="register-link">Register</a>
+        <a href="login.html"
+           id="login-link">
+            Login
+        </a>
+
+        <a href="register.html"
+           id="register-link">
+            Register
+        </a>
 
         <a href="account.html"
            id="user-link"
@@ -31,43 +51,73 @@
 
 </header>
 
+
 <section class="single-account-page">
 
     <div class="single-account-card">
 
         <h2>Create Account</h2>
-        <p id="register-error" class="error-message"></p>
 
-        <input type="text"
-               id="reg-username"
-               placeholder="Username">
+        <p id="register-message"
+           class="error-message">
+        </p>
 
-        <input type="email"
-               id="reg-email"
-               placeholder="Email">
 
-        <input type="password"
-               id="reg-password"
-               placeholder="Password">
+        <form id="register-form">
 
-        <button onclick="register()">
-            Register
-        </button>
+            <input
+                    type="text"
+                    id="register-username"
+                    placeholder="Username"
+                    autocomplete="username"
+                    required
+            >
+
+
+            <input
+                    type="email"
+                    id="register-email"
+                    placeholder="Email"
+                    autocomplete="email"
+                    required
+            >
+
+
+            <input
+                    type="password"
+                    id="register-password"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                    required
+            >
+
+
+            <button type="submit">
+                Register
+            </button>
+
+        </form>
+
 
         <p class="switch-text">
-            Already have account?
+
+            Already have an account?
 
             <a href="login.html">
                 Login
             </a>
+
         </p>
 
     </div>
 
 </section>
 
+
 <script src="js/account.js"></script>
+
 <script src="js/auth-global.js"></script>
 
 </body>
+
 </html>
