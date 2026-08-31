@@ -1,3 +1,4 @@
+
 package com.gamestats.platform.service;
 
 public interface EmailService {
