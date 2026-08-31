@@ -1,9 +1,10 @@
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
-        : "https://game-stats-platform.onrender.com";
+        : "https://game-stats-platform-2.onrender.com";
 
-const AUTH_API = `${API_URL}/api/auth`;
+const API_BASE =
+    `${API_URL}/api/auth`;
 
 
 // ==========================================
