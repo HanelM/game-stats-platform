@@ -36,27 +36,33 @@ public class EmailServiceImpl implements EmailService {
     ) {
 
         String text = """
-                Hello,
+            Hello,
 
-                We received a request to reset your Game Stats Platform password.
+            We received a request to reset your Game Stats Platform password.
 
-                Your password reset verification code is:
+            Your password reset verification code is:
 
-                %s
+            %s
 
-                This code will expire in %d minutes.
+            This code will expire in %d minutes.
 
-                If you did not request a password reset, you can safely ignore this email.
+            If you did not request a password reset, you can safely ignore this email.
 
-                For security reasons, please do not share this code with anyone.
+            For security reasons, please do not share this code with anyone.
 
-                Game Stats Platform
-                """.formatted(
+            Game Stats Platform
+            """.formatted(
                 verificationCode,
                 expirationMinutes
         );
 
-        webClient.post()
+        System.out.println("======================================");
+        System.out.println("SENDING PASSWORD RESET EMAIL");
+        System.out.println("Recipient: " + recipientEmail);
+        System.out.println("From: " + senderEmail);
+        System.out.println("======================================");
+
+        String response = webClient.post()
                 .uri("/emails")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(
@@ -75,5 +81,10 @@ public class EmailServiceImpl implements EmailService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
+        System.out.println("======================================");
+        System.out.println("RESEND RESPONSE:");
+        System.out.println(response);
+        System.out.println("======================================");
     }
 }
