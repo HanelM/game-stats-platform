@@ -1,4 +1,3 @@
-
 package com.gamestats.platform.service.impl;
 
 import com.gamestats.platform.service.EmailService;
@@ -24,6 +23,7 @@ public class EmailServiceImpl implements EmailService {
     private long expirationMinutes;
 
     public EmailServiceImpl(WebClient.Builder webClientBuilder) {
+
         this.webClient = webClientBuilder
                 .baseUrl("https://api.resend.com")
                 .build();
@@ -77,4 +77,3 @@ public class EmailServiceImpl implements EmailService {
                 .block();
     }
 }
-
