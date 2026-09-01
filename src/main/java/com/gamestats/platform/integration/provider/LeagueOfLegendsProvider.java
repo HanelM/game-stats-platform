@@ -114,14 +114,16 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
         int matches = 0;
         int wins = 0;
+
         int kills = 0;
         int deaths = 0;
+        int assists = 0;
 
         long totalDamage = 0;
 
 
         // =====================================================
-        // 6. Get every match
+        // 6. Process every match
         // =====================================================
 
         for (String matchId : matchIds) {
@@ -144,7 +146,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
             // =================================================
-            // Find the requested player
+            // Find requested player
             // =================================================
 
             RiotMatchResponse.Participant player =
@@ -167,7 +169,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
             // =================================================
-            // Add match statistics
+            // Add statistics
             // =================================================
 
             matches++;
@@ -175,6 +177,8 @@ public class LeagueOfLegendsProvider implements GameProvider {
             kills += player.getKills();
 
             deaths += player.getDeaths();
+
+            assists += player.getAssists();
 
             totalDamage +=
                     player.getTotalDamageDealtToChampions();
@@ -187,7 +191,31 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
         // =====================================================
-        // 7. Calculate K/D
+        // 7. Calculate losses
+        // =====================================================
+
+        int losses =
+                Math.max(
+                        0,
+                        matches - wins
+                );
+
+
+        // =====================================================
+        // 8. Calculate win rate
+        // =====================================================
+
+        double winRate = 0.0;
+
+        if (matches > 0) {
+
+            winRate =
+                    ((double) wins / matches) * 100.0;
+        }
+
+
+        // =====================================================
+        // 9. Calculate K/D
         // =====================================================
 
         double kd = 0.0;
@@ -195,13 +223,26 @@ public class LeagueOfLegendsProvider implements GameProvider {
         if (deaths > 0) {
 
             kd =
-                    (double) kills /
-                            deaths;
+                    (double) kills / deaths;
         }
 
 
         // =====================================================
-        // 8. Calculate average damage
+        // 10. Calculate average KDA
+        // =====================================================
+
+        double averageKda = 0.0;
+
+        if (matches > 0) {
+
+            averageKda =
+                    (double) (kills + assists)
+                            / matches;
+        }
+
+
+        // =====================================================
+        // 11. Calculate average damage
         // =====================================================
 
         double averageDamage = 0.0;
@@ -209,13 +250,29 @@ public class LeagueOfLegendsProvider implements GameProvider {
         if (matches > 0) {
 
             averageDamage =
-                    (double) totalDamage /
-                            matches;
+                    (double) totalDamage / matches;
         }
 
 
         // =====================================================
-        // 9. Create response
+        // 12. Round decimal values
+        // =====================================================
+
+        kd =
+                Math.round(kd * 100.0) / 100.0;
+
+        winRate =
+                Math.round(winRate * 100.0) / 100.0;
+
+        averageKda =
+                Math.round(averageKda * 100.0) / 100.0;
+
+        averageDamage =
+                Math.round(averageDamage * 100.0) / 100.0;
+
+
+        // =====================================================
+        // 13. Create response
         // =====================================================
 
         GamePlayerStatsResponse response =
@@ -230,33 +287,58 @@ public class LeagueOfLegendsProvider implements GameProvider {
         );
 
         response.setKd(
-                Math.round(kd * 100.0) / 100.0
-        );
-
-        response.setKills(
-                kills
-        );
-
-        response.setMatches(
-                matches
+                kd
         );
 
         response.setWins(
                 wins
         );
 
-        response.setAverageDamage(
-                Math.round(averageDamage * 100.0) / 100.0
+        response.setLosses(
+                losses
         );
 
-        // Not calculated yet
+        response.setWinRate(
+                winRate
+        );
+
+        response.setKills(
+                kills
+        );
+
+        response.setDeaths(
+                deaths
+        );
+
+        response.setAssists(
+                assists
+        );
+
+        response.setMatches(
+                matches
+        );
+
+        response.setAverageKda(
+                averageKda
+        );
+
+        response.setAverageDamage(
+                averageDamage
+        );
+
+
+        // =====================================================
+        // 14. Survival time
+        // =====================================================
+
+        // We will implement this separately.
         response.setAverageSurvivalTime(
                 0
         );
 
 
         // =====================================================
-        // 10. Rank
+        // 15. Rank / level
         // =====================================================
 
         response.setRank(
