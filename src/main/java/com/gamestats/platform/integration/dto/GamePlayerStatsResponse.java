@@ -20,4 +20,14 @@ public class GamePlayerStatsResponse {
     private String rank;
     private double averageDamage;
     private double averageSurvivalTime;
+
+    private int losses;
+
+    private double winRate;
+
+    private int deaths;
+
+    private int assists;
+
+    private double averageKda;
 }

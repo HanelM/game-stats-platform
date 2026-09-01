@@ -31,6 +31,12 @@ public class LeagueOfLegendsProvider implements GameProvider {
         // 1. Validate Riot ID
         // =====================================================
 
+        if (playerName == null || playerName.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Riot ID cannot be empty"
+            );
+        }
+
         String[] parts =
                 playerName.split("#", 2);
 
@@ -43,8 +49,8 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
-        String gameName = parts[0];
-        String tagLine = parts[1];
+        String gameName = parts[0].trim();
+        String tagLine = parts[1].trim();
 
 
         // =====================================================
@@ -58,7 +64,8 @@ public class LeagueOfLegendsProvider implements GameProvider {
                 );
 
         if (account == null ||
-                account.getPuuid() == null) {
+                account.getPuuid() == null ||
+                account.getPuuid().isBlank()) {
 
             throw new ResourceNotFoundException(
                     "League of Legends player not found"
@@ -70,7 +77,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
         // =====================================================
-        // 3. Get Summoner
+        // 3. Get League of Legends summoner
         // =====================================================
 
         LeagueSummonerResponse summoner =
@@ -96,20 +103,19 @@ public class LeagueOfLegendsProvider implements GameProvider {
                         20
                 );
 
+        if (matchIds == null) {
+            matchIds = List.of();
+        }
+
 
         // =====================================================
-        // 5. Statistics
+        // 5. Initialize statistics
         // =====================================================
 
         int matches = 0;
-
         int wins = 0;
-
         int kills = 0;
-
         int deaths = 0;
-
-        int assists = 0;
 
         long totalDamage = 0;
 
@@ -119,6 +125,10 @@ public class LeagueOfLegendsProvider implements GameProvider {
         // =====================================================
 
         for (String matchId : matchIds) {
+
+            if (matchId == null || matchId.isBlank()) {
+                continue;
+            }
 
             RiotMatchResponse match =
                     riotApiClient.getMatch(
@@ -133,16 +143,19 @@ public class LeagueOfLegendsProvider implements GameProvider {
             }
 
 
-            // Find this player inside the match
+            // =================================================
+            // Find the requested player
+            // =================================================
 
             RiotMatchResponse.Participant player =
                     match.getInfo()
                             .getParticipants()
                             .stream()
                             .filter(participant ->
-                                    puuid.equals(
-                                            participant.getPuuid()
-                                    )
+                                    participant != null &&
+                                            puuid.equals(
+                                                    participant.getPuuid()
+                                            )
                             )
                             .findFirst()
                             .orElse(null);
@@ -154,7 +167,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
             // =================================================
-            // Add statistics
+            // Add match statistics
             // =================================================
 
             matches++;
@@ -162,8 +175,6 @@ public class LeagueOfLegendsProvider implements GameProvider {
             kills += player.getKills();
 
             deaths += player.getDeaths();
-
-            assists += player.getAssists();
 
             totalDamage +=
                     player.getTotalDamageDealtToChampions();
@@ -179,7 +190,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
         // 7. Calculate K/D
         // =====================================================
 
-        double kd = 0;
+        double kd = 0.0;
 
         if (deaths > 0) {
 
@@ -193,7 +204,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
         // 8. Calculate average damage
         // =====================================================
 
-        double averageDamage = 0;
+        double averageDamage = 0.0;
 
         if (matches > 0) {
 
@@ -219,7 +230,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
         );
 
         response.setKd(
-                kd
+                Math.round(kd * 100.0) / 100.0
         );
 
         response.setKills(
@@ -235,16 +246,17 @@ public class LeagueOfLegendsProvider implements GameProvider {
         );
 
         response.setAverageDamage(
-                averageDamage
+                Math.round(averageDamage * 100.0) / 100.0
         );
 
+        // Not calculated yet
         response.setAverageSurvivalTime(
                 0
         );
 
 
         // =====================================================
-        // 10. Rank / level
+        // 10. Rank
         // =====================================================
 
         response.setRank(
@@ -256,3 +268,4 @@ public class LeagueOfLegendsProvider implements GameProvider {
         return response;
     }
 }
+
