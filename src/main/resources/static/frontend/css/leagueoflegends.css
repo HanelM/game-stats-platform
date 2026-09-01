@@ -1,0 +1,413 @@
+
+
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 28px;
+}
+
+
+.logo-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: 2px solid #00ff88;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #00ff88;
+
+    font-size: 16px;
+
+    box-shadow:
+        0 0 14px rgba(0,255,136,0.15);
+}
+
+
+.logo-text h2 {
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+.logo-text span {
+    font-size: 12px;
+
+    color: #00ff88;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.menu {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+.menu a {
+    text-decoration: none;
+
+    color: #d7d7d7;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+.menu a:hover {
+    background: rgba(255,255,255,0.03);
+
+    color: white;
+}
+
+
+.menu .active {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,255,136,0.15),
+            rgba(0,255,136,0.04)
+        );
+
+    border-left: 3px solid #00ff88;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    max-width: 1300px;
+
+    margin-left: 240px;
+
+    padding: 50px 30px;
+}
+
+
+/* =========================
+   TOP SECTION
+========================= */
+
+.top-section {
+    margin-bottom: 30px;
+}
+
+
+.top-section h1 {
+    font-size: 34px;
+
+    margin-bottom: 8px;
+}
+
+
+.top-section p {
+    color: #8b9690;
+}
+
+
+/* =========================
+   GAME CARD
+========================= */
+
+.game-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8,17,20,0.98),
+            rgba(3,7,9,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    border-radius: 28px;
+
+    padding: 28px;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   GAME TOP
+========================= */
+
+.game-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.game-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+}
+
+
+/* =========================
+   GAME ICON
+========================= */
+
+.game-icon {
+    width: 70px;
+    height: 70px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(0,255,136,0.08);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #00ff88;
+
+    font-size: 28px;
+}
+
+
+/* =========================
+   GAME TITLE
+========================= */
+
+.game-left h2 {
+    font-size: 26px;
+
+    margin-bottom: 6px;
+}
+
+
+.game-left span {
+    color: #8b9690;
+}
+
+
+/* =========================
+   CONNECT BUTTON
+========================= */
+
+#lolConnectBtn {
+    height: 48px;
+
+    padding: 0 22px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #00ff88;
+
+    color: black;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state {
+    padding: 60px 0;
+
+    text-align: center;
+}
+
+
+.empty-state i {
+    font-size: 50px;
+
+    color: #555;
+
+    margin-bottom: 18px;
+}
+
+
+.empty-state h3 {
+    margin-bottom: 10px;
+}
+
+
+.empty-state p {
+    color: #8b9690;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats-container {
+    margin-top: 30px;
+}
+
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 16px;
+}
+
+
+.stat-box {
+    background:
+        rgba(255,255,255,0.03);
+
+    border-radius: 18px;
+
+    padding: 20px;
+}
+
+
+.stat-box span {
+    font-size: 12px;
+
+    color: #8b9690;
+}
+
+
+.stat-box h3 {
+    margin-top: 10px;
+
+    font-size: 30px;
+}
+
+
+/* =========================
+   EXTRA STATS
+========================= */
+
+.extra-stats {
+    margin-top: 24px;
+
+    display: flex;
+
+    gap: 40px;
+
+    color: #d0d0d0;
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+    display: none;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 190px;
+    }
+
+    .page {
+        margin-left: 205px;
+
+        padding: 40px 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+
+        height: auto;
+
+        border-right: none;
+    }
+
+    .page {
+        margin-left: 0;
+
+        padding: 30px 15px;
+    }
+
+    .game-top {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+    #lolConnectBtn {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .extra-stats {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+}
+

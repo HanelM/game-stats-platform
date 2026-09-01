@@ -11,11 +11,15 @@
     >
 
     <title>Connected Games</title>
-
+    <link
+            rel="stylesheet"
+            href="css/leagueoflegends.css"
+    >
     <link
             rel="stylesheet"
             href="css/connected-games.css"
     >
+
 
     <link
             rel="stylesheet"
@@ -116,6 +120,7 @@
 
 </aside>
 
+```html
 <!-- =========================
      PAGE CONTENT
 ========================= -->
@@ -134,7 +139,10 @@
 
     </div>
 
-    <!-- PUBG CARD -->
+
+    <!-- =========================
+         PUBG CARD
+    ========================= -->
 
     <div class="game-card">
 
@@ -143,9 +151,7 @@
             <div class="game-left">
 
                 <div class="game-icon">
-
                     <i class="fa-solid fa-crosshairs"></i>
-
                 </div>
 
                 <div>
@@ -155,9 +161,7 @@
                     </h2>
 
                     <span id="connectionStatus">
-
                         Not Connected
-
                     </span>
 
                 </div>
@@ -165,12 +169,11 @@
             </div>
 
             <button id="connectBtn">
-
                 Connect Account
-
             </button>
 
         </div>
+
 
         <!-- EMPTY -->
 
@@ -192,6 +195,7 @@
 
         </div>
 
+
         <!-- REAL DATA -->
 
         <div
@@ -211,6 +215,7 @@
 
                 </div>
 
+
                 <div class="stat-box">
 
                     <span>WINS</span>
@@ -221,6 +226,7 @@
 
                 </div>
 
+
                 <div class="stat-box">
 
                     <span>KD</span>
@@ -230,6 +236,7 @@
                     </h3>
 
                 </div>
+
 
                 <div class="stat-box">
 
@@ -243,39 +250,28 @@
 
             </div>
 
+
             <div class="extra-stats">
 
                 <div>
-
                     Average Damage:
                     <strong id="damage">
-
                         0
-
                     </strong>
-
                 </div>
 
                 <div>
-
                     Survival Time:
                     <strong id="survival">
-
                         0
-
                     </strong>
-
                 </div>
 
                 <div>
-
                     Rank:
                     <strong id="rank">
-
                         Unknown
-
                     </strong>
-
                 </div>
 
             </div>
@@ -283,127 +279,136 @@
         </div>
 
     </div>
-</div>
 
-<!-- LEAGUE OF LEGENDS CARD -->
 
-<div class="game-card">
+    <!-- =========================
+         LEAGUE OF LEGENDS CARD
+    ========================= -->
 
-    <div class="game-top">
+    <div class="game-card">
 
-        <div class="game-left">
+        <div class="game-top">
 
-            <div class="game-icon">
+            <div class="game-left">
 
-                <i class="fa-solid fa-dragon"></i>
+                <div class="game-icon">
+                    <i class="fa-solid fa-dragon"></i>
+                </div>
 
-            </div>
+                <div>
 
-            <div>
+                    <h2>
+                        League of Legends
+                    </h2>
 
-                <h2>
-                    League of Legends
-                </h2>
-
-                <span id="lolConnectionStatus">
+                    <span id="lolConnectionStatus">
                         Not Connected
                     </span>
 
+                </div>
+
             </div>
+
+
+            <button id="lolConnectBtn">
+                Connect Account
+            </button>
 
         </div>
 
-        <button id="lolConnectBtn">
-            Connect Account
-        </button>
 
-    </div>
+        <!-- EMPTY -->
 
-    <!-- EMPTY -->
+        <div
+                id="lolEmptyState"
+                class="empty-state"
+        >
 
-    <div
-            id="lolEmptyState"
-            class="empty-state"
-    >
+            <i class="fa-solid fa-link-slash"></i>
 
-        <i class="fa-solid fa-link-slash"></i>
+            <h3>
+                No League of Legends Account Connected
+            </h3>
 
-        <h3>
-            No League of Legends Account Connected
-        </h3>
-
-        <p>
-            Connect your Riot ID
-            to load real statistics
-        </p>
-
-    </div>
-
-    <!-- REAL DATA -->
-
-    <div
-            id="lolStatsContainer"
-            class="stats-container hidden"
-    >
-
-        <div class="stats-grid">
-
-            <div class="stat-box">
-
-                <span>KILLS</span>
-
-                <h3 id="lolKills">
-                    0
-                </h3>
-
-            </div>
-
-            <div class="stat-box">
-
-                <span>WINS</span>
-
-                <h3 id="lolWins">
-                    0
-                </h3>
-
-            </div>
-
-            <div class="stat-box">
-
-                <span>KD</span>
-
-                <h3 id="lolKd">
-                    0
-                </h3>
-
-            </div>
-
-            <div class="stat-box">
-
-                <span>MATCHES</span>
-
-                <h3 id="lolMatches">
-                    0
-                </h3>
-
-            </div>
+            <p>
+                Connect your Riot ID
+                to load real statistics
+            </p>
 
         </div>
 
-        <div class="extra-stats">
 
-            <div>
-                Rank:
-                <strong id="lolRank">
-                    Unknown
-                </strong>
+        <!-- REAL DATA -->
+
+        <div
+                id="lolStatsContainer"
+                class="stats-container hidden"
+        >
+
+            <div class="stats-grid">
+
+                <div class="stat-box">
+
+                    <span>KILLS</span>
+
+                    <h3 id="lolKills">
+                        0
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-box">
+
+                    <span>WINS</span>
+
+                    <h3 id="lolWins">
+                        0
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-box">
+
+                    <span>KD</span>
+
+                    <h3 id="lolKd">
+                        0
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-box">
+
+                    <span>MATCHES</span>
+
+                    <h3 id="lolMatches">
+                        0
+                    </h3>
+
+                </div>
+
             </div>
 
-            <div>
-                Riot ID:
-                <strong id="lolPlayerName">
-                    Unknown
-                </strong>
+
+            <div class="extra-stats">
+
+                <div>
+                    Rank:
+                    <strong id="lolRank">
+                        Unknown
+                    </strong>
+                </div>
+
+                <div>
+                    Riot ID:
+                    <strong id="lolPlayerName">
+                        Unknown
+                    </strong>
+                </div>
+
             </div>
 
         </div>
@@ -412,10 +417,10 @@
 
 </div>
 
-</div>
 
 <script src="js/connected-games.js"></script>
 <script src="js/league-of-legends.js"></script>
+
 
 </body>
 </html>
