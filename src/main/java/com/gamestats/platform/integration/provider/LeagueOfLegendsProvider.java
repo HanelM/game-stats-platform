@@ -59,10 +59,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
-        List<LolLeagueEntryResponse> rankedData =
-                riotApiClient.getRankedData(
-                        summoner.getId()
-                );
+
 
         GamePlayerStatsResponse response =
                 new GamePlayerStatsResponse();
@@ -85,27 +82,9 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
         response.setAverageSurvivalTime(0);
 
-        if (!rankedData.isEmpty()) {
-
-            LolLeagueEntryResponse ranked =
-                    rankedData.get(0);
-
-            response.setRank(
-                    ranked.getTier()
-                            + " "
-                            + ranked.getRank()
-            );
-
-            response.setWins(
-                    ranked.getWins()
-            );
-        }
-        else {
-
-            response.setRank(
-                    "Unranked"
-            );
-        }
+        response.setRank(
+                "Summoner Level " + summoner.getSummonerLevel()
+        );
 
         return response;
     }
