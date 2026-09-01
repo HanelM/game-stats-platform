@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import com.gamestats.platform.integration.lol.dto.LolMatchStatsResponse;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -17,10 +21,10 @@ public class RiotApiClient {
     private String apiKey;
 
     /**
-     * Gets Riot account information using Riot ID.
+     * Get Riot account using Riot ID.
      *
      * Example:
-     * Faker#KR1
+     * Hide on bush#KR1
      */
     public RiotAccountResponse getAccount(
             String gameName,
@@ -52,8 +56,7 @@ public class RiotApiClient {
     }
 
     /**
-     * Gets League of Legends summoner information
-     * using the PUUID returned by the Riot Account API.
+     * Get League summoner information using PUUID.
      */
     public LeagueSummonerResponse getSummoner(
             String puuid
@@ -74,5 +77,54 @@ public class RiotApiClient {
                 )
                 .block();
     }
-}
 
+    /**
+     * Get recent League of Legends match IDs
+     * for a player using their PUUID.
+     *
+     * We request the latest 20 matches.
+     */
+    public List<String> getMatchIds(
+            String puuid
+    ) {
+
+        String[] response =
+                webClient.get()
+                        .uri(
+                                "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20",
+                                puuid
+                        )
+                        .header(
+                                "X-Riot-Token",
+                                apiKey
+                        )
+                        .retrieve()
+                        .bodyToMono(
+                                String[].class
+                        )
+                        .block();
+
+        return response == null
+                ? List.of()
+                : Arrays.asList(response);
+    }
+    public LolMatchStatsResponse getMatch(
+            String matchId
+    ) {
+
+        return webClient.get()
+                .uri(
+                        "https://asia.api.riotgames.com/lol/match/v5/matches/{matchId}",
+                        matchId
+                )
+                .header(
+                        "X-Riot-Token",
+                        apiKey
+                )
+                .retrieve()
+                .bodyToMono(
+                        LolMatchStatsResponse.class
+                )
+                .block();
+    }
+}
