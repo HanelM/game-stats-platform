@@ -1,0 +1,473 @@
+/* =========================================================
+   TEAMFIGHT TACTICS - CONNECTED GAME
+   ========================================================= */
+
+.tft-card {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 27, 35, 0.98),
+            rgba(10, 15, 20, 0.98)
+        );
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    border-radius: 28px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Glow effect */
+
+.tft-card::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+        circle,
+        rgba(0, 255, 136, 0.08),
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+.tft-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 255, 136, 0.35);
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(0, 255, 136, 0.05);
+}
+
+
+/* =========================================================
+   TOP SECTION
+   ========================================================= */
+
+.tft-top {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   LEFT SIDE
+   ========================================================= */
+
+.tft-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+
+/* =========================================================
+   TFT ICON
+   ========================================================= */
+
+.tft-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0, 255, 136, 0.14),
+            rgba(0, 255, 136, 0.03)
+        );
+
+    border: 1px solid rgba(0, 255, 136, 0.25);
+
+    color: #00ff88;
+
+    font-size: 27px;
+
+    box-shadow:
+        0 0 25px rgba(0, 255, 136, 0.08);
+
+    transition: 0.3s ease;
+}
+
+.tft-card:hover .tft-icon {
+    box-shadow:
+        0 0 30px rgba(0, 255, 136, 0.18);
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.tft-left h2 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    letter-spacing: -0.3px;
+}
+
+.tft-left span {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #7f8c8d;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CONNECT BUTTON
+   ========================================================= */
+
+#tftConnectBtn {
+    border: none;
+    outline: none;
+
+    padding: 12px 22px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00ff88,
+            #00d976
+        );
+
+    color: #06140d;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0, 255, 136, 0.15);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+#tftConnectBtn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(0, 255, 136, 0.25);
+}
+
+#tftConnectBtn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+#tftEmptyState {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 28px;
+
+    padding: 35px 25px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+
+    color: #727d83;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   STATS CONTAINER
+   ========================================================= */
+
+#tftStatsContainer {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 28px;
+}
+
+
+/* =========================================================
+   TFT STAT GRID
+   ========================================================= */
+
+.tft-stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+
+/* =========================================================
+   STAT BOX
+   ========================================================= */
+
+.tft-stat {
+    padding: 22px 18px;
+
+    text-align: center;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+.tft-stat:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(0, 255, 136, 0.18);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0, 255, 136, 0.06),
+            rgba(255, 255, 255, 0.015)
+        );
+}
+
+
+/* =========================================================
+   STAT NUMBER
+   ========================================================= */
+
+.tft-stat-value {
+    display: block;
+
+    color: #00ff88;
+
+    font-size: 27px;
+    font-weight: 800;
+
+    margin-bottom: 7px;
+}
+
+
+/* =========================================================
+   STAT LABEL
+   ========================================================= */
+
+.tft-stat-label {
+    display: block;
+
+    color: #7d898f;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   EXTRA STATISTICS
+   ========================================================= */
+
+.tft-extra-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-top: 15px;
+}
+
+.tft-extra-stat {
+    padding: 18px;
+
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    text-align: center;
+}
+
+.tft-extra-stat span:first-child {
+    display: block;
+
+    color: #68747a;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+
+    margin-bottom: 7px;
+}
+
+.tft-extra-stat span:last-child {
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CONNECTED STATUS
+   ========================================================= */
+
+#tftConnectionStatus.connected {
+    color: #00ff88;
+}
+
+#tftConnectionStatus.disconnected {
+    color: #7f8c8d;
+}
+
+
+/* =========================================================
+   HIDDEN
+   ========================================================= */
+
+.tft-hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .tft-stats-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .tft-extra-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .tft-card {
+        padding: 22px;
+        border-radius: 22px;
+    }
+
+    .tft-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .tft-left {
+        width: 100%;
+    }
+
+    .tft-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+
+    .tft-left h2 {
+        font-size: 19px;
+    }
+
+    #tftConnectBtn {
+        width: 100%;
+    }
+
+    .tft-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tft-extra-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .tft-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tft-left h2 {
+        font-size: 17px;
+    }
+
+    .tft-icon {
+        width: 50px;
+        height: 50px;
+    }
+}

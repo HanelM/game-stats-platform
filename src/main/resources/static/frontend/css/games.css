@@ -770,6 +770,7 @@ body{
         width:100%;
     }
 }
+
 /* =========================
    FOOTER
 ========================= */
@@ -778,21 +779,29 @@ body{
 
     text-align:center;
 
-    padding:30px 0 10px;
+    padding:6px 0 16px;
+
+    margin-left:210px;
+
+    width:calc(100% - 210px);
 }
 
 .creator-footer p{
 
-    font-size:14px;
+    font-size:11px;
 
-    margin-bottom:6px;
+    margin-bottom:4px;
+
+    color:#c0c7c3;
 }
 
 .creator-footer span{
 
     color:#00ff88;
 
-    font-size:12px;
+    font-size:10px;
 
     letter-spacing:1px;
 }
+
+

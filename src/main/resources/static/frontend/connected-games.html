@@ -11,15 +11,17 @@
     >
 
     <title>Connected Games</title>
+
     <link
             rel="stylesheet"
             href="css/leagueoflegends.css"
     >
+
     <link
             rel="stylesheet"
             href="css/connected-games.css"
     >
-
+    <link rel="stylesheet" href="css/tft.css">
 
     <link
             rel="stylesheet"
@@ -38,8 +40,6 @@
 
     <div>
 
-        <!-- LOGO -->
-
         <div class="logo">
 
             <div class="logo-icon">
@@ -53,74 +53,51 @@
 
         </div>
 
-        <!-- MENU -->
 
         <div class="menu">
 
             <a href="games.html">
-
                 <i class="fa-solid fa-ghost"></i>
-
                 Games
-
             </a>
 
             <a href="matches.html">
-
                 <i class="fa-solid fa-gamepad"></i>
-
                 Matches
-
             </a>
 
-            <a
-                    href="match.html"
-
-            >
-
+            <a href="match.html">
                 <i class="fa-solid fa-plus"></i>
-
                 Add Match
-
             </a>
 
             <a href="connected-games.html" class="active">
-
                 <i class="fa-solid fa-link"></i>
-
                 Connected games
-
             </a>
 
             <a href="dashboard.html">
-
                 <i class="fa-solid fa-table-cells-large"></i>
-
                 Dashboard
-
             </a>
-            <a href="analytics.html" >
 
+            <a href="analytics.html">
                 <i class="fa-solid fa-chart-line"></i>
-
                 Analytics
-
             </a>
 
-            <a href="leaderboard.html" >
-
+            <a href="leaderboard.html">
                 <i class="fa-solid fa-trophy"></i>
-
                 Leaderboard
-
             </a>
+
         </div>
 
     </div>
 
 </aside>
 
-```html
+
 <!-- =========================
      PAGE CONTENT
 ========================= -->
@@ -175,8 +152,6 @@
         </div>
 
 
-        <!-- EMPTY -->
-
         <div
                 id="emptyState"
                 class="empty-state"
@@ -195,8 +170,6 @@
 
         </div>
 
-
-        <!-- REAL DATA -->
 
         <div
                 id="statsContainer"
@@ -317,8 +290,6 @@
         </div>
 
 
-        <!-- EMPTY -->
-
         <div
                 id="lolEmptyState"
                 class="empty-state"
@@ -337,8 +308,6 @@
 
         </div>
 
-
-        <!-- REAL DATA -->
 
         <div
                 id="lolStatsContainer"
@@ -415,12 +384,166 @@
 
     </div>
 
+
+    <!-- =========================
+         TEAMFIGHT TACTICS CARD
+    ========================= -->
+
+    <div class="game-card">
+
+        <div class="game-top">
+
+            <div class="game-left">
+
+                <div class="game-icon">
+                    <i class="fa-solid fa-chess"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        Teamfight Tactics
+                    </h2>
+
+                    <span id="tftConnectionStatus">
+                        Not Connected
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button id="tftConnectBtn">
+                Connect Account
+            </button>
+
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div
+                id="tftEmptyState"
+                class="empty-state"
+        >
+
+            <i class="fa-solid fa-link-slash"></i>
+
+            <h3>
+                No Teamfight Tactics Account Connected
+            </h3>
+
+            <p>
+                Connect your Riot account
+                to load real TFT statistics
+            </p>
+
+        </div>
+
+
+        <!-- TFT STATISTICS -->
+
+        <div
+                id="tftStatsContainer"
+                class="stats-container hidden"
+        >
+
+            <div class="stats-grid">
+
+                <div class="stat-box">
+
+                    <span>MATCHES</span>
+
+                    <h3 id="tftMatches">
+                        0
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-box">
+
+                    <span>1ST PLACES</span>
+
+                    <h3 id="tftFirstPlaces">
+                        0
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-box">
+
+                    <span>AVERAGE PLACEMENT</span>
+
+                    <h3 id="tftAveragePlacement">
+                        0
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-box">
+
+                    <span>TOP 4</span>
+
+                    <h3 id="tftTopFour">
+                        0
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="extra-stats">
+
+                <div>
+                    Top 4 Rate:
+                    <strong id="tftTopFourRate">
+                        0%
+                    </strong>
+                </div>
+
+                <div>
+                    Win Rate:
+                    <strong id="tftWinRate">
+                        0%
+                    </strong>
+                </div>
+
+                <div>
+                    Losses:
+                    <strong id="tftLosses">
+                        0
+                    </strong>
+                </div>
+
+                <div>
+                    Player:
+                    <strong id="tftPlayerName">
+                        Unknown
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 
 <script src="js/connected-games.js"></script>
+
 <script src="js/league-of-legends.js"></script>
+
+<script src="js/tft.js"></script>
 
 
 </body>
+
 </html>
+

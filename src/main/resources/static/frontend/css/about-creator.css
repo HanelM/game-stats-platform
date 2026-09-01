@@ -768,36 +768,39 @@ margin-top:20px;
     line-height:1.8;
 }
 
+
 /* =========================
    FOOTER
 ========================= */
 
 .creator-footer{
 
-    margin-left:240px;
+    margin-left:210px;
+
+    width:calc(100% - 210px);
 
     text-align:center;
 
-    padding:10px 0 30px;
+    padding:6px 0 16px;
 }
 
 .creator-footer p{
 
-    font-size:13px;
+    font-size:11px;
 
-    color:#c6cec9;
+    color:#c0c7c3;
 
-    margin-bottom:8px;
+    margin-bottom:4px;
 }
 
 .creator-footer span{
 
     color:#00ff88;
 
-    font-size:11px;
-
-    letter-spacing:2px;
+    font-size:10px;
 }
+
+
 
 /* =========================
    RESPONSIVE

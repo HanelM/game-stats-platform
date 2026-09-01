@@ -1,33 +1,47 @@
 package com.gamestats.platform.integration.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GamePlayerStatsResponse {
 
     private String game;
 
     private String playerName;
 
-    private double kd;
+    private Double kd;
 
-    private int wins;
+    private Integer wins;
 
-    private int kills;
+    private Integer kills;
 
-    private int matches;
+    private Integer matches;
 
     private String rank;
-    private double averageDamage;
-    private double averageSurvivalTime;
 
-    private int losses;
+    private Double averageDamage;
 
-    private double winRate;
+    private Double averageSurvivalTime;
 
-    private int deaths;
+    private Integer losses;
 
-    private int assists;
+    private Double winRate;
 
-    private double averageKda;
+    private Integer deaths;
+
+    private Integer assists;
+
+    private Double averageKda;
+
+    private Double averagePlacement;
+
+    private Integer firstPlaces;
+
+    private Integer topFour;
+
+    private Double topFourRate;
+
+    private Integer leaguePoints;
 }
