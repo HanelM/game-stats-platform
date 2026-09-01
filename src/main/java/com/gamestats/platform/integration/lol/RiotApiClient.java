@@ -29,7 +29,7 @@ public class RiotApiClient {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .scheme("https")
-                                .host("americas.api.riotgames.com")
+                                .host("asia.api.riotgames.com")
                                 .path(
                                         "/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}"
                                 )
@@ -55,7 +55,7 @@ public class RiotApiClient {
 
         return webClient.get()
                 .uri(
-                        "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}",
+                        "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}",
                         puuid
                 )
                 .header(
@@ -76,7 +76,7 @@ public class RiotApiClient {
         LolLeagueEntryResponse[] response =
                 webClient.get()
                         .uri(
-                                "https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/{summonerId}",
+                                "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{summonerId}",
                                 summonerId
                         )
                         .header(
