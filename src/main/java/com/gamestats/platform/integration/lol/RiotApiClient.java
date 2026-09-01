@@ -2,11 +2,11 @@ package com.gamestats.platform.integration.lol;
 
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
+import com.gamestats.platform.integration.lol.dto.RiotMatchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.gamestats.platform.integration.lol.dto.LolMatchStatsResponse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +20,11 @@ public class RiotApiClient {
     @Value("${riot.api.key}")
     private String apiKey;
 
-    /**
-     * Get Riot account using Riot ID.
-     *
-     * Example:
-     * Hide on bush#KR1
-     */
+
+    // =========================================================
+    // RIOT ACCOUNT
+    // =========================================================
+
     public RiotAccountResponse getAccount(
             String gameName,
             String tagLine
@@ -55,9 +54,11 @@ public class RiotApiClient {
                 .block();
     }
 
-    /**
-     * Get League summoner information using PUUID.
-     */
+
+    // =========================================================
+    // SUMMONER
+    // =========================================================
+
     public LeagueSummonerResponse getSummoner(
             String puuid
     ) {
@@ -78,21 +79,36 @@ public class RiotApiClient {
                 .block();
     }
 
-    /**
-     * Get recent League of Legends match IDs
-     * for a player using their PUUID.
-     *
-     * We request the latest 20 matches.
-     */
+
+    // =========================================================
+    // MATCH HISTORY
+    // =========================================================
+
     public List<String> getMatchIds(
-            String puuid
+            String puuid,
+            int count
     ) {
 
         String[] response =
                 webClient.get()
-                        .uri(
-                                "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20",
-                                puuid
+                        .uri(uriBuilder ->
+                                uriBuilder
+                                        .scheme("https")
+                                        .host("asia.api.riotgames.com")
+                                        .path(
+                                                "/lol/match/v5/matches/by-puuid/{puuid}/ids"
+                                        )
+                                        .queryParam(
+                                                "start",
+                                                0
+                                        )
+                                        .queryParam(
+                                                "count",
+                                                count
+                                        )
+                                        .build(
+                                                puuid
+                                        )
                         )
                         .header(
                                 "X-Riot-Token",
@@ -108,7 +124,13 @@ public class RiotApiClient {
                 ? List.of()
                 : Arrays.asList(response);
     }
-    public LolMatchStatsResponse getMatch(
+
+
+    // =========================================================
+    // SINGLE MATCH
+    // =========================================================
+
+    public RiotMatchResponse getMatch(
             String matchId
     ) {
 
@@ -123,7 +145,7 @@ public class RiotApiClient {
                 )
                 .retrieve()
                 .bodyToMono(
-                        LolMatchStatsResponse.class
+                        RiotMatchResponse.class
                 )
                 .block();
     }
