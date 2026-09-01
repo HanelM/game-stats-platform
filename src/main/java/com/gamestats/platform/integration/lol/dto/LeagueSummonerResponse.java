@@ -11,6 +11,8 @@ public class LeagueSummonerResponse {
 
     private String puuid;
 
+    private String name;
+
     private Integer profileIconId;
 
     private Long revisionDate;

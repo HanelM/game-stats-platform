@@ -4,9 +4,12 @@ import com.gamestats.platform.exception.ResourceNotFoundException;
 import com.gamestats.platform.integration.dto.GamePlayerStatsResponse;
 import com.gamestats.platform.integration.lol.RiotApiClient;
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
+import com.gamestats.platform.integration.lol.dto.LolLeagueEntryResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
         String gameName = parts[0];
         String tagLine = parts[1];
 
-        // 2. Get Riot account
+        // 2. Get Riot account using Riot ID
         RiotAccountResponse account =
                 riotApiClient.getAccount(
                         gameName,
@@ -45,26 +48,30 @@ public class LeagueOfLegendsProvider implements GameProvider {
                 );
 
         if (account == null || account.getPuuid() == null) {
-
             throw new ResourceNotFoundException(
                     "League of Legends player not found"
             );
         }
 
-        // 3. Get League of Legends summoner
+        // 3. Get League summoner using PUUID
         LeagueSummonerResponse summoner =
                 riotApiClient.getSummoner(
                         account.getPuuid()
                 );
 
         if (summoner == null) {
-
             throw new ResourceNotFoundException(
                     "League of Legends summoner not found"
             );
         }
 
-        // 4. Create response
+        // 4. Get ranked information
+        List<LolLeagueEntryResponse> rankedData =
+                riotApiClient.getRankedData(
+                        summoner.getId()
+                );
+
+        // 5. Create response
         GamePlayerStatsResponse response =
                 new GamePlayerStatsResponse();
 
@@ -74,20 +81,35 @@ public class LeagueOfLegendsProvider implements GameProvider {
                 gameName + "#" + tagLine
         );
 
-        // These statistics will be implemented later
+        // Default values
         response.setKd(0);
         response.setKills(0);
         response.setMatches(0);
         response.setWins(0);
-
         response.setAverageDamage(0);
         response.setAverageSurvivalTime(0);
 
-        // Currently showing the real Summoner Level
-        response.setRank(
-                "Summoner Level " +
-                        summoner.getSummonerLevel()
-        );
+        // 6. Set ranked information
+        if (rankedData != null && !rankedData.isEmpty()) {
+
+            LolLeagueEntryResponse ranked =
+                    rankedData.get(0);
+
+            response.setRank(
+                    ranked.getTier() + " " +
+                            ranked.getRank()
+            );
+
+            response.setWins(
+                    ranked.getWins()
+            );
+
+        } else {
+
+            response.setRank(
+                    "Unranked"
+            );
+        }
 
         return response;
     }

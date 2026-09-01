@@ -20,6 +20,14 @@ public class RiotApiClient {
     @Value("${riot.api.key}")
     private String apiKey;
 
+    /*
+     * Riot Account API
+     *
+     * Riot ID:
+     * GameName#TagLine
+     *
+     * For Faker#KR1 we use the ASIA routing cluster.
+     */
     public RiotAccountResponse getAccount(
             String gameName,
             String tagLine
@@ -43,10 +51,18 @@ public class RiotApiClient {
                         apiKey
                 )
                 .retrieve()
-                .bodyToMono(RiotAccountResponse.class)
+                .bodyToMono(
+                        RiotAccountResponse.class
+                )
                 .block();
     }
 
+    /*
+     * League Summoner API
+     *
+     * KR is the correct platform routing
+     * for Faker#KR1.
+     */
     public LeagueSummonerResponse getSummoner(
             String puuid
     ) {
@@ -67,6 +83,9 @@ public class RiotApiClient {
                 .block();
     }
 
+    /*
+     * League ranked information
+     */
     public List<LolLeagueEntryResponse> getRankedData(
             String summonerId
     ) {
