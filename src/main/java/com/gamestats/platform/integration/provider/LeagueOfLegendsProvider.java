@@ -4,12 +4,9 @@ import com.gamestats.platform.exception.ResourceNotFoundException;
 import com.gamestats.platform.integration.dto.GamePlayerStatsResponse;
 import com.gamestats.platform.integration.lol.RiotApiClient;
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
-import com.gamestats.platform.integration.lol.dto.LolLeagueEntryResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,12 +20,9 @@ public class LeagueOfLegendsProvider implements GameProvider {
     }
 
     @Override
-    public GamePlayerStatsResponse getPlayerStats(
-            String playerName
-    ) {
+    public GamePlayerStatsResponse getPlayerStats(String playerName) {
 
-        String[] parts =
-                playerName.split("#", 2);
+        String[] parts = playerName.split("#", 2);
 
         if (parts.length != 2) {
             throw new IllegalArgumentException(
@@ -45,9 +39,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
                         tagLine
                 );
 
-        if (account == null ||
-                account.getPuuid() == null) {
-
+        if (account == null || account.getPuuid() == null) {
             throw new ResourceNotFoundException(
                     "League of Legends player not found"
             );
@@ -64,66 +56,26 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
-        List<LolLeagueEntryResponse> rankedData =
-                riotApiClient.getRankedData(
-                        summoner.getId()
-                );
-
         GamePlayerStatsResponse response =
                 new GamePlayerStatsResponse();
 
-        response.setGame(
-                "League of Legends"
-        );
+        response.setGame("League of Legends");
 
         response.setPlayerName(
                 gameName + "#" + tagLine
         );
 
         response.setKd(0);
-
+        response.setWins(0);
         response.setKills(0);
-
         response.setMatches(0);
-
         response.setAverageDamage(0);
-
         response.setAverageSurvivalTime(0);
 
-        if (rankedData.isEmpty()) {
-
-            response.setWins(0);
-
-            response.setRank(
-                    "Unranked"
-            );
-
-        } else {
-
-            LolLeagueEntryResponse ranked =
-                    rankedData.stream()
-                            .filter(entry ->
-                                    "RANKED_SOLO_5x5"
-                                            .equals(entry.getQueueType())
-                            )
-                            .findFirst()
-                            .orElse(rankedData.get(0));
-
-            response.setWins(
-                    ranked.getWins()
-            );
-
-            response.setRank(
-                    ranked.getTier()
-                            + " "
-                            + ranked.getRank()
-                            + " - "
-                            + ranked.getLeaguePoints()
-                            + " LP"
-            );
-        }
+        response.setRank(
+                "Summoner Level " + summoner.getSummonerLevel()
+        );
 
         return response;
     }
 }
-
