@@ -247,207 +247,212 @@ async function login() {
    REGISTER
 ========================= */
 
-const registerForm =
-    document.getElementById("register-form");
+async function register() {
 
-if (registerForm) {
+    const username =
+        document.getElementById(
+            "register-username"
+        );
 
-    registerForm.addEventListener(
-        "submit",
-        async function (e) {
+    const email =
+        document.getElementById(
+            "register-email"
+        );
 
-            e.preventDefault();
+    const password =
+        document.getElementById(
+            "register-password"
+        );
 
-            const username =
-                document.getElementById(
-                    "register-username"
-                );
+    const message =
+        document.getElementById(
+            "register-error"
+        );
 
-            const email =
-                document.getElementById(
-                    "register-email"
-                );
-
-            const password =
-                document.getElementById(
-                    "register-password"
-                );
-
-            const message =
-                document.getElementById(
-                    "register-message"
-                );
-
-            message.innerText = "";
-            message.style.color = "";
+    message.innerText = "";
+    message.style.color = "red";
 
 
-            /* =========================
-               CLIENT-SIDE VALIDATION
-            ========================= */
+    /* =========================
+       VALIDATION
+    ========================= */
 
-            if (username.value.trim() === "") {
+    if (username.value.trim() === "") {
 
-                message.innerText =
-                    "Username is required.";
+        message.innerText =
+            "Username is required.";
 
-                username.focus();
+        username.focus();
 
-                return;
-            }
-
-            if (email.value.trim() === "") {
-
-                message.innerText =
-                    "Email is required.";
-
-                email.focus();
-
-                return;
-            }
-
-            if (password.value === "") {
-
-                message.innerText =
-                    "Password is required.";
-
-                password.focus();
-
-                return;
-            }
-
-            if (username.value.trim().length < 3) {
-
-                message.innerText =
-                    "Username must be at least 3 characters.";
-
-                username.focus();
-
-                return;
-            }
-
-            if (password.value.length < 4) {
-
-                message.innerText =
-                    "Password must be at least 4 characters.";
-
-                password.focus();
-
-                return;
-            }
+        return;
+    }
 
 
-            const data = {
+    if (email.value.trim() === "") {
 
-                username:
-                    username.value.trim(),
+        message.innerText =
+            "Email is required.";
 
-                email:
-                    email.value.trim(),
+        email.focus();
 
-                password:
-                    password.value
-            };
+        return;
+    }
 
 
-            try {
+    if (password.value === "") {
 
-                const response =
-                    await fetch(
-                        API_BASE + "/register",
-                        {
-                            method: "POST",
+        message.innerText =
+            "Password is required.";
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
+        password.focus();
 
-                            body:
-                                JSON.stringify(data)
-                        }
-                    );
+        return;
+    }
 
 
-                let result = {};
+    if (username.value.trim().length < 3) {
 
-                try {
+        message.innerText =
+            "Username must be at least 3 characters.";
 
-                    result =
-                        await response.json();
+        username.focus();
 
-                } catch (e) {
+        return;
+    }
 
-                    console.error(
-                        "Could not parse server response.",
-                        e
-                    );
+
+    if (password.value.length < 4) {
+
+        message.innerText =
+            "Password must be at least 4 characters.";
+
+        password.focus();
+
+        return;
+    }
+
+
+    const data = {
+
+        username:
+            username.value.trim(),
+
+        email:
+            email.value.trim(),
+
+        password:
+            password.value
+    };
+
+
+    /* =========================
+       SEND REQUEST
+    ========================= */
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE + "/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(data)
                 }
+            );
 
 
-                if (response.ok) {
+        let result = {};
 
-                    message.style.color =
-                        "lightgreen";
+        try {
 
-                    message.innerText =
-                        "Registration successful!";
+            result =
+                await response.json();
 
+        } catch (e) {
 
-                    if (result.token) {
-
-                        localStorage.setItem(
-                            "token",
-                            result.token
-                        );
-
-                    }
-
-                    localStorage.setItem(
-                        "username",
-                        username.value.trim()
-                    );
+            console.error(
+                "Could not parse server response.",
+                e
+            );
+        }
 
 
-                    setTimeout(
-                        function () {
+        /* =========================
+           SUCCESS
+        ========================= */
 
-                            window.location.href =
-                                "index.html";
+        if (response.ok) {
 
-                        },
-                        1000
-                    );
+            message.style.color =
+                "lightgreen";
 
-
-                } else {
-
-                    message.style.color =
-                        "red";
-
-                    message.innerText =
-                        result.message ||
-                        result.error ||
-                        "Registration failed.";
-                }
+            message.innerText =
+                "Registration successful!";
 
 
-            } catch (error) {
+            if (result.token) {
 
-                console.error(
-                    "Registration error:",
-                    error
+                localStorage.setItem(
+                    "token",
+                    result.token
                 );
-
-                message.style.color =
-                    "red";
-
-                message.innerText =
-                    "Unable to connect to the server.";
             }
+
+
+            localStorage.setItem(
+                "username",
+                username.value.trim()
+            );
+
+
+            setTimeout(
+                function () {
+
+                    location.reload();
+
+                },
+                1000
+            );
 
         }
-    );
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        else {
+
+            message.style.color =
+                "red";
+
+            message.innerText =
+                result.message ||
+                result.error ||
+                "Registration failed.";
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Registration error:",
+            error
+        );
+
+        message.style.color =
+            "red";
+
+        message.innerText =
+            "Unable to connect to the server.";
+    }
 }
 
 /* =========================
@@ -695,30 +700,47 @@ async function loadProfileStats(){
         console.log(error);
     }
 }
-const homeToken = localStorage.getItem("token");
+const homeToken =
+    localStorage.getItem("token");
 
-if(homeToken){
+if (homeToken) {
 
-    const payload =
-        JSON.parse(
-            atob(
-                homeToken.split(".")[1]
-            )
+    try {
+
+        const payload =
+            JSON.parse(
+                atob(
+                    homeToken.split(".")[1]
+                )
+            );
+
+        if (payload.role === "ADMIN") {
+
+            const adminContainer =
+                document.getElementById(
+                    "adminButtonContainer"
+                );
+
+            if (adminContainer) {
+
+                adminContainer.innerHTML = `
+
+                    <a
+                        href="admin.html"
+                        class="admin-btn"
+                    >
+                        Admin Panel
+                    </a>
+
+                `;
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Invalid token:",
+            error
         );
-
-    if(payload.role === "ADMIN"){
-
-        document.getElementById(
-            "adminButtonContainer"
-        ).innerHTML = `
-
-            <a
-                href="admin.html"
-                class="admin-btn"
-            >
-                Admin Panel
-            </a>
-
-        `;
     }
 }

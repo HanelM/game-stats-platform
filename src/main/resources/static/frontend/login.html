@@ -2,54 +2,43 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
 
-    <title>Login</title>
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
-    <link rel="stylesheet"
-          href="css/account.css">
-
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/account.css">
 </head>
 
 <body>
 
-<header>
+<div class="top-navbar">
 
-    <h1>Game Stats Platform</h1>
+    <div class="nav-left">
+        <h1>🎮Game <span>Stats </span>Platform</h1>
+    </div>
 
-    <nav>
+    <div class="nav-links">
 
-        <a href="index.html">Home</a>
+        <a href="index.html" >Home</a>
 
         <a href="games.html">Games</a>
 
         <a href="about.html">About</a>
 
-        <a href="login.html"
-           id="login-link">
-            Login
+        <a href="account.html" class="active-top" id="nav-user">
+            Account
         </a>
+        <div class="top-right-actions">
 
-        <a href="register.html"
-           id="register-link">
-            Register
-        </a>
+            <div id="adminButtonContainer"></div>
 
-        <a href="account.html"
-           id="user-link"
-           style="display:none; font-weight:bold;">
-        </a>
+        </div>
 
-    </nav>
+    </div>
 
-</header>
+</div>
 
 
 <section class="single-account-page">
@@ -113,8 +102,8 @@
 
 
 <script src="js/account.js"></script>
+<script src="js/auth.js"></script>
 
-<script src="js/auth-global.js"></script>
 
 </body>
 
