@@ -4,9 +4,12 @@ import com.gamestats.platform.exception.ResourceNotFoundException;
 import com.gamestats.platform.integration.dto.GamePlayerStatsResponse;
 import com.gamestats.platform.integration.lol.RiotApiClient;
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
+import com.gamestats.platform.integration.lol.dto.LolLeagueEntryResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
         String gameName = parts[0];
         String tagLine = parts[1];
 
+        // 1. Get Riot account
         RiotAccountResponse account =
                 riotApiClient.getAccount(
                         gameName,
@@ -45,6 +49,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
+        // 2. Get LoL summoner
         LeagueSummonerResponse summoner =
                 riotApiClient.getSummoner(
                         account.getPuuid()
@@ -56,6 +61,22 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
+        // 3. Get ranked data
+        List<LolLeagueEntryResponse> rankedData =
+                riotApiClient.getRankedData(
+                        summoner.getId()
+                );
+
+        // 4. Find SOLO ranked data
+        LolLeagueEntryResponse soloRank =
+                rankedData.stream()
+                        .filter(entry ->
+                                "RANKED_SOLO_5x5".equals(entry.getQueueType())
+                        )
+                        .findFirst()
+                        .orElse(null);
+
+        // 5. Create response
         GamePlayerStatsResponse response =
                 new GamePlayerStatsResponse();
 
@@ -66,15 +87,36 @@ public class LeagueOfLegendsProvider implements GameProvider {
         );
 
         response.setKd(0);
-        response.setWins(0);
+
         response.setKills(0);
+
         response.setMatches(0);
+
         response.setAverageDamage(0);
+
         response.setAverageSurvivalTime(0);
 
-        response.setRank(
-                "Summoner Level " + summoner.getSummonerLevel()
-        );
+        // 6. Set real ranked information
+        if (soloRank != null) {
+
+            response.setRank(
+                    soloRank.getTier()
+                            + " "
+                            + soloRank.getRank()
+            );
+
+            response.setWins(
+                    soloRank.getWins()
+            );
+
+        } else {
+
+            response.setRank(
+                    "Unranked"
+            );
+
+            response.setWins(0);
+        }
 
         return response;
     }
