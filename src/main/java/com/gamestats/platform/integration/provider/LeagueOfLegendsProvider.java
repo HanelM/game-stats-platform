@@ -3,8 +3,8 @@ package com.gamestats.platform.integration.provider;
 import com.gamestats.platform.exception.ResourceNotFoundException;
 import com.gamestats.platform.integration.dto.GamePlayerStatsResponse;
 import com.gamestats.platform.integration.lol.RiotApiClient;
-import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
 import com.gamestats.platform.integration.lol.dto.LolLeagueEntryResponse;
+import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -70,16 +70,16 @@ public class LeagueOfLegendsProvider implements GameProvider {
         response.setGame("League of Legends");
 
         response.setPlayerName(
-                account.getGameName()
-                        + "#"
-                        + account.getTagLine()
+                gameName + "#" + tagLine
         );
+
+        response.setKd(0);
+
+        response.setWins(0);
 
         response.setKills(0);
 
         response.setMatches(0);
-
-        response.setKd(0);
 
         response.setAverageDamage(0);
 
@@ -90,21 +90,21 @@ public class LeagueOfLegendsProvider implements GameProvider {
             LolLeagueEntryResponse ranked =
                     rankedData.get(0);
 
-            response.setWins(
-                    ranked.getWins()
-            );
-
             response.setRank(
                     ranked.getTier()
                             + " "
                             + ranked.getRank()
             );
 
-        } else {
+            response.setWins(
+                    ranked.getWins()
+            );
+        }
+        else {
 
-            response.setWins(0);
-
-            response.setRank("Unranked");
+            response.setRank(
+                    "Unranked"
+            );
         }
 
         return response;

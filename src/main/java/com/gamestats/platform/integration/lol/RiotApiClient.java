@@ -26,52 +26,71 @@ public class RiotApiClient {
     ) {
 
         return webClient.get()
-                .uri(
-                        "https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
-                                + encode(gameName)
-                                + "/"
-                                + encode(tagLine)
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .scheme("https")
+                                .host("americas.api.riotgames.com")
+                                .path(
+                                        "/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}"
+                                )
+                                .build(
+                                        gameName,
+                                        tagLine
+                                )
                 )
-                .header("X-Riot-Token", apiKey)
+                .header(
+                        "X-Riot-Token",
+                        apiKey
+                )
                 .retrieve()
-                .bodyToMono(RiotAccountResponse.class)
+                .bodyToMono(
+                        RiotAccountResponse.class
+                )
                 .block();
     }
 
-    public LeagueSummonerResponse getSummoner(String puuid) {
+    public LeagueSummonerResponse getSummoner(
+            String puuid
+    ) {
 
         return webClient.get()
-                .uri("https://europe.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/"
-                        + puuid)
-                .header("X-Riot-Token", apiKey)
+                .uri(
+                        "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}",
+                        puuid
+                )
+                .header(
+                        "X-Riot-Token",
+                        apiKey
+                )
                 .retrieve()
-                .bodyToMono(LeagueSummonerResponse.class)
+                .bodyToMono(
+                        LeagueSummonerResponse.class
+                )
                 .block();
     }
 
-    public List<LolLeagueEntryResponse> getRankedData(String summonerId) {
+    public List<LolLeagueEntryResponse> getRankedData(
+            String summonerId
+    ) {
 
         LolLeagueEntryResponse[] response =
                 webClient.get()
-                        .uri("https://europe.api.riotgames.com/lol/league/v4/entries/by-summoner/"
-                                + summonerId)
-                        .header("X-Riot-Token", apiKey)
+                        .uri(
+                                "https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/{summonerId}",
+                                summonerId
+                        )
+                        .header(
+                                "X-Riot-Token",
+                                apiKey
+                        )
                         .retrieve()
-                        .bodyToMono(LolLeagueEntryResponse[].class)
+                        .bodyToMono(
+                                LolLeagueEntryResponse[].class
+                        )
                         .block();
 
         return response == null
                 ? List.of()
                 : Arrays.asList(response);
-    }
-
-    private String encode(String value) {
-
-        return java.net.URLEncoder
-                .encode(
-                        value,
-                        java.nio.charset.StandardCharsets.UTF_8
-                )
-                .replace("+", "%20");
     }
 }
