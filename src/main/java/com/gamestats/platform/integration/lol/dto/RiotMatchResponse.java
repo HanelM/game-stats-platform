@@ -13,6 +13,15 @@ public class RiotMatchResponse {
     public static class Info {
 
         private List<Participant> participants;
+
+        /*
+         * Match duration in seconds.
+         *
+         * Riot API returns gameDuration in seconds.
+         * Example:
+         * 1800 seconds = 30 minutes.
+         */
+        private long gameDuration;
     }
 
     @Data

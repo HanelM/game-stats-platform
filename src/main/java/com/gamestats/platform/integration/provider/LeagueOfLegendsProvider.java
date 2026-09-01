@@ -113,13 +113,18 @@ public class LeagueOfLegendsProvider implements GameProvider {
         // =====================================================
 
         int matches = 0;
+
         int wins = 0;
 
         int kills = 0;
+
         int deaths = 0;
+
         int assists = 0;
 
         long totalDamage = 0;
+
+        long totalGameDuration = 0;
 
 
         // =====================================================
@@ -128,14 +133,22 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
         for (String matchId : matchIds) {
 
-            if (matchId == null || matchId.isBlank()) {
+            if (matchId == null ||
+                    matchId.isBlank()) {
+
                 continue;
             }
+
 
             RiotMatchResponse match =
                     riotApiClient.getMatch(
                             matchId
                     );
+
+
+            // -------------------------------------------------
+            // Validate match
+            // -------------------------------------------------
 
             if (match == null ||
                     match.getInfo() == null ||
@@ -169,7 +182,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
             // =================================================
-            // Add statistics
+            // Add match statistics
             // =================================================
 
             matches++;
@@ -183,6 +196,13 @@ public class LeagueOfLegendsProvider implements GameProvider {
             totalDamage +=
                     player.getTotalDamageDealtToChampions();
 
+            totalGameDuration +=
+                    match.getInfo().getGameDuration();
+
+
+            // -------------------------------------------------
+            // Win
+            // -------------------------------------------------
 
             if (player.isWin()) {
                 wins++;
@@ -224,20 +244,37 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
             kd =
                     (double) kills / deaths;
+
+        } else if (kills > 0) {
+
+            // Player has kills but no deaths.
+            // Avoid division by zero.
+
+            kd = kills;
         }
 
 
         // =====================================================
-        // 10. Calculate average KDA
+        // 10. Calculate KDA
+        //
+        // Standard League of Legends formula:
+        //
+        // KDA = (Kills + Assists) / Deaths
         // =====================================================
 
         double averageKda = 0.0;
 
-        if (matches > 0) {
+        if (deaths > 0) {
 
             averageKda =
-                    (double) (kills + assists)
-                            / matches;
+                    (double) (kills + assists) / deaths;
+
+        } else if (kills + assists > 0) {
+
+            // Perfect KDA when there are no deaths.
+
+            averageKda =
+                    kills + assists;
         }
 
 
@@ -255,7 +292,25 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
 
         // =====================================================
-        // 12. Round decimal values
+        // 12. Calculate average match duration
+        //
+        // Riot returns gameDuration in seconds.
+        //
+        // Convert:
+        // seconds -> minutes
+        // =====================================================
+
+        double averageSurvivalTime = 0.0;
+
+        if (matches > 0) {
+
+            averageSurvivalTime =
+                    ((double) totalGameDuration / matches) / 60.0;
+        }
+
+
+        // =====================================================
+        // 13. Round decimal values
         // =====================================================
 
         kd =
@@ -270,75 +325,85 @@ public class LeagueOfLegendsProvider implements GameProvider {
         averageDamage =
                 Math.round(averageDamage * 100.0) / 100.0;
 
+        averageSurvivalTime =
+                Math.round(averageSurvivalTime * 100.0) / 100.0;
+
 
         // =====================================================
-        // 13. Create response
+        // 14. Create response
         // =====================================================
 
         GamePlayerStatsResponse response =
                 new GamePlayerStatsResponse();
 
+
         response.setGame(
                 "League of Legends"
         );
+
 
         response.setPlayerName(
                 gameName + "#" + tagLine
         );
 
+
         response.setKd(
                 kd
         );
+
 
         response.setWins(
                 wins
         );
 
+
         response.setLosses(
                 losses
         );
+
 
         response.setWinRate(
                 winRate
         );
 
+
         response.setKills(
                 kills
         );
+
 
         response.setDeaths(
                 deaths
         );
 
+
         response.setAssists(
                 assists
         );
+
 
         response.setMatches(
                 matches
         );
 
+
         response.setAverageKda(
                 averageKda
         );
+
 
         response.setAverageDamage(
                 averageDamage
         );
 
 
-        // =====================================================
-        // 14. Survival time
-        // =====================================================
-
-        // We will implement this separately.
         response.setAverageSurvivalTime(
-                0
+                averageSurvivalTime
         );
 
 
         // =====================================================
-        // 15. Rank / level
+        // 15. Summoner level
         // =====================================================
 
         response.setRank(
@@ -346,6 +411,10 @@ public class LeagueOfLegendsProvider implements GameProvider {
                         summoner.getSummonerLevel()
         );
 
+
+        // =====================================================
+        // 16. Return response
+        // =====================================================
 
         return response;
     }
