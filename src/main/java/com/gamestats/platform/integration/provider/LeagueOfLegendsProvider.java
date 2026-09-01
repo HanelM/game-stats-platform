@@ -61,20 +61,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
-        // 3. Get ranked data
-        List<LolLeagueEntryResponse> rankedData =
-                riotApiClient.getRankedData(
-                        summoner.getId()
-                );
 
-        // 4. Find SOLO ranked data
-        LolLeagueEntryResponse soloRank =
-                rankedData.stream()
-                        .filter(entry ->
-                                "RANKED_SOLO_5x5".equals(entry.getQueueType())
-                        )
-                        .findFirst()
-                        .orElse(null);
 
         // 5. Create response
         GamePlayerStatsResponse response =
@@ -96,27 +83,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
         response.setAverageSurvivalTime(0);
 
-        // 6. Set real ranked information
-        if (soloRank != null) {
 
-            response.setRank(
-                    soloRank.getTier()
-                            + " "
-                            + soloRank.getRank()
-            );
-
-            response.setWins(
-                    soloRank.getWins()
-            );
-
-        } else {
-
-            response.setRank(
-                    "Unranked"
-            );
-
-            response.setWins(0);
-        }
 
         return response;
     }
