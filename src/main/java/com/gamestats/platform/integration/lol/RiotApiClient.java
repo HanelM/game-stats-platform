@@ -61,7 +61,9 @@ public class RiotApiClient {
                         apiKey
                 )
                 .retrieve()
-                .bodyToMono(LeagueSummonerResponse.class)
+                .bodyToMono(
+                        LeagueSummonerResponse.class
+                )
                 .block();
     }
 
@@ -80,7 +82,9 @@ public class RiotApiClient {
                                 apiKey
                         )
                         .retrieve()
-                        .bodyToMono(LolLeagueEntryResponse[].class)
+                        .bodyToMono(
+                                LolLeagueEntryResponse[].class
+                        )
                         .block();
 
         return response == null
@@ -88,3 +92,4 @@ public class RiotApiClient {
                 : Arrays.asList(response);
     }
 }
+
