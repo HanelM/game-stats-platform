@@ -4,12 +4,9 @@ import com.gamestats.platform.exception.ResourceNotFoundException;
 import com.gamestats.platform.integration.dto.GamePlayerStatsResponse;
 import com.gamestats.platform.integration.lol.RiotApiClient;
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
-import com.gamestats.platform.integration.lol.dto.LolLeagueEntryResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +37,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
         String gameName = parts[0];
         String tagLine = parts[1];
 
-        // 2. Get Riot account using Riot ID
+        // 2. Get Riot account
         RiotAccountResponse account =
                 riotApiClient.getAccount(
                         gameName,
@@ -53,7 +50,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
-        // 3. Get League summoner using PUUID
+        // 3. Get League of Legends summoner
         LeagueSummonerResponse summoner =
                 riotApiClient.getSummoner(
                         account.getPuuid()
@@ -65,13 +62,7 @@ public class LeagueOfLegendsProvider implements GameProvider {
             );
         }
 
-        // 4. Get ranked information
-        List<LolLeagueEntryResponse> rankedData =
-                riotApiClient.getRankedData(
-                        summoner.getId()
-                );
-
-        // 5. Create response
+        // 4. Create response
         GamePlayerStatsResponse response =
                 new GamePlayerStatsResponse();
 
@@ -81,36 +72,33 @@ public class LeagueOfLegendsProvider implements GameProvider {
                 gameName + "#" + tagLine
         );
 
-        // Default values
-        response.setKd(0);
+        /*
+         * These statistics are temporarily set to 0.
+         *
+         * We are intentionally NOT calling:
+         *
+         * /lol/league/v4/entries/by-summoner/{summonerId}
+         *
+         * because that endpoint is currently returning HTTP 403
+         * with the Riot API key.
+         *
+         * Real match statistics can be added later using
+         * Riot Match-V5 API.
+         */
+        response.setWins(0);
         response.setKills(0);
         response.setMatches(0);
-        response.setWins(0);
+        response.setKd(0);
         response.setAverageDamage(0);
         response.setAverageSurvivalTime(0);
 
-        // 6. Set ranked information
-        if (rankedData != null && !rankedData.isEmpty()) {
-
-            LolLeagueEntryResponse ranked =
-                    rankedData.get(0);
-
-            response.setRank(
-                    ranked.getTier() + " " +
-                            ranked.getRank()
-            );
-
-            response.setWins(
-                    ranked.getWins()
-            );
-
-        } else {
-
-            response.setRank(
-                    "Unranked"
-            );
-        }
+        // Show the real League account level
+        response.setRank(
+                "Summoner Level " +
+                        summoner.getSummonerLevel()
+        );
 
         return response;
     }
 }
+

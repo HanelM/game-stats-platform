@@ -1,15 +1,11 @@
 package com.gamestats.platform.integration.lol;
 
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
-import com.gamestats.platform.integration.lol.dto.LolLeagueEntryResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,13 +16,11 @@ public class RiotApiClient {
     @Value("${riot.api.key}")
     private String apiKey;
 
-    /*
-     * Riot Account API
+    /**
+     * Gets Riot account information using Riot ID.
      *
-     * Riot ID:
-     * GameName#TagLine
-     *
-     * For Faker#KR1 we use the ASIA routing cluster.
+     * Example:
+     * Faker#KR1
      */
     public RiotAccountResponse getAccount(
             String gameName,
@@ -57,11 +51,9 @@ public class RiotApiClient {
                 .block();
     }
 
-    /*
-     * League Summoner API
-     *
-     * KR is the correct platform routing
-     * for Faker#KR1.
+    /**
+     * Gets League of Legends summoner information
+     * using the PUUID returned by the Riot Account API.
      */
     public LeagueSummonerResponse getSummoner(
             String puuid
@@ -82,32 +74,5 @@ public class RiotApiClient {
                 )
                 .block();
     }
-
-    /*
-     * League ranked information
-     */
-    public List<LolLeagueEntryResponse> getRankedData(
-            String summonerId
-    ) {
-
-        LolLeagueEntryResponse[] response =
-                webClient.get()
-                        .uri(
-                                "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{summonerId}",
-                                summonerId
-                        )
-                        .header(
-                                "X-Riot-Token",
-                                apiKey
-                        )
-                        .retrieve()
-                        .bodyToMono(
-                                LolLeagueEntryResponse[].class
-                        )
-                        .block();
-
-        return response == null
-                ? List.of()
-                : Arrays.asList(response);
-    }
 }
+
