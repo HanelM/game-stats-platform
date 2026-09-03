@@ -1,13 +1,11 @@
-
 const tftConnectBtn =
-    document.getElementById("tftConnectBtn");
+    document.getElementById(
+        "tftConnectBtn"
+    );
 
-const token =
-    localStorage.getItem("token");
-
-
-const API_URL =
-    window.location.hostname === "localhost"
+const TFT_API_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
 
@@ -20,17 +18,22 @@ window.addEventListener("load", () => {
 
     const savedStats =
         JSON.parse(
-            localStorage.getItem("tftStats")
+            localStorage.getItem(
+                "tftStats"
+            )
         );
+
 
     if (savedStats) {
 
         loadTftData(savedStats);
 
+
         document.getElementById(
             "tftConnectionStatus"
         ).innerText =
             "Already Connected";
+
 
         tftConnectBtn.innerText =
             "Disconnect";
@@ -49,7 +52,9 @@ tftConnectBtn.addEventListener(
 
         const savedStats =
             JSON.parse(
-                localStorage.getItem("tftStats")
+                localStorage.getItem(
+                    "tftStats"
+                )
             );
 
 
@@ -63,10 +68,12 @@ tftConnectBtn.addEventListener(
                 "tftStats"
             );
 
+
             document.getElementById(
                 "tftConnectionStatus"
             ).innerText =
                 "Not Connected";
+
 
             document.getElementById(
                 "tftStatsContainer"
@@ -74,14 +81,37 @@ tftConnectBtn.addEventListener(
                 "hidden"
             );
 
+
             document.getElementById(
                 "tftEmptyState"
             ).classList.remove(
                 "hidden"
             );
 
+
             tftConnectBtn.innerText =
                 "Connect Account";
+
+
+            return;
+        }
+
+
+        /* =========================
+           CHECK LOGIN
+        ========================= */
+
+        const token =
+            localStorage.getItem(
+                "token"
+            );
+
+
+        if (!token) {
+
+            alert(
+                "Please login before connecting your TFT account."
+            );
 
             return;
         }
@@ -115,15 +145,18 @@ tftConnectBtn.addEventListener(
 
             const response =
                 await fetch(
-                    `${API_URL}/api/games/tft/player/${encodeURIComponent(cleanPlayerName)}`,
+
+                    `${TFT_API_URL}/api/games/tft/player/${encodeURIComponent(cleanPlayerName)}`,
+
                     {
                         method: "GET",
 
                         headers: {
+
                             "Authorization":
                                 "Bearer " + token,
 
-                            "Content-Type":
+                            "Accept":
                                 "application/json"
                         }
                     }
@@ -132,14 +165,29 @@ tftConnectBtn.addEventListener(
 
             if (!response.ok) {
 
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "TFT RESPONSE:",
+                    response.status,
+                    errorText
+                );
+
                 throw new Error(
-                    "TFT player not found"
+                    `TFT request failed: ${response.status} - ${errorText}`
                 );
             }
 
 
             const data =
                 await response.json();
+
+
+            console.log(
+                "TFT DATA:",
+                data
+            );
 
 
             localStorage.setItem(
@@ -163,13 +211,16 @@ tftConnectBtn.addEventListener(
 
         } catch (error) {
 
-            console.error(error);
+              console.error(
+                  "TFT ERROR:",
+                  error
+              );
 
-            alert(
-                "TFT player not found"
-            );
-
-        }
+              alert(
+                  error.message ||
+                  "TFT request failed."
+              );
+          }
 
     }
 );
@@ -247,6 +298,4 @@ function loadTftData(data) {
         "tftPlayerName"
     ).innerText =
         data.playerName ?? "Unknown";
-
 }
-

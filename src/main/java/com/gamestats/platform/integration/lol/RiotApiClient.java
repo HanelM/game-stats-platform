@@ -23,6 +23,7 @@ public class RiotApiClient {
 
     // =========================================================
     // RIOT ACCOUNT
+    // Riot ID -> PUUID
     // =========================================================
 
     public RiotAccountResponse getAccount(
@@ -34,7 +35,7 @@ public class RiotApiClient {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .scheme("https")
-                                .host("asia.api.riotgames.com")
+                                .host("europe.api.riotgames.com")
                                 .path(
                                         "/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}"
                                 )
@@ -57,6 +58,8 @@ public class RiotApiClient {
 
     // =========================================================
     // SUMMONER
+    // PUUID -> Summoner
+    // EUW
     // =========================================================
 
     public LeagueSummonerResponse getSummoner(
@@ -65,7 +68,7 @@ public class RiotApiClient {
 
         return webClient.get()
                 .uri(
-                        "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}",
+                        "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}",
                         puuid
                 )
                 .header(
@@ -82,6 +85,7 @@ public class RiotApiClient {
 
     // =========================================================
     // MATCH HISTORY
+    // EUW -> EUROPE ROUTING
     // =========================================================
 
     public List<String> getMatchIds(
@@ -94,7 +98,7 @@ public class RiotApiClient {
                         .uri(uriBuilder ->
                                 uriBuilder
                                         .scheme("https")
-                                        .host("asia.api.riotgames.com")
+                                        .host("europe.api.riotgames.com")
                                         .path(
                                                 "/lol/match/v5/matches/by-puuid/{puuid}/ids"
                                         )
@@ -128,6 +132,7 @@ public class RiotApiClient {
 
     // =========================================================
     // SINGLE MATCH
+    // EUROPE ROUTING
     // =========================================================
 
     public RiotMatchResponse getMatch(
@@ -136,7 +141,7 @@ public class RiotApiClient {
 
         return webClient.get()
                 .uri(
-                        "https://asia.api.riotgames.com/lol/match/v5/matches/{matchId}",
+                        "https://europe.api.riotgames.com/lol/match/v5/matches/{matchId}",
                         matchId
                 )
                 .header(

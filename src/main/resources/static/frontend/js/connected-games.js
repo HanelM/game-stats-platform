@@ -1,63 +1,58 @@
-const connectBtn =
-    document.getElementById(
-        "connectBtn"
-    );
+const pubgConnectBtn =
+    document.getElementById("connectBtn");
 
-const token =
-    localStorage.getItem(
-        "token"
-    );
-const API_URL =
-    window.location.hostname === "localhost"
+const PUBG_API_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
+
+
 /* =========================
    LOAD SAVED PUBG ACCOUNT
 ========================= */
 
-window.onload = () => {
+window.addEventListener("load", () => {
 
     const savedStats =
         JSON.parse(
-            localStorage.getItem(
-                "pubgStats"
-            )
+            localStorage.getItem("pubgStats")
         );
 
-    if(savedStats){
+    if (savedStats) {
 
         loadPubgData(savedStats);
 
         document.getElementById(
             "connectionStatus"
-        ).innerText =
-            "Already Connected";
+        ).innerText = "Already Connected";
 
-        connectBtn.innerText =
+        pubgConnectBtn.innerText =
             "Disconnect";
     }
-};
+
+});
+
 
 /* =========================
    CONNECT / DISCONNECT
 ========================= */
 
-connectBtn.addEventListener(
+pubgConnectBtn.addEventListener(
     "click",
     async () => {
 
         const savedStats =
             JSON.parse(
-                localStorage.getItem(
-                    "pubgStats"
-                )
+                localStorage.getItem("pubgStats")
             );
+
 
         /* =========================
            DISCONNECT
         ========================= */
 
-        if(savedStats){
+        if (savedStats) {
 
             localStorage.removeItem(
                 "pubgStats"
@@ -80,11 +75,29 @@ connectBtn.addEventListener(
                 "hidden"
             );
 
-            connectBtn.innerText =
+            pubgConnectBtn.innerText =
                 "Connect Account";
 
             return;
         }
+
+
+        /* =========================
+           CHECK LOGIN
+        ========================= */
+
+        const token =
+            localStorage.getItem("token");
+
+        if (!token) {
+
+            alert(
+                "Please login before connecting your PUBG account."
+            );
+
+            return;
+        }
+
 
         /* =========================
            CONNECT
@@ -95,71 +108,91 @@ connectBtn.addEventListener(
                 "Enter PUBG Steam username"
             );
 
-        if(!playerName){
-
+        if (!playerName) {
             return;
         }
 
-        try{
+        const cleanPlayerName =
+            playerName.trim();
+
+        if (!cleanPlayerName) {
+            return;
+        }
+
+
+        try {
 
             const response =
                 await fetch(
 
-                    `${API_URL}/api/games/pubg/player/${playerName}`,
+                    `${PUBG_API_URL}/api/games/pubg/player/${encodeURIComponent(cleanPlayerName)}`,
 
                     {
-                        headers:{
+                        method: "GET",
+
+                        headers: {
 
                             "Authorization":
                                 "Bearer " + token,
 
-                            "Content-Type":
+                            "Accept":
                                 "application/json"
                         }
                     }
                 );
 
-            if(!response.ok){
+
+            if (!response.ok) {
 
                 throw new Error(
-                    "Player not found"
+                    `PUBG request failed: ${response.status}`
                 );
             }
 
+
             const data =
                 await response.json();
+
 
             localStorage.setItem(
                 "pubgStats",
                 JSON.stringify(data)
             );
 
+
             loadPubgData(data);
+
 
             document.getElementById(
                 "connectionStatus"
             ).innerText =
                 "Already Connected";
 
-            connectBtn.innerText =
+
+            pubgConnectBtn.innerText =
                 "Disconnect";
 
-        }catch(error){
 
-            console.log(error);
+        } catch (error) {
+
+            console.error(
+                "PUBG ERROR:",
+                error
+            );
 
             alert(
-                "PUBG player not found"
+                "PUBG player not found."
             );
         }
     }
 );
 
+
 /* =========================
    LOAD PUBG DATA
 ========================= */
 
-function loadPubgData(data){
+function loadPubgData(data) {
 
     document.getElementById(
         "emptyState"
@@ -167,44 +200,52 @@ function loadPubgData(data){
         "hidden"
     );
 
+
     document.getElementById(
         "statsContainer"
     ).classList.remove(
         "hidden"
     );
 
+
     document.getElementById(
         "kills"
     ).innerText =
-        data.kills;
+        data.kills ?? 0;
+
 
     document.getElementById(
         "wins"
     ).innerText =
-        data.wins;
+        data.wins ?? 0;
+
 
     document.getElementById(
         "kd"
     ).innerText =
-        data.kd;
+        data.kd ?? 0;
+
 
     document.getElementById(
         "matches"
     ).innerText =
-        data.matches;
+        data.matches ?? 0;
+
 
     document.getElementById(
         "damage"
     ).innerText =
-        data.averageDamage;
+        data.averageDamage ?? 0;
+
 
     document.getElementById(
         "survival"
     ).innerText =
-        data.averageSurvivalTime;
+        data.averageSurvivalTime ?? 0;
+
 
     document.getElementById(
         "rank"
     ).innerText =
-        data.rank;
+        data.rank ?? "Unknown";
 }

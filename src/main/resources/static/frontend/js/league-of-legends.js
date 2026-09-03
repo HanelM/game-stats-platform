@@ -3,18 +3,18 @@ const lolConnectBtn =
         "lolConnectBtn"
     );
 
-const token =
-    localStorage.getItem(
-        "token"
-    );
-
-const API_URL =
-    window.location.hostname === "localhost"
+const LOL_API_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
 
 
-window.onload = () => {
+/* =========================
+   LOAD SAVED LOL ACCOUNT
+========================= */
+
+window.addEventListener("load", () => {
 
     const savedStats =
         JSON.parse(
@@ -23,7 +23,7 @@ window.onload = () => {
             )
         );
 
-    if(savedStats){
+    if (savedStats) {
 
         loadLolData(savedStats);
 
@@ -35,8 +35,13 @@ window.onload = () => {
         lolConnectBtn.innerText =
             "Disconnect";
     }
-};
 
+});
+
+
+/* =========================
+   CONNECT / DISCONNECT
+========================= */
 
 lolConnectBtn.addEventListener(
     "click",
@@ -50,7 +55,11 @@ lolConnectBtn.addEventListener(
             );
 
 
-        if(savedStats){
+        /* =========================
+           DISCONNECT
+        ========================= */
+
+        if (savedStats) {
 
             localStorage.removeItem(
                 "lolStats"
@@ -80,22 +89,50 @@ lolConnectBtn.addEventListener(
         }
 
 
-        const playerName =
-            prompt(
-                "Enter Riot ID (GameName#TagLine)"
+        /* =========================
+           CHECK LOGIN
+        ========================= */
+
+        const token =
+            localStorage.getItem(
+                "token"
             );
 
-        if(!playerName){
+        if (!token) {
+
+            alert(
+                "Please login before connecting your League of Legends account."
+            );
 
             return;
         }
 
 
-        const parts =
-            playerName.split("#");
+        /* =========================
+           CONNECT
+        ========================= */
+
+        const riotId =
+            prompt(
+                "Enter Riot ID (GameName#TagLine)"
+            );
 
 
-        if(parts.length !== 2){
+        if (!riotId) {
+            return;
+        }
+
+
+        const cleanRiotId =
+            riotId.trim();
+
+
+        if (!cleanRiotId) {
+            return;
+        }
+
+
+        if (!cleanRiotId.includes("#")) {
 
             alert(
                 "Please enter Riot ID like: PlayerName#EUW"
@@ -105,37 +142,59 @@ lolConnectBtn.addEventListener(
         }
 
 
-        const gameName =
-            parts[0];
-
-        const tagLine =
-            parts[1];
+        const parts =
+            cleanRiotId.split("#");
 
 
-        try{
+        if (
+            parts.length !== 2 ||
+            !parts[0].trim() ||
+            !parts[1].trim()
+        ) {
+
+            alert(
+                "Please enter Riot ID like: PlayerName#EUW"
+            );
+
+            return;
+        }
+
+
+        try {
 
             const response =
                 await fetch(
 
-                    `${API_URL}/api/games/leagueoflegends/player/${encodeURIComponent(gameName)}?tagLine=${encodeURIComponent(tagLine)}`,
+                    `${LOL_API_URL}/api/games/leagueoflegends/player/${encodeURIComponent(cleanRiotId)}`,
 
                     {
-                        headers:{
+                        method: "GET",
+
+                        headers: {
 
                             "Authorization":
                                 "Bearer " + token,
 
-                            "Content-Type":
+                            "Accept":
                                 "application/json"
                         }
                     }
                 );
 
 
-            if(!response.ok){
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "LOL RESPONSE:",
+                    response.status,
+                    errorText
+                );
 
                 throw new Error(
-                    "League of Legends player not found"
+                    `LoL request failed: ${response.status} - ${errorText}`
                 );
             }
 
@@ -163,20 +222,28 @@ lolConnectBtn.addEventListener(
                 "Disconnect";
 
 
-        }catch(error){
+        } catch (error) {
 
-            console.log(error);
+              console.error(
+                  "LOL ERROR:",
+                  error
+              );
 
-            alert(
-                "League of Legends player not found"
-            );
-        }
+              alert(
+                  error.message ||
+                  "League of Legends request failed."
+              );
+          }
 
     }
 );
 
 
-function loadLolData(data){
+/* =========================
+   LOAD LOL DATA
+========================= */
+
+function loadLolData(data) {
 
     document.getElementById(
         "lolEmptyState"

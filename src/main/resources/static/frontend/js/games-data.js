@@ -64,6 +64,17 @@ const GAMES = [
         img: "./images/games/Fortnite.jpg",
         manual: true,
         connected: true
-    }
+    },
+
+     {
+            id: 7,
+            name: "Teamfight Tactics",
+            genre: "Strategy",
+            players: "80M+",
+            rating: "9.1",
+            img: "./images/games/TFT.jpg",
+            manual: false,
+            connected: true
+        }
 
 ];
