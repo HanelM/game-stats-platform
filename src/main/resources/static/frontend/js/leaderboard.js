@@ -1,3 +1,13 @@
+/* =========================================================
+   LEADERBOARD
+   Manual + API/Online matches are treated together.
+========================================================= */
+
+
+/* =========================
+   DOM ELEMENTS
+========================= */
+
 const sortSelect =
     document.getElementById(
         "sort-select"
@@ -18,93 +28,210 @@ const gameSelect =
         "game-select"
     );
 
-
-
 const bestGamesContainer =
     document.getElementById(
         "best-games"
     );
+
+
+/* =========================
+   API
+========================= */
+
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
-/* =========================
+
+
+/* =========================================================
    LOAD GAMES
-========================= */
+========================================================= */
 
 async function loadGames() {
 
     const token =
         localStorage.getItem("token");
 
+
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/matches/my`,
-            {
-                headers:{
-                    "Authorization":
-                        "Bearer " + token
+        /*
+         * IMPORTANT:
+         *
+         * /my is paginated and normally returns
+         * only 5 matches.
+         *
+         * /all returns ALL matches belonging
+         * to the authenticated user.
+         *
+         * Therefore both manual and API matches
+         * are included here.
+         */
+
+        const response =
+            await fetch(
+                `${API_URL}/api/matches/all`,
+                {
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
                 }
-            }
-        );
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load user matches"
+            );
+        }
+
 
         const data =
             await response.json();
 
+
+        /*
+         * /all should return an array.
+         *
+         * The fallback to data.content is kept
+         * in case the backend is temporarily
+         * returning a Page object.
+         */
+
         const matches =
-            data.content || [];
+            Array.isArray(data)
+                ? data
+                : (data.content || []);
 
-        /* UNIQUE GAMES */
 
-        const uniqueGames =
-            [...new Set(
-                matches.map(
-                    match => match.gameName
-                )
-            )];
+        console.log(
+            "Leaderboard matches loaded:",
+            matches.length
+        );
 
-        /* CLEAR OLD OPTIONS */
+
+        console.log(
+            "Leaderboard match data:",
+            matches
+        );
+
+
+        /* =========================
+           UNIQUE GAMES
+        ========================= */
+
+        const uniqueGames = [
+            ...new Set(
+                matches
+                    .map(
+                        match =>
+                            match.gameName
+                    )
+                    .filter(
+                        game =>
+                            game &&
+                            game.trim() !== ""
+                    )
+            )
+        ];
+
+
+        /* =========================
+           CLEAR OLD OPTIONS
+        ========================= */
 
         gameSelect.innerHTML = `
 
-            <option value="" hidden selected>
+            <option
+                value=""
+                hidden
+                selected
+            >
                 Choose game to see leaderboard
             </option>
 
         `;
 
-        /* ADD GAMES */
+
+        /* =========================
+           ADD GAMES
+        ========================= */
 
         uniqueGames.forEach(game => {
 
-            gameSelect.innerHTML += `
+            const option =
+                document.createElement(
+                    "option"
+                );
 
-                <option value="${game}">
-                    ${game}
-                </option>
 
-            `;
+            option.value = game;
+
+            option.textContent = game;
+
+
+            gameSelect.appendChild(
+                option
+            );
+
         });
 
-        /* BEST GAMES */
+
+        /* =========================
+           BEST GAMES
+        ========================= */
 
         renderBestGames(matches);
 
-    } catch(error){
 
-        console.log(error);
+    } catch (error) {
+
+        console.error(
+            "Error loading leaderboard games:",
+            error
+        );
+
+
+        /*
+         * Clear selector if loading failed.
+         */
+
+        gameSelect.innerHTML = `
+
+            <option
+                value=""
+                hidden
+                selected
+            >
+                Unable to load games
+            </option>
+
+        `;
+
+
+        renderBestGames([]);
+
     }
 }
 
-/* =========================
+
+/* =========================================================
    BEST GAMES
-========================= */
-function renderBestGames(matches){
+========================================================= */
+
+function renderBestGames(matches) {
 
     bestGamesContainer.innerHTML = "";
 
-    if(matches.length === 0){
+
+    /* =========================
+       NO MATCHES
+    ========================= */
+
+    if (!matches || matches.length === 0) {
 
         bestGamesContainer.innerHTML = `
 
@@ -119,9 +246,10 @@ function renderBestGames(matches){
         return;
     }
 
-    /* =========================
+
+    /* =====================================================
        GLOBAL STATS
-    ========================= */
+    ===================================================== */
 
     let totalKills = 0;
 
@@ -133,148 +261,271 @@ function renderBestGames(matches){
 
     let highestScore = 0;
 
+
     matches.forEach(match => {
 
-        totalKills += match.kills;
+        const kills =
+            Number(
+                match.kills || 0
+            );
 
-        totalDeaths += match.deaths;
+        const deaths =
+            Number(
+                match.deaths || 0
+            );
 
-        if(match.win){
+        const score =
+            Number(
+                match.score || 0
+            );
+
+
+        totalKills += kills;
+
+        totalDeaths += deaths;
+
+
+        if (match.win === true) {
 
             totalWins++;
+
         }
 
-        if(match.kills > highestKills){
 
-            highestKills = match.kills;
+        if (kills > highestKills) {
+
+            highestKills =
+                kills;
+
         }
 
-        if(match.score > highestScore){
 
-            highestScore = match.score;
+        if (score > highestScore) {
+
+            highestScore =
+                score;
+
         }
+
     });
-
-    const winRate =
-        (
-            (totalWins / matches.length) * 100
-        ).toFixed(1);
-
-    const kdRatio =
-        totalDeaths > 0
-            ? (totalKills / totalDeaths)
-                .toFixed(2)
-            : totalKills;
-
 
 
     /* =========================
-       TOP 3 MATCHES
+       WIN RATE
     ========================= */
+
+    const winRate =
+        matches.length > 0
+            ? (
+                (totalWins / matches.length)
+                * 100
+            ).toFixed(1)
+            : "0.0";
+
+
+    /* =========================
+       KD RATIO
+    ========================= */
+
+    const kdRatio =
+        totalDeaths > 0
+            ? (
+                totalKills /
+                totalDeaths
+            ).toFixed(2)
+            : totalKills.toFixed(2);
+
+
+    /* =====================================================
+       TOP 3 MATCHES
+    ===================================================== */
 
     const bestMatches =
         [...matches]
-        .sort((a,b) => b.score - a.score)
-        .slice(0,3);
+            .sort(
+                (a, b) => {
 
-    bestMatches.forEach((match,index) => {
+                    const scoreA =
+                        Number(
+                            a.score || 0
+                        );
 
-        const kd =
-            match.deaths > 0
-                ? (match.kills / match.deaths)
-                    .toFixed(2)
-                : match.kills;
+                    const scoreB =
+                        Number(
+                            b.score || 0
+                        );
 
-        bestGamesContainer.innerHTML += `
 
-            <div class="mini-stat-card top-card-${index + 1}">
+                    return scoreB - scoreA;
+                }
+            )
+            .slice(0, 3);
 
-                <div class="match-header">
 
-                    <span class="match-rank">
+    /* =====================================================
+       RENDER TOP 3
+    ===================================================== */
 
-                        ${
-                            index === 0
-                                ? "🥇"
-                            : index === 1
-                                ? "🥈"
-                            : "🥉"
-                        }
+    bestMatches.forEach(
+        (match, index) => {
 
-                    </span>
+            const kills =
+                Number(
+                    match.kills || 0
+                );
 
-                    <span class="match-game">
+            const deaths =
+                Number(
+                    match.deaths || 0
+                );
 
-                        ${match.gameName}
+            const score =
+                Number(
+                    match.score || 0
+                );
 
-                    </span>
 
-                </div>
+            const kd =
+                deaths > 0
+                    ? (
+                        kills /
+                        deaths
+                    ).toFixed(2)
+                    : kills.toFixed(2);
 
-                <div class="match-score">
 
-                    ${match.score}
+            /*
+             * Show whether the match came
+             * from the API or was entered manually.
+             */
 
-                </div>
+            const source =
+                match.source === "API"
+                    ? "ONLINE"
+                    : "MANUAL";
 
-                <div class="mini-stats">
 
-                    <div class="mini-box">
+            const medal =
+                index === 0
+                    ? "🥇"
+                    : index === 1
+                        ? "🥈"
+                        : "🥉";
 
-                        <span>Kills</span>
 
-                        <strong>
-                            ${match.kills}
-                        </strong>
+            bestGamesContainer.innerHTML += `
+
+                <div class="mini-stat-card top-card-${index + 1}">
+
+                    <div class="match-header">
+
+                        <span class="match-rank">
+
+                            ${medal}
+
+                        </span>
+
+
+                        <span class="match-game">
+
+                            ${match.gameName || "Unknown Game"}
+
+                        </span>
 
                     </div>
 
-                    <div class="mini-box">
 
-                        <span>KD</span>
+                    <div class="match-score">
 
-                        <strong>
-                            ${kd}
-                        </strong>
+                        ${score}
 
                     </div>
 
-                    <div class="mini-box">
 
-                        <span>Result</span>
+                    <div class="mini-stats">
 
-                        <strong>
-                            ${
-                                match.win
-                                    ? "WIN"
-                                    : "LOSS"
-                            }
-                        </strong>
+                        <div class="mini-box">
+
+                            <span>
+                                Kills
+                            </span>
+
+                            <strong>
+
+                                ${kills}
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="mini-box">
+
+                            <span>
+                                KD
+                            </span>
+
+                            <strong>
+
+                                ${kd}
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="mini-box">
+
+                            <span>
+                                Result
+                            </span>
+
+                            <strong>
+
+                                ${
+                                    match.win === true
+                                        ? "WIN"
+                                        : "LOSS"
+                                }
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="match-source">
+
+                        ${source}
 
                     </div>
 
                 </div>
 
-            </div>
-
-        `;
-    });
+            `;
+        }
+    );
 }
-/* =========================
-   LEADERBOARD
-========================= */
+
+
+/* =========================================================
+   LOAD LEADERBOARD
+========================================================= */
 
 async function loadLeaderboard() {
 
     const selectedGame =
         gameSelect.value;
 
-    /* NO GAME SELECTED */
 
-    if(!selectedGame){
+    /* =========================
+       NO GAME SELECTED
+    ========================= */
+
+    if (!selectedGame) {
 
         leaderboardBody.innerHTML = "";
-
 
         return;
     }
@@ -283,58 +534,155 @@ async function loadLeaderboard() {
     const token =
         localStorage.getItem("token");
 
+
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/leaderboard?gameName=${selectedGame}`,
-            {
-                headers:{
-                    "Authorization":
-                        "Bearer " + token
+        /*
+         * encodeURIComponent is important because
+         * "League of Legends" contains spaces.
+         */
+
+        const encodedGame =
+            encodeURIComponent(
+                selectedGame
+            );
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/leaderboard?gameName=${encodedGame}`,
+                {
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
                 }
-            }
-        );
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load leaderboard"
+            );
+        }
+
 
         let players =
             await response.json();
 
-        /* SEARCH */
 
-        players = players.filter(player =>
-            player.username
-                .toLowerCase()
-                .includes(
-                    playerSearch.value.toLowerCase()
-                )
-        );
+        /*
+         * Make sure we received an array.
+         */
 
-        /* SORT */
+        if (!Array.isArray(players)) {
 
-        if(sortSelect.value === "wins"){
+            players = [];
+
+        }
+
+
+        /* =================================================
+           SEARCH
+        ================================================= */
+
+        const searchValue =
+            (
+                playerSearch.value || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (searchValue) {
+
+            players =
+                players.filter(
+                    player => {
+
+                        const username =
+                            String(
+                                player.username || ""
+                            )
+                                .toLowerCase();
+
+
+                        return username.includes(
+                            searchValue
+                        );
+
+                    }
+                );
+        }
+
+
+        /* =================================================
+           NORMALIZE NUMBERS
+        ================================================= */
+
+        players =
+            players.map(player => ({
+
+                ...player,
+
+                wins:
+                    Number(
+                        player.wins || 0
+                    ),
+
+                kills:
+                    Number(
+                        player.kills || 0
+                    )
+
+            }));
+
+
+        /* =================================================
+           SORT
+        ================================================= */
+
+        if (
+            sortSelect.value === "wins"
+        ) {
 
             players.sort(
-                (a,b) => b.wins - a.wins
+                (a, b) =>
+                    b.wins - a.wins
             );
 
         } else {
 
             players.sort(
-                (a,b) => b.kills - a.kills
+                (a, b) =>
+                    b.kills - a.kills
             );
+
         }
+
+
+        /* =================================================
+           CLEAR OLD LEADERBOARD
+        ================================================= */
 
         leaderboardBody.innerHTML = "";
 
-        /* EMPTY */
 
-        if(players.length === 0){
+        /* =================================================
+           EMPTY
+        ================================================= */
+
+        if (players.length === 0) {
 
             leaderboardBody.innerHTML = `
 
                 <div class="leaderboard-row">
 
                     <div class="stat">
+
                         No players found.
+
                     </div>
 
                 </div>
@@ -344,75 +692,109 @@ async function loadLeaderboard() {
             return;
         }
 
-        /* RENDER */
 
-        players.forEach((player,index) => {
+        /* =================================================
+           RENDER
+        ================================================= */
 
-            leaderboardBody.innerHTML += `
+        players.forEach(
+            (player, index) => {
 
-            <div class="leaderboard-row
-                ${
+                const username =
+                    player.username ||
+                    "Unknown";
+
+
+                const firstLetter =
+                    username
+                        .charAt(0)
+                        .toUpperCase();
+
+
+                const rankClass =
                     index === 0
                         ? "top-1"
-                    : index === 1
-                        ? "top-2"
-                    : index === 2
-                        ? "top-3"
-                    : ""
-                }
-            ">
+                        : index === 1
+                            ? "top-2"
+                            : index === 2
+                                ? "top-3"
+                                : "";
 
-                <div class="rank">
 
-                    ${
-                        index === 0
-                            ? "🥇"
+                const rank =
+                    index === 0
+                        ? "🥇"
                         : index === 1
                             ? "🥈"
-                        : index === 2
-                            ? "🥉"
-                        : "#" + (index + 1)
-                    }
+                            : index === 2
+                                ? "🥉"
+                                : "#" +
+                                  (index + 1);
 
-                </div>
 
-                <div class="player">
+                leaderboardBody.innerHTML += `
 
-                    <div class="player-avatar">
+                    <div class="leaderboard-row ${rankClass}">
 
-                        ${player.username
-                            .charAt(0)
-                            .toUpperCase()}
+
+                        <div class="rank">
+
+                            ${rank}
+
+                        </div>
+
+
+                        <div class="player">
+
+                            <div class="player-avatar">
+
+                                ${firstLetter}
+
+                            </div>
+
+
+                            ${username}
+
+                        </div>
+
+
+                        <div class="stat">
+
+                            ${player.wins}
+
+                        </div>
+
+
+                        <div class="stat">
+
+                            ${player.kills}
+
+                        </div>
+
 
                     </div>
 
-                    ${player.username}
+                `;
+            }
+        );
 
-                </div>
 
-                <div class="stat">
-                    ${player.wins}
-                </div>
+    } catch (error) {
 
-                <div class="stat">
-                    ${player.kills}
-                </div>
+        console.error(
+            "Leaderboard error:",
+            error
+        );
 
-            </div>
-
-            `;
-        });
-
-    } catch(error){
-
-        console.log(error);
 
         leaderboardBody.innerHTML = `
 
             <div class="leaderboard-row">
 
                 <div class="stat">
+
                     Failed to load leaderboard.
+
                 </div>
 
             </div>
@@ -421,21 +803,59 @@ async function loadLeaderboard() {
     }
 }
 
-/* =========================
+
+/* =========================================================
    EVENTS
-========================= */
+========================================================= */
 
-gameSelect.addEventListener("change", loadLeaderboard);
+if (gameSelect) {
 
-playerSearch.addEventListener("input", () => {
-    if (gameSelect.value) loadLeaderboard();
-});
+    gameSelect.addEventListener(
+        "change",
+        loadLeaderboard
+    );
 
-sortSelect.addEventListener("change", () => {
-    if (gameSelect.value) loadLeaderboard();
-});
-/* =========================
+}
+
+
+if (playerSearch) {
+
+    playerSearch.addEventListener(
+        "input",
+        () => {
+
+            if (gameSelect.value) {
+
+                loadLeaderboard();
+
+            }
+
+        }
+    );
+
+}
+
+
+if (sortSelect) {
+
+    sortSelect.addEventListener(
+        "change",
+        () => {
+
+            if (gameSelect.value) {
+
+                loadLeaderboard();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    START
-========================= */
+========================================================= */
 
 loadGames();

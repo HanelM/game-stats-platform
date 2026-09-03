@@ -54,5 +54,17 @@ public interface GameMatchRepository
             Sort sort
     );
 
+    boolean existsByPlayerUsernameAndGameNameAndExternalMatchId(
+            String username,
+            String gameName,
+            String externalMatchId
+    );
+    void deleteByPlayerUsernameAndGameNameAndSourceAndConnectedAccount(
+            String username,
+            String gameName,
+            String source,
+            String connectedAccount
+    );
+
 
 }

@@ -1,35 +1,45 @@
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
+/* =========================================================
+   DASHBOARD
+   Uses ONLY backend game_matches data.
+   Manual + API/online matches are handled together.
+========================================================= */
 
-const selectedUsername =
-    params.get("username");
+/* =========================
+   PROFILE / AUTH
+========================= */
 
-const viewingOwnProfile =
-    !selectedUsername;
+const params = new URLSearchParams(
+    window.location.search
+);
 
-const token =
-    localStorage.getItem("token");
+const selectedUsername = params.get("username");
 
-const chartGameSelect =
-    document.getElementById(
-        "chartGameSelect"
-    );
+const viewingOwnProfile = !selectedUsername;
 
-const pubgStats =
-    JSON.parse(
-        localStorage.getItem(
-            "pubgStats"
-        )
-    );
+const token = localStorage.getItem("token");
 
+
+/* =========================
+   API
+========================= */
 
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
 
+
+/* =========================
+   DOM ELEMENTS
+========================= */
+
+const chartGameSelect =
+    document.getElementById("chartGameSelect");
+
+
+/* =========================
+   DATA
+========================= */
 
 let matches = [];
 
@@ -38,220 +48,334 @@ let kdChart = null;
 let winRateChart = null;
 let scoreChart = null;
 
-/* =========================
-   LOAD DASHBOARD
-========================= */
 
-async function loadDashboard(){
+/* =========================================================
+   LOAD DASHBOARD
+========================================================= */
+
+async function loadDashboard() {
 
     let url;
 
-    if(selectedUsername){
+    /*
+     * Own profile:
+     * Use /all so we get ALL matches, not only the
+     * first 5 records from /my.
+     *
+     * Other profile:
+     * Use /user/{username}.
+     */
+
+    if (selectedUsername) {
 
         url =
-            `${API_URL}/api/matches/user/${selectedUsername}`;
+            `${API_URL}/api/matches/user/${encodeURIComponent(selectedUsername)}`;
 
     } else {
 
         url =
-            `${API_URL}/api/matches/my`;
+            `${API_URL}/api/matches/all`;
     }
 
-    try{
 
-        const response =
-            await fetch(url, {
-                headers:{
-                    Authorization:
+    try {
+
+        const response = await fetch(
+            url,
+            {
+                headers: {
+                    "Authorization":
                         "Bearer " + token
                 }
-            });
+            }
+        );
 
-        const data =
-            await response.json();
 
-        matches =
-            Array.isArray(data)
-                ? data
-                : (data.content || []);
+        if (!response.ok) {
 
-        loadGameFilter();
-        renderDashboard();
+            throw new Error(
+                "Failed to load dashboard matches"
+            );
+        }
 
-    }catch(error){
+
+        const data = await response.json();
+
+
+        /*
+         * /all and /user/{username} return
+         * a normal array.
+         */
+
+        if (Array.isArray(data)) {
+
+            matches = data;
+
+        } else {
+
+            /*
+             * Safety fallback in case an endpoint
+             * returns a paginated object.
+             */
+
+            matches = data.content || [];
+        }
+
 
         console.log(
+            "Dashboard matches loaded:",
+            matches.length
+        );
+
+
+        console.log(
+            "Dashboard data:",
+            matches
+        );
+
+
+        loadGameFilter();
+
+        renderDashboard();
+
+
+    } catch (error) {
+
+        console.error(
             "Dashboard error:",
             error
         );
+
     }
 }
 
-/* =========================
-   GAME FILTER
-========================= */
 
-function loadGameFilter(){
+/* =========================================================
+   GAME FILTER
+========================================================= */
+
+function loadGameFilter() {
+
+    if (!chartGameSelect) {
+        return;
+    }
+
+
+    /*
+     * Get unique game names from ALL matches.
+     */
 
     const uniqueGames = [
         ...new Set(
-            matches.map(
-                m => m.gameName
-            )
+            matches
+                .map(match => match.gameName)
+                .filter(game => game)
         )
     ];
 
-    if(pubgStats){
 
-        uniqueGames.push("PUBG");
-    }
+    /*
+     * Clear old options.
+     */
 
     chartGameSelect.innerHTML =
         `<option value="all">All Games</option>`;
 
-    [...new Set(uniqueGames)]
-        .forEach(game => {
 
-            chartGameSelect.innerHTML += `
+    /*
+     * Add games.
+     */
 
-                <option value="${game}">
-                    ${game}
-                </option>
+    uniqueGames.forEach(game => {
 
-            `;
-        });
+        const option =
+            document.createElement("option");
+
+        option.value = game;
+
+        option.textContent = game;
+
+        chartGameSelect.appendChild(option);
+
+    });
 }
 
-/* =========================
-   RENDER DASHBOARD
-========================= */
 
-function renderDashboard(){
+/* =========================================================
+   RENDER DASHBOARD
+========================================================= */
+
+function renderDashboard() {
+
+    if (!Array.isArray(matches)) {
+        matches = [];
+    }
+
+
+    /*
+     * Selected game.
+     */
 
     const selectedGame =
-        chartGameSelect.value;
+        chartGameSelect
+            ? chartGameSelect.value
+            : "all";
 
-    let filteredMatches =
-        matches;
 
-    if(selectedGame !== "all"){
+    /*
+     * Filter matches.
+     */
+
+    let filteredMatches = matches;
+
+
+    if (selectedGame !== "all") {
 
         filteredMatches =
             matches.filter(
-                m =>
-                    m.gameName === selectedGame
+                match =>
+                    match.gameName === selectedGame
             );
     }
 
-    /* =========================
-       PUBG MODE
-    ========================= */
 
-    const usingPubgData =
-        viewingOwnProfile &&
-        pubgStats &&
-        selectedGame === "PUBG";
+    /* =====================================================
+       CALCULATE STATISTICS
+    ===================================================== */
 
     let totalKills = 0;
+
     let totalDeaths = 0;
-    let totalWins = 0;
+
     let totalScore = 0;
-    let totalMatches = 0;
 
-    /* =========================
-       PUBG CONNECTED DATA
-    ========================= */
+    let totalWins = 0;
 
-    if(usingPubgData){
+    let totalMatches =
+        filteredMatches.length;
 
-        totalKills =
-            pubgStats.kills || 0;
 
-        totalDeaths =
-            pubgStats.deaths || 0;
+    filteredMatches.forEach(match => {
 
-        totalWins =
-            pubgStats.wins || 0;
+        const kills =
+            Number(match.kills || 0);
 
-        totalMatches =
-            pubgStats.matches || 0;
+        const deaths =
+            Number(match.deaths || 0);
 
-        totalScore =
-            pubgStats.damage || 0;
+        const score =
+            Number(match.score || 0);
 
-    }
 
-    /* =========================
-       NORMAL USER MATCHES
-    ========================= */
+        totalKills += kills;
 
-    else{
+        totalDeaths += deaths;
 
-        filteredMatches.forEach(match => {
+        totalScore += score;
 
-            totalKills +=
-                match.kills || 0;
 
-            totalDeaths +=
-                match.deaths || 0;
+        if (match.win === true) {
 
-            totalScore +=
-                match.score || 0;
+            totalWins++;
+        }
 
-            if(match.win){
+    });
 
-                totalWins++;
-            }
-        });
 
-        totalMatches =
-            filteredMatches.length;
-    }
-
-    /* =========================
-       STATS
-    ========================= */
+    /* =====================================================
+       WIN RATE
+    ===================================================== */
 
     const winRate =
         totalMatches > 0
             ? (
                 (totalWins / totalMatches) * 100
-              ).toFixed(1)
+            ).toFixed(1)
             : "0.0";
+
+
+    /* =====================================================
+       KD RATIO
+    ===================================================== */
 
     const kdRatio =
         totalDeaths > 0
             ? (
                 totalKills / totalDeaths
-              ).toFixed(2)
-            : totalKills;
+            ).toFixed(2)
+            : totalKills.toFixed
+                ? totalKills.toFixed(2)
+                : totalKills;
+
+
+    /* =====================================================
+       AVERAGE SCORE
+    ===================================================== */
 
     const avgScore =
         totalMatches > 0
             ? Math.round(
                 totalScore / totalMatches
-              )
+            )
             : 0;
 
-    document.getElementById(
-        "totalKills"
-    ).innerText = totalKills;
 
-    document.getElementById(
-        "winRate"
-    ).innerText = winRate + "%";
+    /* =====================================================
+       UPDATE MAIN STATS
+    ===================================================== */
 
-    document.getElementById(
-        "kdRatio"
-    ).innerText = kdRatio;
+    const totalKillsElement =
+        document.getElementById(
+            "totalKills"
+        );
 
-    document.getElementById(
-        "avgScore"
-    ).innerText = avgScore;
+    const winRateElement =
+        document.getElementById(
+            "winRate"
+        );
 
-    /* =========================
+    const kdRatioElement =
+        document.getElementById(
+            "kdRatio"
+        );
+
+    const avgScoreElement =
+        document.getElementById(
+            "avgScore"
+        );
+
+
+    if (totalKillsElement) {
+
+        totalKillsElement.innerText =
+            totalKills;
+    }
+
+
+    if (winRateElement) {
+
+        winRateElement.innerText =
+            winRate + "%";
+    }
+
+
+    if (kdRatioElement) {
+
+        kdRatioElement.innerText =
+            kdRatio;
+    }
+
+
+    if (avgScoreElement) {
+
+        avgScoreElement.innerText =
+            avgScore;
+    }
+
+
+    /* =====================================================
        LEVEL SYSTEM
-    ========================= */
+    ===================================================== */
 
     const playerLevel =
         document.getElementById(
@@ -273,294 +397,518 @@ function renderDashboard(){
             "levelGameText"
         );
 
+
+    /*
+     * XP is calculated from ALL matches
+     * currently selected.
+     */
+
     const totalXP =
         (totalKills * 15) +
         (totalWins * 100) +
         (totalMatches * 25);
+
 
     const level =
         Math.floor(
             totalXP / 1000
         ) + 1;
 
+
     const currentXP =
         totalXP % 1000;
+
 
     const xpPercent =
         (currentXP / 1000) * 100;
 
-    playerLevel.innerText =
-        level;
 
-    xpFill.style.width =
-        xpPercent + "%";
+    if (playerLevel) {
 
-    xpText.innerText =
-        currentXP + " / 1000 XP";
+        playerLevel.innerText =
+            level;
+    }
 
-    levelGameText.innerText =
-        usingPubgData
-            ? "PUBG Connected"
-            : "Manual Matches";
 
-    /* =========================
+    if (xpFill) {
+
+        xpFill.style.width =
+            xpPercent + "%";
+    }
+
+
+    if (xpText) {
+
+        xpText.innerText =
+            currentXP +
+            " / 1000 XP";
+    }
+
+
+    if (levelGameText) {
+
+        if (selectedGame === "all") {
+
+            levelGameText.innerText =
+                "All Games";
+
+        } else {
+
+            levelGameText.innerText =
+                selectedGame;
+        }
+    }
+
+
+    /* =====================================================
        ACHIEVEMENTS
-    ========================= */
+    ===================================================== */
 
     const achievementList =
         document.getElementById(
             "achievementList"
         );
 
-    achievementList.innerHTML = "";
 
-    const achievements = [];
+    if (achievementList) {
 
-    if(totalKills >= 40){
+        achievementList.innerHTML = "";
 
-        achievements.push({
+        const achievements = [];
 
-            icon:"🔥",
 
-            title:"Kill Master",
+        /* Kill Master */
 
-            desc:"40+ kills"
-        });
-    }
+        if (totalKills >= 40) {
 
-    if(totalWins >= 3){
+            achievements.push({
 
-        achievements.push({
+                icon: "🔥",
 
-            icon:"🏆",
+                title: "Kill Master",
 
-            title:"Champion",
+                desc: "40+ kills"
+            });
+        }
 
-            desc:"3+ wins"
-        });
-    }
 
-    if(parseFloat(kdRatio) >= 2){
+        /* Champion */
 
-        achievements.push({
+        if (totalWins >= 3) {
 
-            icon:"⚡",
+            achievements.push({
 
-            title:"High KD",
+                icon: "🏆",
 
-            desc:"KD above 2.0"
-        });
-    }
+                title: "Champion",
 
-    if(achievements.length === 0){
+                desc: "3+ wins"
+            });
+        }
 
-        achievements.push({
 
-            icon:"❌",
+        /* High KD */
 
-            title:"No Achievements",
+        if (parseFloat(kdRatio) >= 2) {
 
-            desc:"Play more matches"
-        });
-    }
+            achievements.push({
 
-    achievements.forEach(a => {
+                icon: "⚡",
 
-        achievementList.innerHTML += `
-            <div class="achievement">
+                title: "High KD",
 
-                <div>
+                desc: "KD above 2.0"
+            });
+        }
 
-                    <h4>
-                        ${a.icon} ${a.title}
-                    </h4>
 
-                    <p>
-                        ${a.desc}
-                    </p>
+        /* No achievements */
+
+        if (achievements.length === 0) {
+
+            achievements.push({
+
+                icon: "❌",
+
+                title: "No Achievements",
+
+                desc: "Play more matches"
+            });
+        }
+
+
+        /* Render achievements */
+
+        achievements.forEach(achievement => {
+
+            achievementList.innerHTML += `
+
+                <div class="achievement">
+
+                    <div>
+
+                        <h4>
+                            ${achievement.icon}
+                            ${achievement.title}
+                        </h4>
+
+                        <p>
+                            ${achievement.desc}
+                        </p>
+
+                    </div>
 
                 </div>
 
-            </div>
-        `;
-    });
+            `;
+        });
+    }
 
-    /* =========================
+
+    /* =====================================================
        RECENT ACTIVITY
-    ========================= */
+    ===================================================== */
 
     const recentActivity =
         document.getElementById(
             "recentActivity"
         );
 
-    recentActivity.innerHTML = "";
 
-    if(!usingPubgData){
+    if (recentActivity) {
 
-        [...filteredMatches]
-            .reverse()
-            .slice(0,5)
-            .forEach(match => {
+        recentActivity.innerHTML = "";
+
+
+        /*
+         * Sort newest first.
+         *
+         * Do NOT use reverse() here because the
+         * backend may already return newest first.
+         */
+
+        const recentMatches =
+            [...filteredMatches]
+                .sort(
+                    (a, b) => {
+
+                        const dateA =
+                            new Date(
+                                a.playedAt || 0
+                            );
+
+                        const dateB =
+                            new Date(
+                                b.playedAt || 0
+                            );
+
+                        return dateB - dateA;
+                    }
+                )
+                .slice(0, 5);
+
+
+        if (recentMatches.length === 0) {
+
+            recentActivity.innerHTML = `
+
+                <div class="activity-item">
+
+                    <div class="activity-left">
+
+                        <div class="activity-icon">
+                            🎮
+                        </div>
+
+                        <div class="activity-info">
+
+                            <strong>
+                                No Matches
+                            </strong>
+
+                            <span>
+                                Play a match to see activity
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        } else {
+
+
+            recentMatches.forEach(match => {
+
+                const score =
+                    Number(
+                        match.score || 0
+                    );
+
+
+                /*
+                 * Online/API vs Manual badge.
+                 */
+
+                const source =
+                    match.source === "API"
+                        ? "ONLINE"
+                        : "MANUAL";
+
 
                 recentActivity.innerHTML += `
+
                     <div class="activity-item">
 
                         <div class="activity-left">
 
                             <div class="activity-icon">
-                                ${match.win ? "🏆" : "🎯"}
+
+                                ${
+                                    match.win === true
+                                        ? "🏆"
+                                        : "🎯"
+                                }
+
                             </div>
+
 
                             <div class="activity-info">
 
                                 <strong>
-                                    ${match.gameName}
+
+                                    ${
+                                        match.gameName ||
+                                        "Unknown Game"
+                                    }
+
                                 </strong>
 
+
                                 <span>
-                                    ${match.win
-                                        ? "Victory"
-                                        : "Defeat"}
+
+                                    ${
+                                        match.win === true
+                                            ? "Victory"
+                                            : "Defeat"
+                                    }
+
+                                    ·
+
+                                    ${source}
+
                                 </span>
 
                             </div>
 
                         </div>
 
+
                         <div class="activity-score">
-                            ${match.score || 0}
+
+                            ${score}
+
                         </div>
 
                     </div>
+
                 `;
             });
-
-    }else{
-
-        recentActivity.innerHTML = `
-            <div class="activity-item">
-
-                <div class="activity-left">
-
-                    <div class="activity-icon">
-                        🎮
-                    </div>
-
-                    <div class="activity-info">
-
-                        <strong>
-                            PUBG Connected
-                        </strong>
-
-                        <span>
-                            Live PUBG stats loaded
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-        `;
+        }
     }
 
-    /* =========================
-       CHARTS
-    ========================= */
+
+    /* =====================================================
+       CHART DATA
+    ===================================================== */
+
+    /*
+     * Charts are based directly on the same
+     * filtered matches.
+     */
 
     const labels =
-        usingPubgData
-            ? ["PUBG"]
-            : filteredMatches.map(
-                (_, i) =>
-                    "Match " + (i + 1)
-              );
+        filteredMatches.map(
+            (_, index) =>
+                "Match " + (index + 1)
+        );
+
 
     const killsData =
-        usingPubgData
-            ? [totalKills]
-            : filteredMatches.map(
-                m => m.kills || 0
-              );
+        filteredMatches.map(
+            match =>
+                Number(
+                    match.kills || 0
+                )
+        );
+
 
     const scoreData =
-        usingPubgData
-            ? [totalScore]
-            : filteredMatches.map(
-                m => m.score || 0
-              );
+        filteredMatches.map(
+            match =>
+                Number(
+                    match.score || 0
+                )
+        );
+
 
     const kdData =
-        usingPubgData
-            ? [kdRatio]
-            : filteredMatches.map(m =>
+        filteredMatches.map(match => {
 
-                m.deaths > 0
+            const kills =
+                Number(
+                    match.kills || 0
+                );
 
-                    ? (
-                        m.kills / m.deaths
-                      ).toFixed(2)
+            const deaths =
+                Number(
+                    match.deaths || 0
+                );
 
-                    : m.kills
-            );
+
+            if (deaths > 0) {
+
+                return Number(
+                    (
+                        kills / deaths
+                    ).toFixed(2)
+                );
+
+            }
+
+
+            return kills;
+        });
+
 
     const winRateData =
-        usingPubgData
-            ? [winRate]
-            : filteredMatches.map(
-                m => m.win ? 100 : 0
-              );
-
-    if(mainChart) mainChart.destroy();
-    if(kdChart) kdChart.destroy();
-    if(winRateChart) winRateChart.destroy();
-    if(scoreChart) scoreChart.destroy();
-
-    mainChart =
-        createChart(
-            "mainChart",
-            "bar",
-            labels,
-            killsData,
-            "Kills",
-            "#00ff88"
+        filteredMatches.map(
+            match =>
+                match.win === true
+                    ? 100
+                    : 0
         );
 
-    kdChart =
-        createChart(
-            "kdChart",
-            "line",
-            labels,
-            kdData,
-            "KD Ratio",
-            "#00ff88"
-        );
 
-    winRateChart =
-        createChart(
-            "winRateChart",
-            "line",
-            labels,
-            winRateData,
-            "Win Rate",
-            "#00bfff"
-        );
+    /* =====================================================
+       DESTROY OLD CHARTS
+    ===================================================== */
 
-    scoreChart =
-        createChart(
-            "scoreChart",
-            "line",
-            labels,
-            scoreData,
-            "Score",
-            "#ffd000"
-        );
+    if (mainChart) {
+
+        mainChart.destroy();
+
+        mainChart = null;
+    }
+
+
+    if (kdChart) {
+
+        kdChart.destroy();
+
+        kdChart = null;
+    }
+
+
+    if (winRateChart) {
+
+        winRateChart.destroy();
+
+        winRateChart = null;
+    }
+
+
+    if (scoreChart) {
+
+        scoreChart.destroy();
+
+        scoreChart = null;
+    }
+
+
+    /* =====================================================
+       CREATE CHARTS
+    ===================================================== */
+
+    if (
+        document.getElementById(
+            "mainChart"
+        )
+    ) {
+
+        mainChart =
+            createChart(
+                "mainChart",
+                "bar",
+                labels,
+                killsData,
+                "Kills",
+                "#00ff88"
+            );
+    }
+
+
+    if (
+        document.getElementById(
+            "kdChart"
+        )
+    ) {
+
+        kdChart =
+            createChart(
+                "kdChart",
+                "line",
+                labels,
+                kdData,
+                "KD Ratio",
+                "#00ff88"
+            );
+    }
+
+
+    if (
+        document.getElementById(
+            "winRateChart"
+        )
+    ) {
+
+        winRateChart =
+            createChart(
+                "winRateChart",
+                "line",
+                labels,
+                winRateData,
+                "Win Rate",
+                "#00bfff"
+            );
+    }
+
+
+    if (
+        document.getElementById(
+            "scoreChart"
+        )
+    ) {
+
+        scoreChart =
+            createChart(
+                "scoreChart",
+                "line",
+                labels,
+                scoreData,
+                "Score",
+                "#ffd000"
+            );
+    }
 }
 
-/* =========================
+
+/* =========================================================
    CHART FACTORY
-========================= */
+========================================================= */
 
 function createChart(
     id,
@@ -569,82 +917,131 @@ function createChart(
     data,
     label,
     color
-){
+) {
+
+    const canvas =
+        document.getElementById(id);
+
+
+    if (!canvas) {
+
+        return null;
+    }
+
 
     return new Chart(
 
-        document.getElementById(id),
+        canvas,
 
         {
-            type:type,
 
-            data:{
-                labels:labels,
+            type: type,
 
-                datasets:[{
 
-                    label:label,
+            data: {
 
-                    data:data,
+                labels: labels,
 
-                    borderColor:color,
 
-                    backgroundColor:
-                        color + "33",
+                datasets: [
 
-                    borderWidth:3,
+                    {
 
-                    tension:0.4,
+                        label: label,
 
-                    fill:true
-                }]
+                        data: data,
+
+                        borderColor: color,
+
+                        backgroundColor:
+                            color + "33",
+
+                        borderWidth: 3,
+
+                        tension: 0.4,
+
+                        fill: true
+
+                    }
+
+                ]
+
             },
 
-            options:{
 
-                responsive:true,
+            options: {
 
-                maintainAspectRatio:false,
+                responsive: true,
 
-                plugins:{
-                    legend:{
-                        labels:{
-                            color:"white"
+                maintainAspectRatio: false,
+
+
+                plugins: {
+
+                    legend: {
+
+                        labels: {
+
+                            color: "white"
+
                         }
+
                     }
+
                 },
 
-                scales:{
-                    x:{
-                        ticks:{
-                            color:"white"
+
+                scales: {
+
+                    x: {
+
+                        ticks: {
+
+                            color: "white"
+
                         }
+
                     },
 
-                    y:{
-                        beginAtZero:true,
 
-                        ticks:{
-                            color:"white"
+                    y: {
+
+                        beginAtZero: true,
+
+
+                        ticks: {
+
+                            color: "white"
+
                         }
+
                     }
+
                 }
+
             }
+
         }
+
     );
 }
 
-/* =========================
+
+/* =========================================================
    FILTER EVENT
-========================= */
+========================================================= */
 
-chartGameSelect.addEventListener(
-    "change",
-    renderDashboard
-);
+if (chartGameSelect) {
 
-/* =========================
+    chartGameSelect.addEventListener(
+        "change",
+        renderDashboard
+    );
+}
+
+
+/* =========================================================
    START
-========================= */
+========================================================= */
 
 loadDashboard();

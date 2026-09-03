@@ -1,5 +1,4 @@
 const GAMES = [
-
     {
         id: 1,
         name: "PUBG",
@@ -10,7 +9,6 @@ const GAMES = [
         manual: true,
         connected: true
     },
-
     {
         id: 2,
         name: "Valorant",
@@ -19,9 +17,8 @@ const GAMES = [
         rating: "9.0",
         img: "./images/games/Valorant.jpg",
         manual: true,
-        connected: true
+        connected: false
     },
-
     {
         id: 3,
         name: "Elden Ring",
@@ -32,7 +29,6 @@ const GAMES = [
         manual: true,
         connected: false
     },
-
     {
         id: 4,
         name: "CS2",
@@ -41,9 +37,8 @@ const GAMES = [
         rating: "9.1",
         img: "./images/games/CS2.jpg",
         manual: true,
-        connected: true
+        connected: false
     },
-
     {
         id: 5,
         name: "League of Legends",
@@ -54,7 +49,6 @@ const GAMES = [
         manual: true,
         connected: true
     },
-
     {
         id: 6,
         name: "Fortnite",
@@ -63,18 +57,16 @@ const GAMES = [
         rating: "9.0",
         img: "./images/games/Fortnite.jpg",
         manual: true,
-        connected: true
+        connected: false
     },
-
-     {
-            id: 7,
-            name: "Teamfight Tactics",
-            genre: "Strategy",
-            players: "80M+",
-            rating: "9.1",
-            img: "./images/games/TFT.jpg",
-            manual: false,
-            connected: true
-        }
-
+    {
+        id: 7,
+        name: "Teamfight Tactics",
+        genre: "Strategy",
+        players: "80M+",
+        rating: "9.1",
+        img: "./images/games/TFT.jpg",
+        manual: true,
+        connected: true
+    }
 ];

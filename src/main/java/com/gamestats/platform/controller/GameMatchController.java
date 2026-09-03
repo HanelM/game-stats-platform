@@ -92,6 +92,27 @@ public class GameMatchController {
                 sortBy
         );
     }
+
+
+    // =========================
+// GET ALL MATCHES
+// =========================
+
+    @Operation(
+            summary = "Get all player matches",
+            description = "Returns all manual and connected game matches for the authenticated player."
+    )
+    @GetMapping("/all")
+    public List<GameMatchResponse> getAllMyMatches(
+            Authentication authentication
+    ) {
+
+        return gameMatchService
+                .getAllPlayerMatches(authentication.getName())
+                .stream()
+                .map(GameMatchMapper::toResponse)
+                .toList();
+    }
     // =========================
     // STATS
     // =========================
@@ -257,4 +278,6 @@ public class GameMatchController {
                 .map(GameMatchMapper::toResponse)
                 .toList();
     }
+
+
 }

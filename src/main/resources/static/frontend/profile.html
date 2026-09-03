@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Profile</title>
 
     <link rel="stylesheet" href="css/profile.css">
-
 </head>
 
 <body>
@@ -19,54 +17,85 @@
 
         <div class="profile-top">
 
-            <div id="profile-avatar"
-                 class="profile-avatar">
+            <div id="profile-avatar" class="profile-avatar">
+                M
             </div>
 
             <div>
-
-                <h1 id="profile-username">
-                    Username
-                </h1>
-
-                <p id="profile-email">
-                    user@email.com
-                </p>
-
+                <h1 id="profile-username">Username</h1>
+                <p id="profile-email">user@email.com</p>
             </div>
 
         </div>
 
+
+        <div class="profile-info">
+
+            <div>
+                <strong>Professional Gamer Statistics</strong>
+            </div>
+
+            <div>
+                📧 Email:
+                <span id="profile-email-info"></span>
+            </div>
+
+            <div>
+                📅 Member Since:
+                <span id="member-since"></span>
+            </div>
+
+        </div>
+
+
+        <div class="xp-section">
+
+            <div class="xp-header">
+                <span>XP Progress</span>
+                <span id="xp-text">380 / 1000 XP</span>
+            </div>
+
+            <div class="xp-bar">
+                <div
+                        id="xp-progress"
+                        class="xp-progress"
+                        style="width: 38%;">
+                </div>
+            </div>
+
+        </div>
+
+
         <div class="profile-stats">
 
             <div class="stat-box">
-
-                <h2 id="totalMatches">
-                    0
-                </h2>
-
+                <h2 id="totalMatches">0</h2>
                 <p>Total Matches</p>
-
             </div>
 
             <div class="stat-box">
-
-                <h2 id="totalWins">
-                    0
-                </h2>
-
-                <p>Total Wins</p>
-
+                <h2 id="totalWins">0</h2>
+                <p>Wins</p>
             </div>
 
             <div class="stat-box">
+                <h2 id="totalLosses">0</h2>
+                <p>Losses</p>
+            </div>
 
-                <h2 id="winRate">
-                    0%
-                </h2>
-
+            <div class="stat-box">
+                <h2 id="winRate">0%</h2>
                 <p>Win Rate</p>
+            </div>
 
+            <div class="stat-box">
+                <h2 id="totalKills">0</h2>
+                <p>Total Kills</p>
+            </div>
+
+            <div class="stat-box">
+                <h2 id="favoriteGame">-</h2>
+                <p>Favorite Game</p>
             </div>
 
         </div>
@@ -75,8 +104,8 @@
 
 </div>
 
-<script src="js/profile.js"></script>
+
+<script src="js/profile.js?v=2"></script>
 
 </body>
-
 </html>

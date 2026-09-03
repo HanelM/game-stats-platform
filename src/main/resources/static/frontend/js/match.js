@@ -1,3 +1,10 @@
+/* =========================================================
+   MANUAL MATCH ENTRY
+   Saves manual matches into the same game_matches
+   collection used by online/API matches.
+========================================================= */
+
+
 /* =========================
    ELEMENTS
 ========================= */
@@ -10,13 +17,21 @@ const dynamicFields =
 
 const message =
     document.getElementById("match-message");
+
+
+/* =========================
+   API
+========================= */
+
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
-/* =========================
+
+
+/* =========================================================
    GAME CONFIGS
-========================= */
+========================================================= */
 
 const gameConfigs = {
 
@@ -73,7 +88,9 @@ const gameConfigs = {
             type: "text",
             placeholder: "28m"
         }
+
     ],
+
 
     "CS2": [
 
@@ -121,7 +138,9 @@ const gameConfigs = {
             min: 0,
             max: 100
         }
+
     ],
+
 
     "Valorant": [
 
@@ -169,7 +188,9 @@ const gameConfigs = {
             min: 0,
             max: 100
         }
+
     ],
+
 
     "League of Legends": [
 
@@ -217,19 +238,28 @@ const gameConfigs = {
             min: 0,
             max: 100000
         }
+
     ]
+
 };
 
-/* =========================
+
+/* =========================================================
    LOAD GAME FIELDS
-========================= */
+========================================================= */
 
 function loadGameFields() {
 
     dynamicFields.innerHTML = "";
 
+
     const selectedGame =
         gameInput.value;
+
+
+    /* =========================
+       NO GAME
+    ========================= */
 
     if (!selectedGame) {
 
@@ -240,13 +270,40 @@ function loadGameFields() {
                 Select a game to load match fields
 
             </p>
+
         `;
 
         return;
     }
 
+
+    /* =========================
+       CHECK CONFIG
+    ========================= */
+
     const fields =
         gameConfigs[selectedGame];
+
+
+    if (!fields) {
+
+        dynamicFields.innerHTML = `
+
+            <p class="choose-game-text">
+
+                This game does not support manual match entry.
+
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    /* =========================
+       CREATE INPUTS
+    ========================= */
 
     fields.forEach(field => {
 
@@ -254,7 +311,7 @@ function loadGameFields() {
 
             <div class="input-group">
 
-                <label>
+                <label for="${field.id}">
                     ${field.label}
                 </label>
 
@@ -262,95 +319,215 @@ function loadGameFields() {
                     type="${field.type}"
                     id="${field.id}"
                     placeholder="${field.placeholder}"
+                    ${field.type === "number"
+                        ? `min="${field.min}" max="${field.max}"`
+                        : ""}
                 >
 
             </div>
+
         `;
     });
 }
 
-/* =========================
+
+/* =========================================================
    GAME CHANGE
-========================= */
+========================================================= */
 
-gameInput.addEventListener(
-    "change",
-    loadGameFields
-);
+if (gameInput) {
 
-/* =========================
+    gameInput.addEventListener(
+        "change",
+        loadGameFields
+    );
+
+}
+
+
+/* =========================================================
    SHOW ERROR
-========================= */
+========================================================= */
 
 function showError(text) {
 
+    if (!message) {
+        return;
+    }
+
+
     message.innerText =
         text;
+
 
     message.style.color =
         "#ff4d4d";
 }
 
-/* =========================
+
+/* =========================================================
    SHOW SUCCESS
-========================= */
+========================================================= */
 
 function showSuccess(text) {
 
+    if (!message) {
+        return;
+    }
+
+
     message.innerText =
         text;
+
 
     message.style.color =
         "#00ff88";
 }
 
-/* =========================
+
+/* =========================================================
    SAVE MATCH
-========================= */
+========================================================= */
 
 async function saveMatch() {
+
+    /* =========================
+       TOKEN
+    ========================= */
 
     const token =
         localStorage.getItem("token");
 
-    const selectedGame =
-        gameInput.value;
 
-    const result =
-        document.getElementById("result").value;
-
-    if (!selectedGame) {
+    if (!token) {
 
         showError(
-            "Please select a game"
+            "You must be logged in to add a match."
         );
 
         return;
     }
 
+
+    /* =========================
+       GAME
+    ========================= */
+
+    const selectedGame =
+        gameInput.value;
+
+
+    /* =========================
+       RESULT
+    ========================= */
+
+    const resultElement =
+        document.getElementById(
+            "result"
+        );
+
+
+    if (!resultElement) {
+
+        showError(
+            "Result field not found."
+        );
+
+        return;
+    }
+
+
+    const result =
+        resultElement.value;
+
+
+    /* =========================
+       VALIDATE GAME
+    ========================= */
+
+    if (!selectedGame) {
+
+        showError(
+            "Please select a game."
+        );
+
+        return;
+    }
+
+
     const config =
         gameConfigs[selectedGame];
+
+
+    if (!config) {
+
+        showError(
+            "This game does not support manual match entry."
+        );
+
+        return;
+    }
+
+
+    /* =========================
+       VALIDATE RESULT
+    ========================= */
+
+    if (
+        result !== "WIN" &&
+        result !== "LOSS"
+    ) {
+
+        showError(
+            "Please select WIN or LOSS."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       BASE MATCH DATA
+    ===================================================== */
 
     let matchData = {
 
         gameName: selectedGame,
 
         win: result === "WIN"
+
     };
 
-    /* =========================
-       VALIDATE FIELDS
-    ========================= */
+
+    /* =====================================================
+       VALIDATE DYNAMIC FIELDS
+    ===================================================== */
 
     for (const field of config) {
 
         const element =
-            document.getElementById(field.id);
+            document.getElementById(
+                field.id
+            );
 
-        if (!element) continue;
+
+        if (!element) {
+
+            showError(
+                `${field.label} field is missing.`
+            );
+
+            return;
+        }
+
 
         let value =
-            element.value;
+            element.value.trim();
+
+
+        /* =========================
+           REQUIRED
+        ========================= */
 
         if (
             value === "" ||
@@ -358,62 +535,131 @@ async function saveMatch() {
         ) {
 
             showError(
-                `${field.label} is required`
+                `${field.label} is required.`
             );
 
             return;
         }
 
-        /* NUMBER VALIDATION */
 
-        if (field.type === "number") {
+        /* =========================
+           NUMBER
+        ========================= */
 
-            value = Number(value);
+        if (
+            field.type === "number"
+        ) {
 
-            if (isNaN(value)) {
+            value =
+                Number(value);
+
+
+            if (
+                !Number.isFinite(value)
+            ) {
 
                 showError(
-                    `${field.label} must be a number`
+                    `${field.label} must be a number.`
                 );
 
                 return;
             }
 
-            if (value < field.min) {
+
+            if (
+                value < field.min
+            ) {
 
                 showError(
-                    `${field.label} cannot be lower than ${field.min}`
+                    `${field.label} cannot be lower than ${field.min}.`
                 );
 
                 return;
             }
 
-            if (value > field.max) {
+
+            if (
+                value > field.max
+            ) {
 
                 showError(
-                    `${field.label} cannot be higher than ${field.max}`
+                    `${field.label} cannot be higher than ${field.max}.`
+                );
+
+                return;
+            }
+
+
+            /*
+             * Make sure integer fields
+             * actually contain integers.
+             */
+
+            if (
+                !Number.isInteger(value)
+            ) {
+
+                showError(
+                    `${field.label} must be a whole number.`
+                );
+
+                return;
+            }
+
+        }
+
+
+        /* =========================
+           TEXT
+        ========================= */
+
+        if (
+            field.type === "text"
+        ) {
+
+            value =
+                value.trim();
+
+
+            if (!value) {
+
+                showError(
+                    `${field.label} is required.`
                 );
 
                 return;
             }
         }
 
-        matchData[field.id] = value;
+
+        matchData[field.id] =
+            value;
     }
 
-    /* =========================
-       PUBG LOGIC
-    ========================= */
 
-    if (selectedGame === "PUBG") {
+    /* =====================================================
+       PUBG VALIDATION
+    ===================================================== */
+
+    if (
+        selectedGame === "PUBG"
+    ) {
 
         const placement =
-            Number(matchData.placement);
+            Number(
+                matchData.placement
+            );
+
 
         const deaths =
-            Number(matchData.deaths);
+            Number(
+                matchData.deaths
+            );
 
-        /* WIN = PLACE 1 */
+
+        /* =========================
+           WIN = PLACE 1
+        ========================= */
 
         if (
             result === "WIN" &&
@@ -421,13 +667,16 @@ async function saveMatch() {
         ) {
 
             showError(
-                "If you won, placement must be 1"
+                "If you won, placement must be 1."
             );
 
             return;
         }
 
-        /* LOSS CANNOT BE PLACE 1 */
+
+        /* =========================
+           LOSS CANNOT BE PLACE 1
+        ========================= */
 
         if (
             result === "LOSS" &&
@@ -435,13 +684,17 @@ async function saveMatch() {
         ) {
 
             showError(
-                "You cannot be 1st place with LOSS"
+                "You cannot be 1st place with LOSS."
             );
 
             return;
         }
 
-        /* WIN CANNOT HAVE 3 DEATHS */
+
+        /*
+         * Keep your original PUBG
+         * validation rule.
+         */
 
         if (
             result === "WIN" &&
@@ -449,169 +702,353 @@ async function saveMatch() {
         ) {
 
             showError(
-                "You cannot win PUBG with 3 deaths"
+                "You cannot win PUBG with 3 deaths."
             );
 
             return;
         }
+
     }
 
-    /* =========================
-       CS2 LOGIC
-    ========================= */
 
-    if (selectedGame === "CS2") {
+    /* =====================================================
+       CS2 VALIDATION
+    ===================================================== */
+
+    if (
+        selectedGame === "CS2"
+    ) {
+
+        const kills =
+            Number(
+                matchData.kills || 0
+            );
+
+
+        const headshots =
+            Number(
+                matchData.headshots || 0
+            );
+
 
         if (
-            matchData.headshots >
-            matchData.kills
+            headshots > kills
         ) {
 
             showError(
-                "Headshots cannot be higher than kills"
+                "Headshots cannot be higher than kills."
             );
 
             return;
         }
+
     }
 
-    /* =========================
-       VALORANT LOGIC
-    ========================= */
 
-    if (selectedGame === "Valorant") {
+    /* =====================================================
+       VALORANT VALIDATION
+    ===================================================== */
+
+    if (
+        selectedGame === "Valorant"
+    ) {
+
+        const kills =
+            Number(
+                matchData.kills || 0
+            );
+
+
+        const headshots =
+            Number(
+                matchData.headshots || 0
+            );
+
+
+        const combatScore =
+            Number(
+                matchData.combatScore || 0
+            );
+
 
         if (
-            matchData.headshots >
-            matchData.kills
+            headshots > kills
         ) {
 
             showError(
-                "Headshots cannot be higher than kills"
+                "Headshots cannot be higher than kills."
             );
 
             return;
         }
 
+
         if (
-            matchData.combatScore > 1000
+            combatScore > 1000
         ) {
 
             showError(
-                "Combat score is unrealistically high"
+                "Combat score is unrealistically high."
             );
 
             return;
         }
+
     }
 
-    /* =========================
-       LOL LOGIC
-    ========================= */
+
+    /* =====================================================
+       LEAGUE OF LEGENDS VALIDATION
+    ===================================================== */
 
     if (
         selectedGame ===
         "League of Legends"
     ) {
 
+        const cs =
+            Number(
+                matchData.cs || 0
+            );
+
+
+        const gold =
+            Number(
+                matchData.gold || 0
+            );
+
+
         if (
-            matchData.cs > 600
+            cs > 600
         ) {
 
             showError(
-                "Creep score is unrealistically high"
+                "Creep score is unrealistically high."
             );
 
             return;
         }
 
+
         if (
-            matchData.gold > 50000
+            gold > 50000
         ) {
 
             showError(
-                "Gold earned is unrealistically high"
+                "Gold earned is unrealistically high."
             );
 
             return;
         }
+
     }
 
-    /* =========================
-       SAVE REQUEST
-    ========================= */
+
+    /* =====================================================
+       REMOVE OLD MESSAGE
+    ===================================================== */
+
+    if (message) {
+
+        message.innerText = "";
+
+    }
+
+
+    /* =====================================================
+       DISABLE BUTTON
+    ===================================================== */
+
+    const saveButton =
+        document.getElementById(
+            "save-match-btn"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.disabled = true;
+
+        saveButton.dataset.originalText =
+            saveButton.innerText;
+
+        saveButton.innerText =
+            "Saving...";
+
+    }
+
+
+    /* =====================================================
+       SEND TO BACKEND
+    ===================================================== */
 
     try {
 
-        const response = await fetch(
-            `${API_URL}/api/matches`,
-            {
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "Authorization":
-                        "Bearer " + token
-                },
-
-                body: JSON.stringify(matchData)
-            }
+        console.log(
+            "Saving manual match:",
+            matchData
         );
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/matches`,
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " + token
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            matchData
+                        )
+                }
+            );
+
+
+        /* =================================================
+           SUCCESS
+        ================================================= */
 
         if (response.ok) {
 
             showSuccess(
-                "Match added successfully"
+                "Match added successfully."
             );
 
-            setTimeout(() => {
 
-                window.location.href =
-                    "matches.html";
+            /*
+             * Redirect to unified match history.
+             */
 
-            }, 1200);
-        }
+            setTimeout(
+                () => {
 
-        else {
+                    window.location.href =
+                        "matches.html";
 
-            showError(
-                "Failed to save match"
+                },
+                1200
             );
+
+
+            return;
         }
+
+
+        /* =================================================
+           BACKEND ERROR
+        ================================================= */
+
+        let errorMessage =
+            "Failed to save match.";
+
+
+        try {
+
+            const errorData =
+                await response.json();
+
+
+            if (
+                errorData.message
+            ) {
+
+                errorMessage =
+                    errorData.message;
+
+            } else if (
+                errorData.error
+            ) {
+
+                errorMessage =
+                    errorData.error;
+
+            }
+
+        } catch (jsonError) {
+
+            /*
+             * Backend response wasn't JSON.
+             * Keep generic error.
+             */
+
+        }
+
+
+        showError(
+            errorMessage
+        );
+
 
     } catch (error) {
 
-        console.log(error);
+        console.error(
+            "Save match error:",
+            error
+        );
+
 
         showError(
-            "Server error"
+            "Server error. Please try again."
         );
+
+    } finally {
+
+        /* =========================
+           ENABLE BUTTON
+        ========================= */
+
+        if (saveButton) {
+
+            saveButton.disabled = false;
+
+            saveButton.innerText =
+                saveButton.dataset.originalText ||
+                "Save Match";
+
+        }
+
     }
 }
 
-/* =========================
+
+/* =========================================================
    INITIAL LOAD
-========================= */
+========================================================= */
 
 const savedGame =
-    localStorage.getItem("selectedGame");
+    localStorage.getItem(
+        "selectedGame"
+    );
 
-if (savedGame) {
+
+if (
+    savedGame &&
+    gameConfigs[savedGame]
+) {
 
     gameInput.value =
         savedGame;
 
+
     loadGameFields();
+
 
     localStorage.removeItem(
         "selectedGame"
     );
-}
 
-else {
+} else {
 
     loadGameFields();
+
 }

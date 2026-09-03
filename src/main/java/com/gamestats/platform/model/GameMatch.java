@@ -20,6 +20,11 @@ public class GameMatch {
 
     private String gameName;
 
+    private String source;
+    private String connectedAccount;
+    private String externalMatchId;
+    private String platform;
+
     /* =========================
        COMMON
     ========================= */

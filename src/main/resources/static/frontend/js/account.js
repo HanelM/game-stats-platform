@@ -536,27 +536,41 @@ async function loadProfileStats(){
     try{
 
         const response = await fetch(
-            `${API_URL}/api/matches/my`,
+            `${API_URL}/api/matches/all`,
             {
-                headers:{
+                headers: {
                     "Authorization":
                         "Bearer " + token
                 }
             }
         );
 
+        if (!response.ok) {
+            throw new Error(
+                `Failed to load all matches (${response.status})`
+            );
+        }
+
         const data =
             await response.json();
 
         const matches =
-            data.content || [];
+            Array.isArray(data)
+                ? data
+                : (data.content || []);
+
+        console.log("========================================");
+        console.log("ACCOUNT PROFILE STATISTICS");
+        console.log("Total matches loaded:", matches.length);
+        console.log("All matches:", matches);
+        console.log("========================================");
 
         const totalMatches =
             matches.length;
 
         const wins =
             matches.filter(
-                m => m.win
+                m => m.win === true
             ).length;
 
         const losses =

@@ -15,6 +15,21 @@ public class GameMatchResponse {
 
     private String gameName;
 
+    /*
+     * MANUAL = manually entered match
+     * API    = imported from connected game account
+     */
+    private String source;
+
+    /*
+     * The external account used for online/API matches.
+     * Example:
+     * PUBG -> shroud
+     * LoL  -> PlayerName#EUW
+     * TFT  -> PlayerName#EUW
+     */
+    private String connectedAccount;
+
     private Integer score;
 
     private Integer kills;
@@ -25,7 +40,10 @@ public class GameMatchResponse {
 
     private LocalDateTime playedAt;
 
-    /* PUBG */
+
+    /* =========================
+       PUBG
+    ========================= */
 
     private Integer placement;
 
@@ -33,17 +51,26 @@ public class GameMatchResponse {
 
     private String survivalTime;
 
-    /* CS2 / VALORANT */
+
+    /* =========================
+       CS2 / VALORANT
+    ========================= */
 
     private Integer assists;
 
     private Integer headshots;
 
-    /* VALORANT */
+
+    /* =========================
+       VALORANT
+    ========================= */
 
     private Integer combatScore;
 
-    /* LEAGUE OFLEGENDS */
+
+    /* =========================
+       LEAGUE OF LEGENDS
+    ========================= */
 
     private Integer cs;
 

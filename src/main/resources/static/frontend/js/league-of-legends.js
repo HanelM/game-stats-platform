@@ -1,7 +1,10 @@
-const lolConnectBtn =
-    document.getElementById(
-        "lolConnectBtn"
-    );
+
+/* =========================================================
+   LEAGUE OF LEGENDS
+   Riot API connection
+========================================================= */
+
+let lolConnectBtn;
 
 const LOL_API_URL =
     window.location.hostname === "localhost" ||
@@ -10,107 +13,243 @@ const LOL_API_URL =
         : "https://game-stats-platform.onrender.com";
 
 
-/* =========================
-   LOAD SAVED LOL ACCOUNT
-========================= */
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const savedStats =
-        JSON.parse(
-            localStorage.getItem(
-                "lolStats"
-            )
+    lolConnectBtn =
+        document.getElementById("lolConnectBtn");
+
+    if (!lolConnectBtn) {
+        console.error("LOL: lolConnectBtn not found.");
+        return;
+    }
+
+    console.log("LOL: button initialized.");
+
+    lolConnectBtn.addEventListener(
+        "click",
+        handleLolConnection
+    );
+
+    loadLolConnection();
+});
+
+
+/* =========================================================
+   LOAD CONNECTION
+========================================================= */
+
+async function loadLolConnection() {
+
+    const token =
+        localStorage.getItem("token");
+
+    if (!token) {
+
+        setLolDisconnected();
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${LOL_API_URL}/api/games/connected`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token,
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            if (response.status === 401) {
+
+                setLolDisconnected();
+
+                return;
+            }
+
+            throw new Error(
+                `Connected games request failed: ${response.status}`
+            );
+        }
+
+
+        const accounts =
+            await response.json();
+
+
+        console.log(
+            "LOL CONNECTED ACCOUNTS:",
+            accounts
         );
 
-    if (savedStats) {
 
-        loadLolData(savedStats);
+        const lolAccount =
+            accounts.find(
+                account =>
+                    account.game &&
+                    account.game.toLowerCase() ===
+                        "leagueoflegends" &&
+                    account.connected === true
+            );
+
+
+        if (!lolAccount) {
+
+            setLolDisconnected();
+
+            return;
+        }
+
 
         document.getElementById(
             "lolConnectionStatus"
         ).innerText =
             "Already Connected";
 
+
         lolConnectBtn.innerText =
             "Disconnect";
+
+
+        await loadLolStats(
+            lolAccount.accountName
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "LOL CONNECTION ERROR:",
+            error
+        );
+
+        setLolDisconnected();
+    }
+}
+
+
+/* =========================================================
+   CONNECT / DISCONNECT
+========================================================= */
+
+async function handleLolConnection() {
+
+    const token =
+        localStorage.getItem("token");
+
+
+    if (!token) {
+
+        alert(
+            "Please login before connecting your League of Legends account."
+        );
+
+        return;
     }
 
-});
 
+    try {
 
-/* =========================
-   CONNECT / DISCONNECT
-========================= */
+        /* -------------------------------------------------
+           CHECK CURRENT CONNECTION
+        ------------------------------------------------- */
 
-lolConnectBtn.addEventListener(
-    "click",
-    async () => {
-
-        const savedStats =
-            JSON.parse(
-                localStorage.getItem(
-                    "lolStats"
-                )
+        const connectedResponse =
+            await fetch(
+                `${LOL_API_URL}/api/games/connected`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token,
+                        "Accept":
+                            "application/json"
+                    }
+                }
             );
 
 
-        /* =========================
+        if (!connectedResponse.ok) {
+
+            throw new Error(
+                `Unable to check connected games: ${connectedResponse.status}`
+            );
+        }
+
+
+        const accounts =
+            await connectedResponse.json();
+
+
+        const lolAccount =
+            accounts.find(
+                account =>
+                    account.game &&
+                    account.game.toLowerCase() ===
+                        "leagueoflegends" &&
+                    account.connected === true
+            );
+
+
+        /* =================================================
            DISCONNECT
-        ========================= */
+        ================================================= */
 
-        if (savedStats) {
+        if (lolAccount) {
 
-            localStorage.removeItem(
-                "lolStats"
-            );
-
-            document.getElementById(
-                "lolConnectionStatus"
-            ).innerText =
-                "Not Connected";
-
-            document.getElementById(
-                "lolStatsContainer"
-            ).classList.add(
-                "hidden"
-            );
-
-            document.getElementById(
-                "lolEmptyState"
-            ).classList.remove(
-                "hidden"
-            );
+            lolConnectBtn.disabled = true;
 
             lolConnectBtn.innerText =
-                "Connect Account";
+                "Disconnecting...";
+
+
+            const response =
+                await fetch(
+                    `${LOL_API_URL}/api/games/leagueoflegends/disconnect`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                throw new Error(
+                    errorText ||
+                    `League of Legends disconnect failed: ${response.status}`
+                );
+            }
+
+
+            setLolDisconnected();
 
             return;
         }
 
 
-        /* =========================
-           CHECK LOGIN
-        ========================= */
-
-        const token =
-            localStorage.getItem(
-                "token"
-            );
-
-        if (!token) {
-
-            alert(
-                "Please login before connecting your League of Legends account."
-            );
-
-            return;
-        }
-
-
-        /* =========================
+        /* =================================================
            CONNECT
-        ========================= */
+        ================================================= */
 
         const riotId =
             prompt(
@@ -125,21 +264,6 @@ lolConnectBtn.addEventListener(
 
         const cleanRiotId =
             riotId.trim();
-
-
-        if (!cleanRiotId) {
-            return;
-        }
-
-
-        if (!cleanRiotId.includes("#")) {
-
-            alert(
-                "Please enter Riot ID like: PlayerName#EUW"
-            );
-
-            return;
-        }
 
 
         const parts =
@@ -160,137 +284,338 @@ lolConnectBtn.addEventListener(
         }
 
 
-        try {
+        lolConnectBtn.disabled = true;
 
-            const response =
-                await fetch(
-
-                    `${LOL_API_URL}/api/games/leagueoflegends/player/${encodeURIComponent(cleanRiotId)}`,
-
-                    {
-                        method: "GET",
-
-                        headers: {
-
-                            "Authorization":
-                                "Bearer " + token,
-
-                            "Accept":
-                                "application/json"
-                        }
-                    }
-                );
+        lolConnectBtn.innerText =
+            "Connecting...";
 
 
-            if (!response.ok) {
-
-                const errorText =
-                    await response.text();
-
-                console.error(
-                    "LOL RESPONSE:",
-                    response.status,
-                    errorText
-                );
-
-                throw new Error(
-                    `LoL request failed: ${response.status} - ${errorText}`
-                );
-            }
+        console.log(
+            "Connecting League of Legends:",
+            cleanRiotId
+        );
 
 
-            const data =
-                await response.json();
+        /* -------------------------------------------------
+           BACKEND CONNECT
+        ------------------------------------------------- */
 
-
-            localStorage.setItem(
-                "lolStats",
-                JSON.stringify(data)
+        const connectResponse =
+            await fetch(
+                `${LOL_API_URL}/api/games/leagueoflegends/connect`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token,
+                        "Content-Type":
+                            "application/json",
+                        "Accept":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        playerName:
+                            cleanRiotId
+                    })
+                }
             );
 
 
-            loadLolData(data);
+        if (!connectResponse.ok) {
+
+            const errorText =
+                await connectResponse.text();
+
+            console.error(
+                "LOL CONNECT RESPONSE:",
+                connectResponse.status,
+                errorText
+            );
+
+            throw new Error(
+                errorText ||
+                `League of Legends connection failed: ${connectResponse.status}`
+            );
+        }
 
 
-            document.getElementById(
-                "lolConnectionStatus"
-            ).innerText =
-                "Already Connected";
+        const connectData =
+            await connectResponse.json();
 
 
-            lolConnectBtn.innerText =
-                "Disconnect";
+        console.log(
+            "LOL CONNECT RESPONSE:",
+            connectData
+        );
 
 
-        } catch (error) {
+        /* -------------------------------------------------
+           LOAD STATISTICS
+        ------------------------------------------------- */
 
-              console.error(
-                  "LOL ERROR:",
-                  error
-              );
+        await loadLolStats(
+            cleanRiotId
+        );
 
-              alert(
-                  error.message ||
-                  "League of Legends request failed."
-              );
-          }
+
+        document.getElementById(
+            "lolConnectionStatus"
+        ).innerText =
+            "Already Connected";
+
+
+        lolConnectBtn.innerText =
+            "Disconnect";
+
+
+        alert(
+            `League of Legends connected successfully.\nImported matches: ${
+                connectData.importedMatches ?? 0
+            }`
+        );
 
     }
-);
+    catch (error) {
+
+        console.error(
+            "LOL ERROR:",
+            error
+        );
 
 
-/* =========================
-   LOAD LOL DATA
-========================= */
+        alert(
+            error.message ||
+            "League of Legends connection failed."
+        );
+
+
+        setLolDisconnected();
+
+    }
+    finally {
+
+        if (lolConnectBtn) {
+
+            lolConnectBtn.disabled =
+                false;
+        }
+    }
+}
+
+
+/* =========================================================
+   LOAD LOL STATISTICS
+========================================================= */
+
+async function loadLolStats(
+    playerName
+) {
+
+    const token =
+        localStorage.getItem("token");
+
+
+    if (!token) {
+
+        setLolDisconnected();
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${LOL_API_URL}/api/games/leagueoflegends/player/${encodeURIComponent(playerName)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token,
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "LOL STATS RESPONSE:",
+                response.status,
+                errorText
+            );
+
+            throw new Error(
+                `League of Legends statistics request failed: ${response.status}`
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "LOL DATA:",
+            data
+        );
+
+
+        loadLolData(data);
+
+    }
+    catch (error) {
+
+        console.error(
+            "LOL STATS ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Could not load League of Legends statistics."
+        );
+    }
+}
+
+
+/* =========================================================
+   DISPLAY LOL DATA
+========================================================= */
 
 function loadLolData(data) {
 
-    document.getElementById(
-        "lolEmptyState"
-    ).classList.add(
-        "hidden"
-    );
+    const emptyState =
+        document.getElementById(
+            "lolEmptyState"
+        );
+
+    const statsContainer =
+        document.getElementById(
+            "lolStatsContainer"
+        );
 
 
-    document.getElementById(
-        "lolStatsContainer"
-    ).classList.remove(
-        "hidden"
-    );
+    if (emptyState) {
+        emptyState.classList.add("hidden");
+    }
 
 
-    document.getElementById(
-        "lolKills"
-    ).innerText =
-        data.kills ?? 0;
+    if (statsContainer) {
+        statsContainer.classList.remove("hidden");
+    }
 
 
-    document.getElementById(
-        "lolWins"
-    ).innerText =
-        data.wins ?? 0;
+    const kills =
+        document.getElementById("lolKills");
+
+    const wins =
+        document.getElementById("lolWins");
+
+    const kd =
+        document.getElementById("lolKd");
+
+    const matches =
+        document.getElementById("lolMatches");
+
+    const rank =
+        document.getElementById("lolRank");
+
+    const playerName =
+        document.getElementById("lolPlayerName");
 
 
-    document.getElementById(
-        "lolKd"
-    ).innerText =
-        data.kd ?? 0;
+    if (kills)
+        kills.innerText =
+            data.kills ?? 0;
 
 
-    document.getElementById(
-        "lolMatches"
-    ).innerText =
-        data.matches ?? 0;
+    if (wins)
+        wins.innerText =
+            data.wins ?? 0;
 
 
-    document.getElementById(
-        "lolRank"
-    ).innerText =
-        data.rank ?? "Unknown";
+    if (kd)
+        kd.innerText =
+            data.kd ?? 0;
 
 
-    document.getElementById(
-        "lolPlayerName"
-    ).innerText =
-        data.playerName ?? "Unknown";
+    if (matches)
+        matches.innerText =
+            data.matches ?? 0;
+
+
+    if (rank)
+        rank.innerText =
+            data.rank ?? "Unknown";
+
+
+    if (playerName)
+        playerName.innerText =
+            data.playerName ?? "Unknown";
 }
+
+
+/* =========================================================
+   DISCONNECTED
+========================================================= */
+
+function setLolDisconnected() {
+
+    const status =
+        document.getElementById(
+            "lolConnectionStatus"
+        );
+
+
+    if (status) {
+
+        status.innerText =
+            "Not Connected";
+    }
+
+
+    if (lolConnectBtn) {
+
+        lolConnectBtn.innerText =
+            "Connect Account";
+
+        lolConnectBtn.disabled =
+            false;
+    }
+
+
+    const statsContainer =
+        document.getElementById(
+            "lolStatsContainer"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "lolEmptyState"
+        );
+
+
+    if (statsContainer) {
+
+        statsContainer.classList.add(
+            "hidden"
+        );
+    }
+
+
+    if (emptyState) {
+
+        emptyState.classList.remove(
+            "hidden"
+        );
+    }
+}
+

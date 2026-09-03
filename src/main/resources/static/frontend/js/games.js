@@ -1,163 +1,276 @@
+
 const gamesContainer =
     document.getElementById("games-container");
 
 const playedContainer =
-    document.getElementById(
-        "played-games-container"
-    );
+    document.getElementById("played-games-container");
 
 const searchInput =
     document.getElementById("search-input");
 
 const genreFilter =
     document.getElementById("genre-filter");
+
 const API_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"
         : "https://game-stats-platform.onrender.com";
+
 let playedGameNames = [];
 
-/* =========================
-   LOAD PLAYED GAMES
-========================= */
 
-async function loadPlayedGames(){
+/* =========================================================
+   LOAD ALL PLAYED GAMES
+   ========================================================= */
+
+async function loadPlayedGames() {
 
     const token =
         localStorage.getItem("token");
 
-    if(!token){
+    if (!token) {
+
+        playedContainer.innerHTML = `
+            <p class="no-results">
+                Please log in to see your played games.
+            </p>
+        `;
+
+        renderDiscoverGames(GAMES);
+
         return;
     }
 
-    try{
+    try {
 
+        /*
+         * IMPORTANT:
+         * /all returns ALL matches.
+         *
+         * /my is paginated and may return only
+         * the first 5/10 matches.
+         */
         const response = await fetch(
-            `${API_URL}/api/matches/my`,
+            `${API_URL}/api/matches/all`,
             {
-                headers:{
+                headers: {
                     "Authorization":
                         "Bearer " + token
                 }
             }
         );
 
-        const data =
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load matches: " +
+                response.status
+            );
+        }
+
+        const matches =
             await response.json();
+
+
+        /*
+         * Make sure we always have an array.
+         */
+        if (!Array.isArray(matches)) {
+
+            throw new Error(
+                "Invalid matches response"
+            );
+        }
+
 
         playedContainer.innerHTML = "";
 
-        /* UNIQUE GAME NAMES */
+
+        /* =====================================================
+           FIND UNIQUE PLAYED GAMES
+           ===================================================== */
 
         playedGameNames = [];
 
-        data.content
+        matches
             .sort(
                 (a, b) =>
-                    new Date(b.playedAt) -
-                    new Date(a.playedAt)
+                    new Date(b.playedAt || 0) -
+                    new Date(a.playedAt || 0)
             )
             .forEach(match => {
 
-                if(
+                if (!match.gameName) {
+                    return;
+                }
+
+                /*
+                 * Prevent duplicate games.
+                 */
+                if (
                     !playedGameNames.includes(
                         match.gameName
                     )
-                ){
+                ) {
+
                     playedGameNames.push(
                         match.gameName
                     );
                 }
             });
 
-        /* SHOW PLAYED GAMES */
 
-        playedGameNames.forEach(name => {
+        /* =====================================================
+           RENDER MY PLAYED GAMES
+           ===================================================== */
+
+        playedGameNames.forEach(gameName => {
 
             const game =
-                GAMES.find(
-                    g => g.name === name
-                );
+                findGame(gameName);
 
-            if(!game){
+            /*
+             * If the backend contains a game that isn't
+             * present in games-data.js, don't crash the page.
+             */
+            if (!game) {
                 return;
             }
 
-            playedContainer.innerHTML += `
-
-            <div class="game-card">
-
-                <img src="${game.img}">
-
-                <h2>${game.name}</h2>
-
-                <p>🎮 Genre: ${game.genre}</p>
-
-                <p>👥 Players: ${game.players}</p>
-
-                <p>⭐ Rating: ${game.rating}</p>
-
-                <div class="game-buttons">
-
-                    <button onclick="viewMatches('${game.name}')">
-                        View Matches
-                    </button>
-
-                    <button onclick="openMatchPage('${game.name}')">
-                        Add Match
-                    </button>
-
-                </div>
-
-            </div>
-
-            `;
+            renderPlayedGame(game);
         });
 
-        /* DISCOVER NEW GAMES */
+
+        /*
+         * No played games.
+         */
+        if (playedGameNames.length === 0) {
+
+            playedContainer.innerHTML = `
+                <p
+                    id="played-no-results"
+                    class="no-results"
+                >
+                    You haven't played any games yet.
+                </p>
+            `;
+        }
+
+
+        /* =====================================================
+           DISCOVER NEW GAMES
+           ===================================================== */
 
         const newGames =
             GAMES.filter(game =>
-                !playedGameNames.includes(
-                    game.name
+                !playedGameNames.some(
+                    playedName =>
+                        normalizeGameName(playedName) ===
+                        normalizeGameName(game.name)
                 )
             );
 
         renderDiscoverGames(newGames);
 
-    }catch(error){
 
-        console.log(error);
+        /*
+         * Apply current filters after loading.
+         */
+        filterGames();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error loading played games:",
+            error
+        );
+
+        playedContainer.innerHTML = `
+            <p class="no-results">
+                Unable to load played games.
+            </p>
+        `;
+
+        renderDiscoverGames(GAMES);
     }
 }
 
-/* =========================
-   DISCOVER GAMES
-========================= */
 
-function renderDiscoverGames(games){
+/* =========================================================
+   NORMALIZE GAME NAME
+   ========================================================= */
 
-    gamesContainer.innerHTML = "";
+function normalizeGameName(name) {
 
-    games.forEach(game => {
+    return String(name || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+}
 
-        gamesContainer.innerHTML += `
 
-        <div class="game-card">
+/* =========================================================
+   FIND GAME
+   ========================================================= */
 
-            <img src="${game.img}">
+function findGame(gameName) {
+
+    const normalized =
+        normalizeGameName(gameName);
+
+    return GAMES.find(
+        game =>
+            normalizeGameName(game.name) ===
+            normalized
+    );
+}
+
+
+/* =========================================================
+   RENDER PLAYED GAME
+   ========================================================= */
+
+function renderPlayedGame(game) {
+
+    playedContainer.innerHTML += `
+
+        <div
+            class="game-card"
+            data-game-name="${game.name}"
+            data-game-genre="${game.genre}"
+        >
+
+            <img
+                src="${game.img}"
+                alt="${game.name}"
+            >
 
             <h2>${game.name}</h2>
 
-            <p>🎮 Genre: ${game.genre}</p>
+            <p>
+                🎮 Genre: ${game.genre}
+            </p>
 
-            <p>👥 Players: ${game.players}</p>
+            <p>
+                👥 Players: ${game.players}
+            </p>
 
-            <p>⭐ Rating: ${game.rating}</p>
+            <p>
+                ⭐ Rating: ${game.rating}
+            </p>
 
             <div class="game-buttons">
 
-                <button onclick="openMatchPage('${game.name}')">
+                <button
+                    onclick="viewMatches('${escapeGameName(game.name)}')"
+                >
+                    View Matches
+                </button>
+
+                <button
+                    onclick="openMatchPage('${escapeGameName(game.name)}')"
+                >
                     Add Match
                 </button>
 
@@ -165,94 +278,94 @@ function renderDiscoverGames(games){
 
         </div>
 
+    `;
+}
+
+
+/* =========================================================
+   RENDER DISCOVER GAMES
+   ========================================================= */
+
+function renderDiscoverGames(games) {
+
+    gamesContainer.innerHTML = "";
+
+    games.forEach(game => {
+
+        gamesContainer.innerHTML += `
+
+            <div
+                class="game-card"
+                data-game-name="${game.name}"
+                data-game-genre="${game.genre}"
+            >
+
+                <img
+                    src="${game.img}"
+                    alt="${game.name}"
+                >
+
+                <h2>${game.name}</h2>
+
+                <p>
+                    🎮 Genre: ${game.genre}
+                </p>
+
+                <p>
+                    👥 Players: ${game.players}
+                </p>
+
+                <p>
+                    ⭐ Rating: ${game.rating}
+                </p>
+
+                <div class="game-buttons">
+
+                    <button
+                        onclick="openMatchPage('${escapeGameName(game.name)}')"
+                    >
+                        Add Match
+                    </button>
+
+                </div>
+
+            </div>
+
         `;
     });
 }
 
-/* =========================
-   SEARCH
-========================= */
 
-function filterGames(){
+/* =========================================================
+   ESCAPE GAME NAME
+   ========================================================= */
+
+function escapeGameName(name) {
+
+    return String(name)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+}
+
+
+/* =========================================================
+   FILTER GAMES
+   ========================================================= */
+
+function filterGames() {
 
     const search =
-        searchInput.value.toLowerCase();
+        searchInput.value
+            .trim()
+            .toLowerCase();
 
     const genre =
         genreFilter.value;
 
-    /* REMOVE OLD MESSAGES */
 
-    const oldPlayedMessage =
-        document.getElementById(
-            "played-no-results"
-        );
-
-    if(oldPlayedMessage){
-        oldPlayedMessage.remove();
-    }
-
-    const oldDiscoverMessage =
-        document.getElementById(
-            "discover-no-results"
-        );
-
-    if(oldDiscoverMessage){
-        oldDiscoverMessage.remove();
-    }
-
-    /* =========================
-       FILTER DISCOVER GAMES
-    ========================= */
-
-    const discoverGames =
-        GAMES.filter(game => {
-
-            const gameName =
-                (game.name || "")
-                .toLowerCase();
-
-            const gameGenre =
-                game.genre || "";
-
-            const matchesSearch =
-                gameName.includes(search);
-
-            const matchesGenre =
-                genre === "all" ||
-                gameGenre === genre;
-
-            const notPlayed =
-                !playedGameNames.includes(
-                    game.name
-                );
-
-            return matchesSearch &&
-                   matchesGenre &&
-                   notPlayed;
-        });
-
-    renderDiscoverGames(discoverGames);
-
-    /* DISCOVER NO RESULTS */
-
-    if(discoverGames.length === 0){
-
-        gamesContainer.innerHTML = `
-
-            <p
-                id="discover-no-results"
-                class="no-results"
-            >
-                No new games found.
-            </p>
-
-        `;
-    }
-
-    /* =========================
-       FILTER PLAYED GAMES
-    ========================= */
+    /* =====================================================
+       PLAYED GAMES
+       ===================================================== */
 
     const playedCards =
         document.querySelectorAll(
@@ -263,72 +376,163 @@ function filterGames(){
 
     playedCards.forEach(card => {
 
-        const title =
-            card.querySelector("h2")
-                .innerText
+        const gameName =
+            card.dataset.gameName
                 .toLowerCase();
 
-        const genreText =
-            card.querySelectorAll("p")[0]
-                .innerText
-                .toLowerCase();
+        const gameGenre =
+            card.dataset.gameGenre;
 
         const matchesSearch =
-            title.includes(search);
+            gameName.includes(search);
 
         const matchesGenre =
             genre === "all" ||
-            genreText.includes(
-                genre.toLowerCase()
-            );
+            gameGenre === genre;
 
-        if(matchesSearch && matchesGenre){
+        if (
+            matchesSearch &&
+            matchesGenre
+        ) {
 
-            card.style.display = "block";
+            card.style.display = "";
 
             visiblePlayedGames++;
-        }
-        else{
+
+        } else {
 
             card.style.display = "none";
         }
     });
 
-    /* PLAYED NO RESULTS */
 
-    let noResults =
+    /* =====================================================
+       PLAYED NO RESULTS MESSAGE
+       ===================================================== */
+
+    let playedNoResults =
         document.getElementById(
             "played-no-results"
         );
 
-    if(visiblePlayedGames === 0){
+    if (
+        playedCards.length > 0 &&
+        visiblePlayedGames === 0
+    ) {
 
-        if(!noResults){
+        if (!playedNoResults) {
 
-            noResults =
+            playedNoResults =
                 document.createElement("p");
 
-            noResults.id =
+            playedNoResults.id =
                 "played-no-results";
 
-            noResults.className =
+            playedNoResults.className =
                 "no-results";
 
-            noResults.innerText =
-                "No played games found.";
-
             playedContainer.appendChild(
-                noResults
+                playedNoResults
             );
         }
-    }
-    else{
 
-        if(noResults){
-            noResults.remove();
+        playedNoResults.innerText =
+            "No played games found.";
+
+    }
+    else if (playedNoResults) {
+
+        playedNoResults.remove();
+    }
+
+
+    /* =====================================================
+       DISCOVER GAMES
+       ===================================================== */
+
+    const discoverCards =
+        document.querySelectorAll(
+            "#games-container .game-card"
+        );
+
+    let visibleDiscoverGames = 0;
+
+    discoverCards.forEach(card => {
+
+        const gameName =
+            card.dataset.gameName
+                .toLowerCase();
+
+        const gameGenre =
+            card.dataset.gameGenre;
+
+        const matchesSearch =
+            gameName.includes(search);
+
+        const matchesGenre =
+            genre === "all" ||
+            gameGenre === genre;
+
+        if (
+            matchesSearch &&
+            matchesGenre
+        ) {
+
+            card.style.display = "";
+
+            visibleDiscoverGames++;
+
+        } else {
+
+            card.style.display = "none";
         }
+    });
+
+
+    /* =====================================================
+       DISCOVER NO RESULTS
+       ===================================================== */
+
+    let discoverNoResults =
+        document.getElementById(
+            "discover-no-results"
+        );
+
+    if (
+        discoverCards.length > 0 &&
+        visibleDiscoverGames === 0
+    ) {
+
+        if (!discoverNoResults) {
+
+            discoverNoResults =
+                document.createElement("p");
+
+            discoverNoResults.id =
+                "discover-no-results";
+
+            discoverNoResults.className =
+                "no-results";
+
+            gamesContainer.appendChild(
+                discoverNoResults
+            );
+        }
+
+        discoverNoResults.innerText =
+            "No new games found.";
+
+    }
+    else if (discoverNoResults) {
+
+        discoverNoResults.remove();
     }
 }
+
+
+/* =========================================================
+   SEARCH EVENTS
+   ========================================================= */
 
 searchInput.addEventListener(
     "input",
@@ -340,22 +544,12 @@ genreFilter.addEventListener(
     filterGames
 );
 
-/* =========================
-   BUTTONS
-========================= */
 
-function addMatch(gameName){
+/* =========================================================
+   VIEW MATCHES
+   ========================================================= */
 
-    localStorage.setItem(
-        "selectedGame",
-        gameName
-    );
-
-    window.location.href =
-        "match.html";
-}
-
-function viewMatches(gameName){
+function viewMatches(gameName) {
 
     localStorage.setItem(
         "selectedGame",
@@ -365,9 +559,11 @@ function viewMatches(gameName){
     window.location.href =
         "matches.html";
 }
-/* =========================
+
+
+/* =========================================================
    OPEN MATCH PAGE
-========================= */
+   ========================================================= */
 
 function openMatchPage(gameName) {
 
@@ -381,35 +577,62 @@ function openMatchPage(gameName) {
 }
 
 
-/* =========================
-   LOAD
-========================= */
+/* =========================================================
+   ADMIN BUTTON
+   ========================================================= */
 
-loadPlayedGames();
-const homeToken = localStorage.getItem("token");
+const homeToken =
+    localStorage.getItem("token");
 
-if(homeToken){
+if (homeToken) {
 
-    const payload =
-        JSON.parse(
-            atob(
-                homeToken.split(".")[1]
-            )
+    try {
+
+        const payload =
+            JSON.parse(
+                atob(
+                    homeToken.split(".")[1]
+                )
+            );
+
+        if (
+            payload.role === "ADMIN"
+        ) {
+
+            const adminContainer =
+                document.getElementById(
+                    "adminButtonContainer"
+                );
+
+            if (adminContainer) {
+
+                adminContainer.innerHTML = `
+
+                    <a
+                        href="admin.html"
+                        class="admin-btn"
+                    >
+                        Admin Panel
+                    </a>
+
+                `;
+            }
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Invalid JWT:",
+            error
         );
-
-    if(payload.role === "ADMIN"){
-
-        document.getElementById(
-            "adminButtonContainer"
-        ).innerHTML = `
-
-            <a
-                href="admin.html"
-                class="admin-btn"
-            >
-                Admin Panel
-            </a>
-
-        `;
     }
 }
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+loadPlayedGames();
+

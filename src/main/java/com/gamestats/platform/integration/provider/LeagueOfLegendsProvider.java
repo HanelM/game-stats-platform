@@ -6,9 +6,12 @@ import com.gamestats.platform.integration.lol.RiotApiClient;
 import com.gamestats.platform.integration.lol.dto.LeagueSummonerResponse;
 import com.gamestats.platform.integration.lol.dto.RiotAccountResponse;
 import com.gamestats.platform.integration.lol.dto.RiotMatchResponse;
+import com.gamestats.platform.model.GameMatch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -17,73 +20,49 @@ public class LeagueOfLegendsProvider implements GameProvider {
 
     private final RiotApiClient riotApiClient;
 
+
+    // =========================================================
+    // GAME NAME
+    // =========================================================
+
     @Override
     public String getGameName() {
         return "leagueoflegends";
     }
+
+
+    // =========================================================
+    // CONNECTION SUPPORT
+    // =========================================================
+
+    @Override
+    public boolean supportsConnection() {
+        return true;
+    }
+
+
+    // =========================================================
+    // GET PLAYER STATISTICS
+    // =========================================================
 
     @Override
     public GamePlayerStatsResponse getPlayerStats(
             String playerName
     ) {
 
-        // =====================================================
-        // 1. Validate Riot ID
-        // =====================================================
-
-        if (playerName == null || playerName.isBlank()) {
-            throw new IllegalArgumentException(
-                    "Riot ID cannot be empty"
-            );
-        }
-
-        String[] parts =
-                playerName.split("#", 2);
-
-        if (parts.length != 2 ||
-                parts[0].isBlank() ||
-                parts[1].isBlank()) {
-
-            throw new IllegalArgumentException(
-                    "Riot ID must be in format GameName#TagLine"
-            );
-        }
-
-        String gameName = parts[0].trim();
-        String tagLine = parts[1].trim();
-
-
-        // =====================================================
-        // 2. Get Riot account
-        // =====================================================
-
         RiotAccountResponse account =
-                riotApiClient.getAccount(
-                        gameName,
-                        tagLine
-                );
-
-        if (account == null ||
-                account.getPuuid() == null ||
-                account.getPuuid().isBlank()) {
-
-            throw new ResourceNotFoundException(
-                    "League of Legends player not found"
-            );
-        }
+                getAccount(playerName);
 
         String puuid =
                 account.getPuuid();
 
 
-        // =====================================================
-        // 3. Get League of Legends summoner
-        // =====================================================
+        // -----------------------------------------------------
+        // Get summoner
+        // -----------------------------------------------------
 
         LeagueSummonerResponse summoner =
-                riotApiClient.getSummoner(
-                        puuid
-                );
+                riotApiClient.getSummoner(puuid);
 
         if (summoner == null) {
 
@@ -93,9 +72,9 @@ public class LeagueOfLegendsProvider implements GameProvider {
         }
 
 
-        // =====================================================
-        // 4. Get recent match IDs
-        // =====================================================
+        // -----------------------------------------------------
+        // Get matches
+        // -----------------------------------------------------
 
         List<String> matchIds =
                 riotApiClient.getMatchIds(
@@ -108,59 +87,243 @@ public class LeagueOfLegendsProvider implements GameProvider {
         }
 
 
-        // =====================================================
-        // 5. Initialize statistics
-        // =====================================================
+        // -----------------------------------------------------
+        // Statistics
+        // -----------------------------------------------------
 
         int matches = 0;
-
         int wins = 0;
-
         int kills = 0;
-
         int deaths = 0;
-
         int assists = 0;
 
         long totalDamage = 0;
-
         long totalGameDuration = 0;
 
 
-        // =====================================================
-        // 6. Process every match
-        // =====================================================
+        // -----------------------------------------------------
+        // Process matches
+        // -----------------------------------------------------
 
         for (String matchId : matchIds) {
 
             if (matchId == null ||
                     matchId.isBlank()) {
+                continue;
+            }
 
+            RiotMatchResponse match =
+                    riotApiClient.getMatch(matchId);
+
+            if (match == null ||
+                    match.getInfo() == null ||
+                    match.getInfo().getParticipants() == null) {
+                continue;
+            }
+
+
+            RiotMatchResponse.Participant player =
+                    match.getInfo()
+                            .getParticipants()
+                            .stream()
+                            .filter(participant ->
+                                    participant != null &&
+                                            puuid.equals(
+                                                    participant.getPuuid()
+                                            )
+                            )
+                            .findFirst()
+                            .orElse(null);
+
+            if (player == null) {
+                continue;
+            }
+
+
+            matches++;
+
+            kills += player.getKills();
+
+            deaths += player.getDeaths();
+
+            assists += player.getAssists();
+
+            totalDamage +=
+                    player.getTotalDamageDealtToChampions();
+
+            totalGameDuration +=
+                    match.getInfo().getGameDuration();
+
+
+            if (player.isWin()) {
+                wins++;
+            }
+        }
+
+
+        // -----------------------------------------------------
+        // Calculations
+        // -----------------------------------------------------
+
+        int losses =
+                Math.max(
+                        matches - wins,
+                        0
+                );
+
+        double winRate =
+                matches > 0
+                        ? ((double) wins / matches) * 100.0
+                        : 0.0;
+
+        double kd =
+                deaths > 0
+                        ? (double) kills / deaths
+                        : kills;
+
+        double averageKda =
+                deaths > 0
+                        ? (double) (kills + assists) / deaths
+                        : kills + assists;
+
+        double averageDamage =
+                matches > 0
+                        ? (double) totalDamage / matches
+                        : 0.0;
+
+        double averageSurvivalTime =
+                matches > 0
+                        ? ((double) totalGameDuration / matches) / 60.0
+                        : 0.0;
+
+
+        // -----------------------------------------------------
+        // Round values
+        // -----------------------------------------------------
+
+        kd =
+                Math.round(kd * 100.0) / 100.0;
+
+        winRate =
+                Math.round(winRate * 100.0) / 100.0;
+
+        averageKda =
+                Math.round(averageKda * 100.0) / 100.0;
+
+        averageDamage =
+                Math.round(averageDamage * 100.0) / 100.0;
+
+        averageSurvivalTime =
+                Math.round(averageSurvivalTime * 100.0) / 100.0;
+
+
+        // -----------------------------------------------------
+        // Response
+        // -----------------------------------------------------
+
+        GamePlayerStatsResponse response =
+                new GamePlayerStatsResponse();
+
+        response.setGame(
+                "League of Legends"
+        );
+
+        response.setPlayerName(
+                account.getGameName() +
+                        "#" +
+                        account.getTagLine()
+        );
+
+        response.setKd(kd);
+
+        response.setWins(wins);
+
+        response.setLosses(losses);
+
+        response.setWinRate(winRate);
+
+        response.setKills(kills);
+
+        response.setDeaths(deaths);
+
+        response.setAssists(assists);
+
+        response.setMatches(matches);
+
+        response.setAverageKda(averageKda);
+
+        response.setAverageDamage(averageDamage);
+
+        response.setAverageSurvivalTime(
+                averageSurvivalTime
+        );
+
+        response.setRank(
+                "Summoner Level " +
+                        summoner.getSummonerLevel()
+        );
+
+        return response;
+    }
+
+
+    // =========================================================
+    // GET INDIVIDUAL MATCHES
+    // =========================================================
+
+    @Override
+    public List<GameMatch> getMatches(
+            String playerName
+    ) {
+
+        RiotAccountResponse account =
+                getAccount(playerName);
+
+        String puuid =
+                account.getPuuid();
+
+
+        // -----------------------------------------------------
+        // Get match IDs
+        // -----------------------------------------------------
+
+        List<String> matchIds =
+                riotApiClient.getMatchIds(
+                        puuid,
+                        20
+                );
+
+        if (matchIds == null) {
+            return List.of();
+        }
+
+
+        List<GameMatch> matches =
+                new ArrayList<>();
+
+
+        // -----------------------------------------------------
+        // Process matches
+        // -----------------------------------------------------
+
+        for (String matchId : matchIds) {
+
+            if (matchId == null ||
+                    matchId.isBlank()) {
                 continue;
             }
 
 
             RiotMatchResponse match =
-                    riotApiClient.getMatch(
-                            matchId
-                    );
+                    riotApiClient.getMatch(matchId);
 
-
-            // -------------------------------------------------
-            // Validate match
-            // -------------------------------------------------
 
             if (match == null ||
                     match.getInfo() == null ||
                     match.getInfo().getParticipants() == null) {
-
                 continue;
             }
 
-
-            // =================================================
-            // Find requested player
-            // =================================================
 
             RiotMatchResponse.Participant player =
                     match.getInfo()
@@ -181,242 +344,148 @@ public class LeagueOfLegendsProvider implements GameProvider {
             }
 
 
-            // =================================================
-            // Add match statistics
-            // =================================================
-
-            matches++;
-
-            kills += player.getKills();
-
-            deaths += player.getDeaths();
-
-            assists += player.getAssists();
-
-            totalDamage +=
-                    player.getTotalDamageDealtToChampions();
-
-            totalGameDuration +=
-                    match.getInfo().getGameDuration();
-
-
             // -------------------------------------------------
-            // Win
+            // Create GameMatch
             // -------------------------------------------------
 
-            if (player.isWin()) {
-                wins++;
-            }
+            GameMatch gameMatch =
+                    GameMatch.builder()
+
+                            .gameName(
+                                    "League of Legends"
+                            )
+
+                            /*
+                             * Simple score used by the
+                             * leaderboard / best matches.
+                             */
+                            .score(
+                                    player.getKills() +
+                                            player.getAssists()
+                            )
+
+                            .kills(
+                                    player.getKills()
+                            )
+
+                            .deaths(
+                                    player.getDeaths()
+                            )
+
+                            .assists(
+                                    player.getAssists()
+                            )
+
+                            .damage(
+                                    player.getTotalDamageDealtToChampions()
+                            )
+
+                            .win(
+                                    player.isWin()
+                            )
+
+                            /*
+                             * This is an API/imported match.
+                             */
+                            .source(
+                                    "API"
+                            )
+
+                            /*
+                             * Riot ID used to connect
+                             * the account.
+                             */
+                            .connectedAccount(
+                                    account.getGameName() +
+                                            "#" +
+                                            account.getTagLine()
+                            )
+
+                            /*
+                             * Riot's match ID.
+                             */
+                            .externalMatchId(
+                                    matchId
+                            )
+
+                            /*
+                             * Current implementation uses
+                             * EUW1 as the platform.
+                             */
+                            .platform(
+                                    "EUW1"
+                            )
+
+                            .playedAt(
+                                    LocalDateTime.now()
+                            )
+
+                            .build();
+
+
+            matches.add(gameMatch);
         }
 
 
-        // =====================================================
-        // 7. Calculate losses
-        // =====================================================
+        return matches;
+    }
 
-        int losses =
-                Math.max(
-                        0,
-                        matches - wins
+
+    // =========================================================
+    // GET RIOT ACCOUNT
+    // =========================================================
+
+    private RiotAccountResponse getAccount(
+            String playerName
+    ) {
+
+        if (playerName == null ||
+                playerName.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "League of Legends Riot ID cannot be empty"
+            );
+        }
+
+
+        String[] parts =
+                playerName.split("#", 2);
+
+
+        if (parts.length != 2 ||
+                parts[0].isBlank() ||
+                parts[1].isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Riot ID must be in format GameName#TagLine"
+            );
+        }
+
+
+        String gameName =
+                parts[0].trim();
+
+        String tagLine =
+                parts[1].trim();
+
+
+        RiotAccountResponse account =
+                riotApiClient.getAccount(
+                        gameName,
+                        tagLine
                 );
 
 
-        // =====================================================
-        // 8. Calculate win rate
-        // =====================================================
+        if (account == null ||
+                account.getPuuid() == null ||
+                account.getPuuid().isBlank()) {
 
-        double winRate = 0.0;
-
-        if (matches > 0) {
-
-            winRate =
-                    ((double) wins / matches) * 100.0;
+            throw new ResourceNotFoundException(
+                    "League of Legends player not found"
+            );
         }
 
 
-        // =====================================================
-        // 9. Calculate K/D
-        // =====================================================
-
-        double kd = 0.0;
-
-        if (deaths > 0) {
-
-            kd =
-                    (double) kills / deaths;
-
-        } else if (kills > 0) {
-
-            // Player has kills but no deaths.
-            // Avoid division by zero.
-
-            kd = kills;
-        }
-
-
-        // =====================================================
-        // 10. Calculate KDA
-        //
-        // Standard League of Legends formula:
-        //
-        // KDA = (Kills + Assists) / Deaths
-        // =====================================================
-
-        double averageKda = 0.0;
-
-        if (deaths > 0) {
-
-            averageKda =
-                    (double) (kills + assists) / deaths;
-
-        } else if (kills + assists > 0) {
-
-            // Perfect KDA when there are no deaths.
-
-            averageKda =
-                    kills + assists;
-        }
-
-
-        // =====================================================
-        // 11. Calculate average damage
-        // =====================================================
-
-        double averageDamage = 0.0;
-
-        if (matches > 0) {
-
-            averageDamage =
-                    (double) totalDamage / matches;
-        }
-
-
-        // =====================================================
-        // 12. Calculate average match duration
-        //
-        // Riot returns gameDuration in seconds.
-        //
-        // Convert:
-        // seconds -> minutes
-        // =====================================================
-
-        double averageSurvivalTime = 0.0;
-
-        if (matches > 0) {
-
-            averageSurvivalTime =
-                    ((double) totalGameDuration / matches) / 60.0;
-        }
-
-
-        // =====================================================
-        // 13. Round decimal values
-        // =====================================================
-
-        kd =
-                Math.round(kd * 100.0) / 100.0;
-
-        winRate =
-                Math.round(winRate * 100.0) / 100.0;
-
-        averageKda =
-                Math.round(averageKda * 100.0) / 100.0;
-
-        averageDamage =
-                Math.round(averageDamage * 100.0) / 100.0;
-
-        averageSurvivalTime =
-                Math.round(averageSurvivalTime * 100.0) / 100.0;
-
-
-        // =====================================================
-        // 14. Create response
-        // =====================================================
-
-        GamePlayerStatsResponse response =
-                new GamePlayerStatsResponse();
-
-
-        response.setGame(
-                "League of Legends"
-        );
-
-
-        response.setPlayerName(
-                gameName + "#" + tagLine
-        );
-
-
-        response.setKd(
-                kd
-        );
-
-
-        response.setWins(
-                wins
-        );
-
-
-        response.setLosses(
-                losses
-        );
-
-
-        response.setWinRate(
-                winRate
-        );
-
-
-        response.setKills(
-                kills
-        );
-
-
-        response.setDeaths(
-                deaths
-        );
-
-
-        response.setAssists(
-                assists
-        );
-
-
-        response.setMatches(
-                matches
-        );
-
-
-        response.setAverageKda(
-                averageKda
-        );
-
-
-        response.setAverageDamage(
-                averageDamage
-        );
-
-
-        response.setAverageSurvivalTime(
-                averageSurvivalTime
-        );
-
-
-        // =====================================================
-        // 15. Summoner level
-        // =====================================================
-
-        response.setRank(
-                "Summoner Level " +
-                        summoner.getSummonerLevel()
-        );
-
-
-        // =====================================================
-        // 16. Return response
-        // =====================================================
-
-        return response;
+        return account;
     }
 }
-

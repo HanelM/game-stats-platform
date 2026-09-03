@@ -369,3 +369,21 @@ body{
 
     display:none;
 }
+/* =========================================================
+   CONNECT ACCOUNT BUTTON FIX
+========================================================= */
+
+.game-top {
+    position: relative;
+    z-index: 20;
+}
+
+.game-top button,
+#connectBtn,
+#lolConnectBtn,
+#tftConnectBtn {
+    position: relative;
+    z-index: 30;
+    pointer-events: auto;
+    cursor: pointer;
+}

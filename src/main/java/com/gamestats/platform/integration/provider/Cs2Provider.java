@@ -12,16 +12,10 @@ public class Cs2Provider implements GameProvider {
     }
 
     @Override
-    public GamePlayerStatsResponse getPlayerStats(
-            String playerName
-    ) {
-
-        GamePlayerStatsResponse response =
-                new GamePlayerStatsResponse();
-
+    public GamePlayerStatsResponse getPlayerStats(String playerName) {
+        GamePlayerStatsResponse response = new GamePlayerStatsResponse();
         response.setGame("CS2");
         response.setPlayerName(playerName);
-
         return response;
     }
 }

@@ -2,17 +2,12 @@ package com.gamestats.platform.service;
 
 import com.gamestats.platform.dto.GameMatchRequest;
 import com.gamestats.platform.dto.MatchStatsResponse;
+import com.gamestats.platform.dto.AnalyticsResponse;
+import com.gamestats.platform.dto.GameMatchResponse;
 import com.gamestats.platform.model.GameMatch;
 import org.springframework.data.domain.Page;
-import com.gamestats.platform.dto.AnalyticsResponse;
+
 import java.time.LocalDate;
-import com.gamestats.platform.dto.GameMatchResponse;
-import java.util.List;
-
-
-
-
-
 import java.util.List;
 
 public interface GameMatchService {
@@ -23,14 +18,14 @@ public interface GameMatchService {
     );
 
     Page<GameMatch> getPlayerMatches(
-
             String username,
-
             int page,
-
             int size,
-
             String sortBy
+    );
+
+    List<GameMatch> getAllPlayerMatches(
+            String username
     );
 
     MatchStatsResponse getPlayerStats(
@@ -40,6 +35,7 @@ public interface GameMatchService {
     AnalyticsResponse getAnalytics(
             String username
     );
+
     List<GameMatchResponse> searchMatches(
             String username,
             String gameName,
@@ -61,6 +57,4 @@ public interface GameMatchService {
     List<GameMatch> getMatchesForUser(
             String username
     );
-
-
 }

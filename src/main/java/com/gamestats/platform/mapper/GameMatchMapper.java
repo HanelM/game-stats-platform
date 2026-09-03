@@ -12,35 +12,103 @@ public class GameMatchMapper {
         return GameMatchResponse.builder()
 
                 .id(match.getId())
-                .playerUsername(match.getPlayerUsername())
 
-                .gameName(match.getGameName())
+                .playerUsername(
+                        match.getPlayerUsername()
+                )
 
-                .score(match.getScore())
+                .gameName(
+                        match.getGameName()
+                )
 
-                .kills(match.getKills())
+                /*
+                 * MATCH SOURCE
+                 *
+                 * MANUAL = manually entered
+                 * API    = online/imported
+                 */
+                .source(
+                        match.getSource()
+                )
 
-                .deaths(match.getDeaths())
+                /*
+                 * Connected external account.
+                 */
+                .connectedAccount(
+                        match.getConnectedAccount()
+                )
 
-                .win(match.getWin())
+                .score(
+                        match.getScore()
+                )
 
-                .playedAt(match.getPlayedAt())
+                .kills(
+                        match.getKills()
+                )
 
-                /* PUBG */
-                .placement(match.getPlacement())
-                .damage(match.getDamage())
-                .survivalTime(match.getSurvivalTime())
+                .deaths(
+                        match.getDeaths()
+                )
 
-                /* CS2 / VALORANT */
-                .assists(match.getAssists())
-                .headshots(match.getHeadshots())
+                .win(
+                        match.getWin()
+                )
 
-                /* VALORANT */
-                .combatScore(match.getCombatScore())
+                .playedAt(
+                        match.getPlayedAt()
+                )
 
-                /* LOL */
-                .cs(match.getCs())
-                .gold(match.getGold())
+
+                /* =========================
+                   PUBG
+                ========================= */
+
+                .placement(
+                        match.getPlacement()
+                )
+
+                .damage(
+                        match.getDamage()
+                )
+
+                .survivalTime(
+                        match.getSurvivalTime()
+                )
+
+
+                /* =========================
+                   CS2 / VALORANT
+                ========================= */
+
+                .assists(
+                        match.getAssists()
+                )
+
+                .headshots(
+                        match.getHeadshots()
+                )
+
+
+                /* =========================
+                   VALORANT
+                ========================= */
+
+                .combatScore(
+                        match.getCombatScore()
+                )
+
+
+                /* =========================
+                   LEAGUE OF LEGENDS
+                ========================= */
+
+                .cs(
+                        match.getCs()
+                )
+
+                .gold(
+                        match.getGold()
+                )
 
                 .build();
     }

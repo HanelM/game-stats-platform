@@ -6,11 +6,13 @@ const API_URL =
 
 const token =
     localStorage.getItem("token");
+
+
 /* =========================
    ADMIN PROTECTION
 ========================= */
 
-if(token){
+if (token) {
 
     const payload =
         JSON.parse(
@@ -19,17 +21,18 @@ if(token){
             )
         );
 
-    if(payload.role !== "ADMIN"){
+    if (payload.role !== "ADMIN") {
 
         window.location.href =
             "index.html";
     }
 
-}else{
+} else {
 
     window.location.href =
         "index.html";
 }
+
 
 /* =========================
    ELEMENTS
@@ -100,11 +103,13 @@ const gameFilter =
         "gameFilter"
     );
 
+
 /* =========================
    GLOBAL USERS
 ========================= */
 
 let allUsers = [];
+
 
 /* =========================
    FILTER MODAL
@@ -140,13 +145,16 @@ cancelFiltersBtn.addEventListener(
     }
 );
 
-/* CLICK OUTSIDE CLOSE */
+
+/* =========================
+   CLICK OUTSIDE CLOSE
+========================= */
 
 filterModal.addEventListener(
     "click",
     (e) => {
 
-        if(e.target === filterModal){
+        if (e.target === filterModal) {
 
             filterModal.classList.remove(
                 "active"
@@ -154,6 +162,7 @@ filterModal.addEventListener(
         }
     }
 );
+
 
 /* =========================
    APPLY FILTERS
@@ -166,11 +175,11 @@ applyFiltersBtn.addEventListener(
         const value =
             searchInput.value.trim();
 
-        if(value === ""){
+        if (value === "") {
 
             applySorting(allUsers);
 
-        }else{
+        } else {
 
             searchUsers(value);
         }
@@ -181,13 +190,14 @@ applyFiltersBtn.addEventListener(
     }
 );
 
+
 /* =========================
    LOAD ALL USERS
 ========================= */
 
-async function loadUsers(){
+async function loadUsers() {
 
-    try{
+    try {
 
         let currentPage = 0;
 
@@ -195,20 +205,26 @@ async function loadUsers(){
 
         let users = [];
 
-        while(currentPage < totalPages){
+
+        /* =========================
+           LOAD USERS PAGINATION
+        ========================= */
+
+        while (currentPage < totalPages) {
 
             const response =
                 await fetch(
                     `${API_URL}/api/admin/users?page=${currentPage}&size=50`,
                     {
-                        headers:{
+                        headers: {
                             Authorization:
                                 "Bearer " + token
                         }
                     }
                 );
 
-            if(!response.ok){
+
+            if (!response.ok) {
 
                 console.log(
                     "Failed loading users"
@@ -217,102 +233,202 @@ async function loadUsers(){
                 return;
             }
 
+
             const data =
                 await response.json();
 
+
             const currentUsers =
                 data.content || [];
+
 
             users = [
                 ...users,
                 ...currentUsers
             ];
 
+
             totalPages =
                 data.totalPages || 1;
+
 
             currentPage++;
         }
 
+
+        /* =========================
+           LOAD USER STATISTICS
+        ========================= */
+
         const usersWithStats =
             await Promise.all(
 
-                users.map(async user => {
+                users.map(
+                    async user => {
 
-                    try{
+                        try {
 
-                        const statsResponse =
-                            await fetch(
-                                `${API_URL}/api/matches/analytics/user/${user.username}`,
-                                {
-                                    headers:{
-                                        Authorization:
-                                            "Bearer " + token
+                            const statsResponse =
+                                await fetch(
+                                    `${API_URL}/api/matches/analytics/user/${encodeURIComponent(user.username)}`,
+                                    {
+                                        headers: {
+                                            Authorization:
+                                                "Bearer " + token
+                                        }
                                     }
-                                }
-                            );
+                                );
 
-                        if(!statsResponse.ok){
+
+                            /* =========================
+                               STATS REQUEST FAILED
+                            ========================= */
+
+                            if (!statsResponse.ok) {
+
+                                return {
+                                    ...user,
+
+                                    kdRatio: 0,
+
+                                    avgScore: 0,
+
+                                    winRate: 0,
+
+                                    kills: 0,
+
+                                    totalMatches: 0,
+
+                                    favoriteGame:
+                                        "Unknown"
+                                };
+                            }
+
+
+                            /* =========================
+                               READ STATISTICS
+                            ========================= */
+
+                            const stats =
+                                await statsResponse.json();
+
+
+                            /* =========================
+                               TOTAL KILLS
+                            ========================= */
+
+                            const totalKills =
+                                Number(
+                                    stats.totalKills || 0
+                                );
+
+
+                            /* =========================
+                               TOTAL DEATHS
+                            ========================= */
+
+                            const totalDeaths =
+                                Number(
+                                    stats.totalDeaths || 0
+                                );
+
+
+                            /* =========================
+                               SAFE KD RATIO
+                            ========================= */
+
+                            const kdRatio =
+                                totalDeaths > 0
+                                    ? totalKills / totalDeaths
+                                    : 0;
+
+
+                            /* =========================
+                               RETURN USER DATA
+                            ========================= */
 
                             return {
+
                                 ...user,
-                                kdRatio:0,
-                                avgScore:0,
-                                winRate:0,
-                                kills:0,
-                                totalMatches:0,
-                                favoriteGame:"Unknown"
+
+                                kdRatio:
+                                    kdRatio,
+
+                                winRate:
+                                    Number(
+                                        stats.winRate || 0
+                                    ),
+
+                                kills:
+                                    totalKills,
+
+                                totalMatches:
+                                    Number(
+                                        stats.totalMatches || 0
+                                    ),
+
+                                favoriteGame:
+                                    stats.favoriteGame ||
+                                    "Unknown"
+                            };
+
+
+                        } catch (error) {
+
+                            console.log(
+                                `Failed loading stats for ${user.username}:`,
+                                error
+                            );
+
+
+                            return {
+
+                                ...user,
+
+                                kdRatio: 0,
+
+                                avgScore: 0,
+
+                                winRate: 0,
+
+                                kills: 0,
+
+                                totalMatches: 0,
+
+                                favoriteGame:
+                                    "Unknown"
                             };
                         }
-
-                        const stats =
-                            await statsResponse.json();
-
-
-                        return {
-
-                            ...user,
-
-                            kdRatio:
-                                stats.kdRatio || 0,
-
-
-                            winRate:
-                                stats.winRate || 0,
-
-                            kills:
-                                stats.totalKills || 0,
-
-                            totalMatches:
-                                stats.totalMatches || 0,
-
-                            favoriteGame:
-                                stats.favoriteGame || "Unknown"
-                        };
-
-                    }catch{
-
-                        return {
-                            ...user,
-                            kdRatio:0,
-                            avgScore:0,
-                            winRate:0,
-                            kills:0,
-                            totalMatches:0,
-                            favoriteGame:"Unknown"
-                        };
                     }
-                })
+                )
             );
+
+
+        /* =========================
+           SAVE USERS
+        ========================= */
 
         allUsers =
             usersWithStats;
 
+
+        /* =========================
+           LOAD GAMES
+        ========================= */
+
         loadGames();
 
-        applySorting(allUsers);
 
-    }catch(error){
+        /* =========================
+           DISPLAY USERS
+        ========================= */
+
+        applySorting(
+            allUsers
+        );
+
+
+    } catch (error) {
 
         console.log(
             "Load users error:",
@@ -321,11 +437,12 @@ async function loadUsers(){
     }
 }
 
+
 /* =========================
    LOAD GAMES
 ========================= */
 
-function loadGames(){
+function loadGames() {
 
     gameFilter.innerHTML = `
 
@@ -335,80 +452,108 @@ function loadGames(){
 
     `;
 
+
     const uniqueGames = [
 
         ...new Set(
 
             allUsers
-                .map(user => user.favoriteGame)
-                .filter(game =>
-                    game &&
-                    game !== "Unknown" &&
-                    game.trim() !== ""
+                .map(
+                    user =>
+                        user.favoriteGame
                 )
-
+                .filter(
+                    game =>
+                        game &&
+                        game !== "Unknown" &&
+                        game.trim() !== ""
+                )
         )
 
     ];
 
+
     uniqueGames.sort();
 
-    uniqueGames.forEach(game => {
 
-        gameFilter.innerHTML += `
+    uniqueGames.forEach(
+        game => {
 
-            <option value="${game}">
-                ${game}
-            </option>
+            gameFilter.innerHTML += `
 
-        `;
-    });
+                <option value="${game}">
+                    ${game}
+                </option>
+
+            `;
+        }
+    );
 }
+
 
 /* =========================
    SEARCH USERS
 ========================= */
 
-function searchUsers(value){
+function searchUsers(value) {
+
+    const searchValue =
+        value.toLowerCase();
+
 
     const filtered =
-        allUsers.filter(user =>
+        allUsers.filter(
+            user => {
 
-            user.username
-                .toLowerCase()
-                .includes(
-                    value.toLowerCase()
-                )
+                const username =
+                    String(
+                        user.username || ""
+                    ).toLowerCase();
 
-            ||
 
-            user.email
-                .toLowerCase()
-                .includes(
-                    value.toLowerCase()
-                )
+                const email =
+                    String(
+                        user.email || ""
+                    ).toLowerCase();
+
+
+                return (
+                    username.includes(
+                        searchValue
+                    )
+                    ||
+                    email.includes(
+                        searchValue
+                    )
+                );
+            }
         );
 
-    applySorting(filtered);
+
+    applySorting(
+        filtered
+    );
 }
+
 
 /* =========================
    APPLY SORTING
 ========================= */
 
-function applySorting(users){
+function applySorting(users) {
 
     let filteredUsers =
         [...users];
+
 
     /* =========================
        GAME FILTER
     ========================= */
 
-    if(
+    if (
         gameFilter &&
         gameFilter.value !== "all"
-    ){
+    ) {
 
         filteredUsers =
             filteredUsers.filter(
@@ -418,187 +563,261 @@ function applySorting(users){
             );
     }
 
+
     /* =========================
        REGISTER FILTER
     ========================= */
 
-    if(
+    if (
         registerFilter &&
-        registerFilter.value === "newestRegistered"
-    ){
+        registerFilter.value ===
+            "newestRegistered"
+    ) {
 
         filteredUsers.sort(
-            (a,b) => {
+            (a, b) => {
 
                 const dateA =
                     a.createdAt
-                        ? new Date(a.createdAt).getTime()
+                        ? new Date(
+                            a.createdAt
+                        ).getTime()
                         : 0;
+
 
                 const dateB =
                     b.createdAt
-                        ? new Date(b.createdAt).getTime()
+                        ? new Date(
+                            b.createdAt
+                        ).getTime()
                         : 0;
+
 
                 return dateB - dateA;
             }
         );
+
     }
 
-    else if(
+    else if (
         registerFilter &&
-        registerFilter.value === "oldestRegistered"
-    ){
+        registerFilter.value ===
+            "oldestRegistered"
+    ) {
 
         filteredUsers.sort(
-            (a,b) => {
+            (a, b) => {
 
                 const dateA =
                     a.createdAt
-                        ? new Date(a.createdAt).getTime()
+                        ? new Date(
+                            a.createdAt
+                        ).getTime()
                         : 0;
+
 
                 const dateB =
                     b.createdAt
-                        ? new Date(b.createdAt).getTime()
+                        ? new Date(
+                            b.createdAt
+                        ).getTime()
                         : 0;
+
 
                 return dateA - dateB;
             }
         );
     }
 
+
     /* =========================
        KD FILTER
     ========================= */
 
-    else if(
+    else if (
         kdFilter &&
-        kdFilter.value === "highestKD"
-    ){
+        kdFilter.value ===
+            "highestKD"
+    ) {
 
         filteredUsers.sort(
-            (a,b) =>
-                Number(b.kdRatio || 0)
+            (a, b) =>
+                Number(
+                    b.kdRatio || 0
+                )
                 -
-                Number(a.kdRatio || 0)
+                Number(
+                    a.kdRatio || 0
+                )
+        );
+
+    }
+
+    else if (
+        kdFilter &&
+        kdFilter.value ===
+            "lowestKD"
+    ) {
+
+        filteredUsers.sort(
+            (a, b) =>
+                Number(
+                    a.kdRatio || 0
+                )
+                -
+                Number(
+                    b.kdRatio || 0
+                )
         );
     }
 
-    else if(
-        kdFilter &&
-        kdFilter.value === "lowestKD"
-    ){
-
-        filteredUsers.sort(
-            (a,b) =>
-                Number(a.kdRatio || 0)
-                -
-                Number(b.kdRatio || 0)
-        );
-    }
 
     /* =========================
        MATCHES FILTER
     ========================= */
 
-    else if(
+    else if (
         scoreFilter &&
-        scoreFilter.value === "highestNumberMatches"
-    ){
+        scoreFilter.value ===
+            "highestNumberMatches"
+    ) {
 
         filteredUsers.sort(
-            (a,b) =>
-                Number(b.totalMatches || 0)
+            (a, b) =>
+                Number(
+                    b.totalMatches || 0
+                )
                 -
-                Number(a.totalMatches || 0)
+                Number(
+                    a.totalMatches || 0
+                )
+        );
+
+    }
+
+    else if (
+        scoreFilter &&
+        scoreFilter.value ===
+            "lowestNumberMatches"
+    ) {
+
+        filteredUsers.sort(
+            (a, b) =>
+                Number(
+                    a.totalMatches || 0
+                )
+                -
+                Number(
+                    b.totalMatches || 0
+                )
         );
     }
 
-    else if(
-        scoreFilter &&
-        scoreFilter.value === "lowestNumberMatches"
-    ){
-
-        filteredUsers.sort(
-            (a,b) =>
-                Number(a.totalMatches || 0)
-                -
-                Number(b.totalMatches || 0)
-        );
-    }
 
     /* =========================
-       WINRATE FILTER
+       WIN RATE FILTER
     ========================= */
 
-    else if(
+    else if (
         winrateFilter &&
-        winrateFilter.value === "highestWinrate"
-    ){
+        winrateFilter.value ===
+            "highestWinrate"
+    ) {
 
         filteredUsers.sort(
-            (a,b) =>
-                Number(b.winRate || 0)
+            (a, b) =>
+                Number(
+                    b.winRate || 0
+                )
                 -
-                Number(a.winRate || 0)
+                Number(
+                    a.winRate || 0
+                )
+        );
+
+    }
+
+    else if (
+        winrateFilter &&
+        winrateFilter.value ===
+            "lowestWinrate"
+    ) {
+
+        filteredUsers.sort(
+            (a, b) =>
+                Number(
+                    a.winRate || 0
+                )
+                -
+                Number(
+                    b.winRate || 0
+                )
         );
     }
 
-    else if(
-        winrateFilter &&
-        winrateFilter.value === "lowestWinrate"
-    ){
-
-        filteredUsers.sort(
-            (a,b) =>
-                Number(a.winRate || 0)
-                -
-                Number(b.winRate || 0)
-        );
-    }
 
     /* =========================
        KILLS FILTER
     ========================= */
 
-    else if(
+    else if (
         killsFilter &&
-        killsFilter.value === "highestKills"
-    ){
+        killsFilter.value ===
+            "highestKills"
+    ) {
 
         filteredUsers.sort(
-            (a,b) =>
-                Number(b.kills || 0)
+            (a, b) =>
+                Number(
+                    b.kills || 0
+                )
                 -
-                Number(a.kills || 0)
+                Number(
+                    a.kills || 0
+                )
+        );
+
+    }
+
+    else if (
+        killsFilter &&
+        killsFilter.value ===
+            "lowestKills"
+    ) {
+
+        filteredUsers.sort(
+            (a, b) =>
+                Number(
+                    a.kills || 0
+                )
+                -
+                Number(
+                    b.kills || 0
+                )
         );
     }
 
-    else if(
-        killsFilter &&
-        killsFilter.value === "lowestKills"
-    ){
 
-        filteredUsers.sort(
-            (a,b) =>
-                Number(a.kills || 0)
-                -
-                Number(b.kills || 0)
-        );
-    }
+    /* =========================
+       RENDER
+    ========================= */
 
-    renderUsers(filteredUsers);
+    renderUsers(
+        filteredUsers
+    );
 }
+
+
 /* =========================
    RENDER USERS
 ========================= */
 
-function renderUsers(users){
+function renderUsers(users) {
 
     usersGrid.innerHTML = "";
 
-    if(users.length === 0){
+
+    if (users.length === 0) {
 
         usersGrid.innerHTML = `
 
@@ -606,7 +825,9 @@ function renderUsers(users){
 
                 <i class="fa-solid fa-user-slash"></i>
 
-                <h2>No users found</h2>
+                <h2>
+                    No users found
+                </h2>
 
             </div>
 
@@ -614,84 +835,144 @@ function renderUsers(users){
 
         return;
     }
-console.log(users);
-    users.forEach(user => {
 
-        usersGrid.innerHTML += `
 
-            <div class="user-card"
-                 onclick="openUserProfile('${user.username}')">
+    console.log(
+        "Users:",
+        users
+    );
 
-                <div class="user-top">
 
-                    <div class="avatar">
-                        <i class="fa-solid fa-user"></i>
+    users.forEach(
+        user => {
+
+            usersGrid.innerHTML += `
+
+                <div
+                    class="user-card"
+                    onclick="openUserProfile('${user.username}')"
+                >
+
+                    <div class="user-top">
+
+                        <div class="avatar">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+
+                        <div class="user-info">
+
+                            <h3>
+                                ${user.username}
+                            </h3>
+
+
+                            <p>
+                                ${user.email}
+                            </p>
+
+
+                            <span class="role">
+                                ${user.role}
+                            </span>
+
+                        </div>
+
                     </div>
 
-                    <div class="user-info">
 
-                        <h3>
-                            ${user.username}
-                        </h3>
+                    <div class="stats-grid">
 
-                        <p>
-                            ${user.email}
-                        </p>
 
-                        <span class="role">
-                            ${user.role}
-                        </span>
+                        <div class="mini-stat">
+
+                            <span>
+                                KD
+                            </span>
+
+                            <strong>
+                                ${Number(
+                                    user.kdRatio || 0
+                                ).toFixed(2)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="mini-stat">
+
+                            <span>
+                                Matches
+                            </span>
+
+                            <strong>
+                                ${Number(
+                                    user.totalMatches || 0
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="mini-stat">
+
+                            <span>
+                                Win%
+                            </span>
+
+                            <strong>
+                                ${Number(
+                                    user.winRate || 0
+                                ).toFixed(1)}%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="mini-stat">
+
+                            <span>
+                                Kills
+                            </span>
+
+                            <strong>
+                                ${Number(
+                                    user.kills || 0
+                                )}
+                            </strong>
+
+                        </div>
 
                     </div>
+
+
+                    <button
+                        class="view-btn"
+                        onclick="event.stopPropagation(); openUserProfile('${user.username}')"
+                    >
+                        View Profile
+                    </button>
 
                 </div>
 
-                <div class="stats-grid">
-
-                    <div class="mini-stat">
-                        <span>KD</span>
-                        <strong>${Number(user.kdRatio || 0).toFixed(2)}</strong>
-                    </div>
-
-                    <div class="mini-stat">
-                        <span>Matches</span>
-                        <strong>${Number(user.totalMatches || 0)}</strong>
-                    </div>
-
-                    <div class="mini-stat">
-                        <span>Win%</span>
-                        <strong>${Number(user.winRate || 0).toFixed(1)}%</strong>
-                    </div>
-
-                    <div class="mini-stat">
-                        <span>Kills</span>
-                        <strong>${Number(user.kills || 0)}</strong>
-                    </div>
-
-                </div>
-
-                <button class="view-btn"
-                        onclick="event.stopPropagation(); openUserProfile('${user.username}')">
-
-                    View Profile
-
-                </button>
-
-            </div>
-
-        `;
-    });
+            `;
+        }
+    );
 }
+
 
 /* =========================
    OPEN PROFILE
 ========================= */
 
-function openUserProfile(username){
+function openUserProfile(username) {
 
     window.location.href =
-        `user-profile.html?username=${username}`;
+        `user-profile.html?username=${encodeURIComponent(username)}`;
 }
+
 
 /* =========================
    SEARCH
@@ -704,19 +985,26 @@ searchInput.addEventListener(
         const value =
             e.target.value.trim();
 
-        if(value === ""){
 
-            applySorting(allUsers);
+        if (value === "") {
 
-        }else{
+            applySorting(
+                allUsers
+            );
 
-            searchUsers(value);
+        } else {
+
+            searchUsers(
+                value
+            );
         }
     }
 );
+
 
 /* =========================
    START
 ========================= */
 
 loadUsers();
+
