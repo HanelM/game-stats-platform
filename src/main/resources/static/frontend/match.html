@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
 
     <meta charset="UTF-8">
 
@@ -22,6 +24,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     >
 
+
 </head>
 
 <body>
@@ -31,6 +34,7 @@
 ========================= -->
 
 <aside class="sidebar">
+
 
     <div class="logo">
 
@@ -74,12 +78,10 @@
             <i class="fa-solid fa-table-cells-large"></i>
             Dashboard
         </a>
-        <a href="analytics.html" >
 
+        <a href="analytics.html">
             <i class="fa-solid fa-chart-line"></i>
-
             Analytics
-
         </a>
 
         <a href="leaderboard.html">
@@ -89,6 +91,7 @@
 
     </div>
 
+
 </aside>
 
 <!-- =========================
@@ -96,6 +99,7 @@
 ========================= -->
 
 <div class="match-page">
+
 
     <div class="match-card">
 
@@ -113,6 +117,7 @@
 
         </div>
 
+
         <!-- FORM -->
 
         <div class="match-form">
@@ -121,7 +126,9 @@
 
             <div class="input-group">
 
-                <label>Select Game</label>
+                <label for="game-name">
+                    Select Game
+                </label>
 
                 <select id="game-name">
 
@@ -133,27 +140,42 @@
                         PUBG
                     </option>
 
-                    <option value="CS2">
-                        CS2
-                    </option>
-
                     <option value="Valorant">
                         Valorant
+                    </option>
+
+                    <option value="Elden Ring">
+                        Elden Ring
+                    </option>
+
+                    <option value="CS2">
+                        CS2
                     </option>
 
                     <option value="League of Legends">
                         League of Legends
                     </option>
 
+                    <option value="Fortnite">
+                        Fortnite
+                    </option>
+
+                    <option value="Teamfight Tactics">
+                        Teamfight Tactics
+                    </option>
+
                 </select>
 
             </div>
+
 
             <!-- RESULT -->
 
             <div class="input-group">
 
-                <label>Result</label>
+                <label for="result">
+                    Result
+                </label>
 
                 <select id="result">
 
@@ -169,19 +191,27 @@
 
             </div>
 
+
             <!-- DYNAMIC FIELDS -->
 
             <div
                     id="dynamic-fields"
                     class="dynamic-fields"
             >
+
+                <p class="choose-game-text">
+                    Select a game to load match fields
+                </p>
+
             </div>
+
 
             <!-- BUTTONS -->
 
             <div class="match-actions">
 
                 <button
+                        id="save-match-btn"
                         class="save-btn"
                         onclick="saveMatch()"
                 >
@@ -191,6 +221,7 @@
                     Save Match
 
                 </button>
+
 
                 <a
                         href="connected-games.html"
@@ -205,15 +236,18 @@
 
             </div>
 
+
             <p id="match-message"></p>
 
         </div>
 
     </div>
 
+
 </div>
 
-<script src="js/match.js"></script>
+<script src="js/match.js?v=3"></script>
 
 </body>
+
 </html>
